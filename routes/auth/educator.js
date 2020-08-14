@@ -9,7 +9,7 @@ const auth = require('../../middlewares/auth');
 const router = express.Router();
 
 /**
- * @route GET/ api/auth
+ * @route GET/ api/auth/educator
  * @description Get Loged In user
  * @access Private
  */

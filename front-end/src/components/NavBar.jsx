@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import AuthContext from '../context/auth/authcontext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonAppBar() {
     const classes = useStyles();
+    const authContext = useContext(AuthContext);
+    const { logOut } = authContext;
+    const handleLogOut = () => {
+        logOut();
+    }
 
     return (
         <div className={classes.root}>
@@ -41,6 +47,7 @@ export default function ButtonAppBar() {
                     <Typography variant="h6" className={classes.title}>
                         {APP_NAME}
                     </Typography>
+                    <Button variant="outlined" onClick={handleLogOut} >LOG OUT</Button>
                     <Button variant="outlined" >Create Course</Button>
                     <IconButton aria-label="show 17 new notifications" color="inherit">
                         <Badge badgeContent={4} color="secondary">

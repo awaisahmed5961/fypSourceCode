@@ -9,13 +9,13 @@ const { required } = require('@hapi/joi');
 /**
  * @route POST/ api/user
  * @description Register a user
- * @access Public
+ * @access public
  */
 router.post('/',
     async (req, res) => {
         // Validating the Request body 
-        let { error } = educatorValidationSchema.validate(req.body);
-        if (error) { return res.status(400).send(error.details[0].message) }
+        // let { error } = educatorValidationSchema.validate(req.body);
+        // if (error) { return res.status(400).send(error.details[0].message) }
         // Pulling required Information from the Request 
         const { name, email, password } = req.body;
 

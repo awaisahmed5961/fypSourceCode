@@ -7,25 +7,35 @@ import SignUp from './components/SignUp';
 import NotFound from './components/NotFound';
 
 import theme from "./components/Ui/Theme";
+import AuthState from './context/auth/AuthState';
+import setAuthToken from './utils/setAuthToken';
+import PrivateRoute from './components/routing/PrivateRoute';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token)
+}
+
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <div >
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/login" component={SignIn} />
-            <Route exact path="/register_user" component={SignUp} />
+    <AuthState>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <div >
+            <Switch>
+              <PrivateRoute exact path="/" component={Dashboard} />
+              <Route exact path="/login" component={SignIn} />
+              <Route exact path="/register_user" component={SignUp} />
 
-            <Route path="" component={NotFound} />
+              <Route path="" component={NotFound} />
 
-            {/*<Route exact path="/" component={}/> */}
+              {/*<Route exact path="/" component={}/> */}
 
-          </Switch>
-        </div>
-      </Router>
-    </ThemeProvider>
+            </Switch>
+          </div>
+        </Router>
+      </ThemeProvider>
+    </AuthState>
   );
 }
 

@@ -1,5 +1,5 @@
 import { APP_NAME } from '../app preferences/app manifest';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -11,9 +11,11 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+
+import AuthContext from '../context/auth/authcontext';
+
 
 const LinkBehavior = React.forwardRef((props, ref) => (
     <RouterLink ref={ref} to="/login" {...props} />
@@ -65,14 +67,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// const handleOnSubmit = (e) => {
-//     e.preventDefault();
-//     alert('form is empty is empty')
 
-// }
-
-export default function SignUp() {
+export default function SignUp(props) {
     const classes = useStyles();
+
+    const authContext = useContext(AuthContext);
+    const { register, error, clearErrors, isAuthenticated } = authContext;
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            props.history.push('/');
+        }
+        if (error === "User Already Exist") {
+            alert('show alert here? uesr already exist');
+            clearErrors();
+        }
+        // eslint-disable-next-line
+    }, [error, isAuthenticated, props.history]);
 
     const [values, setValues] = useState({
         name: '',
@@ -96,10 +107,13 @@ export default function SignUp() {
     }
     const handleOnSubmit = (e) => {
         e.preventDefault();
-        console.log(errors)
-        console.log()
+        const { name, email, password } = values;
         if (formValidation()) {
-            alert('form is submitting')
+            register({
+                name,
+                email,
+                password
+            });
         }
 
     }
