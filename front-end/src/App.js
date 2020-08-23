@@ -1,15 +1,19 @@
 import React from 'react';
 import { ThemeProvider } from "@material-ui/styles";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import NotFound from './components/NotFound';
 
 import theme from "./components/Ui/Theme";
 import AuthState from './context/auth/AuthState';
+import CourseState from './context/course/CourseState';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/routing/PrivateRoute';
+import Dashboard from './pages/Dashboard';
+import Course from './pages/Course';
+import CourseDetail from './pages/CourseDetail';
+import TopicDetail from './pages/TopicDetail';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -17,26 +21,30 @@ if (localStorage.token) {
 
 
 function App() {
+
   return (
     <AuthState>
-      <ThemeProvider theme={theme}>
-        <Router>
-          <div >
-            <Switch>
-              <PrivateRoute exact path="/" component={Dashboard} />
-              <Route exact path="/login" component={SignIn} />
-              <Route exact path="/register_user" component={SignUp} />
+      <CourseState>
+        <ThemeProvider theme={theme}>
+          <Router>
+            <div >
+              <Switch>
+                <Route exact path="/login" component={SignIn} />
+                <Route exact path="/register_user" component={SignUp} />
+                <PrivateRoute exact path="/" label="Home" component={Dashboard} />
+                <PrivateRoute exact path="/course/:id?" component={Course} />
+                <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
+                <PrivateRoute exact path="/:title" component={CourseDetail} />
+                <Route path="" component={NotFound} />
 
-              <Route path="" component={NotFound} />
-
-              {/*<Route exact path="/" component={}/> */}
-
-            </Switch>
-          </div>
-        </Router>
-      </ThemeProvider>
+              </Switch>
+            </div>
+          </Router>
+        </ThemeProvider>
+      </CourseState>
     </AuthState>
   );
 }
 
 export default App;
+// props.data.name.split(' ').join('')

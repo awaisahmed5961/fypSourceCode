@@ -1,4 +1,4 @@
-import React, { useReducer, Children } from 'react';
+import React, { useReducer } from 'react';
 import AuthContext from './authcontext';
 import authReducer from './authReducer';
 import axios from 'axios';
@@ -111,6 +111,7 @@ const AuthState = props => {
             error: state.error,
             register,
             loadUser,
+            clearErrors,
             logIn,
             logOut
 

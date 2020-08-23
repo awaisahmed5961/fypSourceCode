@@ -12,20 +12,19 @@ import { Link as RouterLink } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthContext from '../context/auth/authcontext';
-
-const LinkBehavior = React.forwardRef((props, ref) => (
-    <RouterLink ref={ref} to="/register_user" {...props} />
-));
-
+import { Spinner } from '../components/Spinner'
+import Joi from 'joi-browser'
 function Copyright() {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography variant="body2"
+            color="textSecondary"
+            align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link color="inherit"
+                href="/">
                 {APP_NAME}
             </Link>{' '}
             {new Date().getFullYear()}
@@ -68,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn(props) {
+
     const classes = useStyles();
 
     const authContext = useContext(AuthContext);
@@ -77,17 +77,29 @@ export default function SignIn(props) {
         if (isAuthenticated) {
             props.history.push('/');
         }
-        if (error === "Invalid Credentials") {
+        if (error !== null && error !== undefined && error.includes("Invalid Credentials")) {
             alert('invalid credintials');
-            // clearErrors();
+            clearErrors();
+            setValues({
+                loagging: false,
+                email: '',
+                password: ''
+            });
+            setErrors({
+                email: 'Invalid Credentials',
+                password: 'Invalid Credentials'
+            });
+
+
         }
         // eslint-disable-next-line
     }, [error, isAuthenticated, props.history]);
 
     const [values, setValues] = useState({
         email: '',
-        password: ''
+        password: '',
     });
+    const [loagging, setLoagging] = useState(false);
     const [errors, setErrors] = useState({
         email: '',
         password: ''
@@ -102,32 +114,45 @@ export default function SignIn(props) {
     }
     const handleOnSubmit = (e) => {
         e.preventDefault();
-        const { email, password } = values;
-        if (formValidation()) {
-            // alert('form is submitting')
+        let { email, password } = values;
+
+        const eerrors = formValidation();
+
+        if (eerrors) {
+            setErrors({ ...eerrors });
+        }
+        else {
+            setErrors({});
+            setLoagging(true);
             logIn({
                 email,
                 password
             });
+            clearErrors();
         }
 
     }
+    var schema = {
+        email: Joi.string().required().email().label('Email'),
+        password: Joi.string().required().label('Password')
+    }
     const formValidation = () => {
-        let temp = {};
 
-        temp.email = values.email ? '' : 'Please Provide email';
-        // temp.email = (/$|.+@.+..+/).test(values.email) ? '' : 'pppp'
-        temp.password = values.password ? '' : 'Please Provide Password';
-        setErrors({
-            ...temp
-        });
-        return Object.values(temp).every(x => x === "");
+        const result = Joi.validate(values, schema, { abortEarly: false });
+        if (!result.error) return null;
+
+        let errors = {};
+        for (let item of result.error.details) {
+            errors[item.path[0]] = item.message;
+        }
+        return errors;
     }
     return (
         <Grid container component="main" className={classes.root}>
+
             <CssBaseline />
-            <Grid item xs={false} sm={4} md={6} className={classes.image} >
-            </Grid>
+            {/* <Grid item xs={false} sm={4} md={6} className={classes.image} >
+            </Grid> */}
             <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
@@ -136,6 +161,7 @@ export default function SignIn(props) {
                     <Typography component="h1" variant="h5">
                         Sign in
           </Typography>
+
                     <form className={classes.form} noValidate onSubmit={handleOnSubmit}>
                         <TextField
                             variant="outlined"
@@ -175,9 +201,11 @@ export default function SignIn(props) {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            {...(loagging && { disabled: true })}
                         >
-                            Sign In
-            </Button>
+                            {loagging ? (<Spinner />) : 'Sign In'}
+                            {/* // Authenticating... */}
+                        </Button>
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
@@ -185,8 +213,7 @@ export default function SignIn(props) {
                 </Link>
                             </Grid>
                             <Grid item>
-                                {/* <Link href="register_user" variant="body2"> */}
-                                <Link component={LinkBehavior} variant="body2">
+                                <Link component={RouterLink} to="/register_user" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
@@ -197,6 +224,6 @@ export default function SignIn(props) {
                     </form>
                 </div>
             </Grid>
-        </Grid>
+        </Grid >
     );
 }

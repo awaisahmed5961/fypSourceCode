@@ -5,21 +5,20 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Joi from 'joi-browser';
+import { Spinner } from '../components/Spinner'
+
 
 import AuthContext from '../context/auth/authcontext';
 
 
-const LinkBehavior = React.forwardRef((props, ref) => (
-    <RouterLink ref={ref} to="/login" {...props} />
-));
+
 
 function Copyright() {
     return (
@@ -89,8 +88,9 @@ export default function SignUp(props) {
         name: '',
         email: '',
         password: '',
-        conformPassword: ''
+        conformPassword: '',
     });
+    const [registering, setRegistering] = useState(false);
     const [errors, setErrors] = useState({
         name: '',
         email: '',
@@ -108,28 +108,43 @@ export default function SignUp(props) {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         const { name, email, password } = values;
-        if (formValidation()) {
-            register({
-                name,
-                email,
-                password
-            });
-        }
 
+        const eerrors = formValidation();
+
+        if (eerrors) {
+            setErrors({ ...eerrors });
+        }
+        else {
+            setErrors({});
+            setRegistering(true);
+            alert('registeration method is disabled')
+            // register({
+            //     name,
+            //     email,
+            //     password
+            // });
+        }
     }
+
+
     const formValidation = () => {
-        let temp = {};
-        temp.name = values.name ? '' : 'Please Provide Name';
-        temp.email = values.email ? '' : 'Please Provide email';
-        // temp.email = (/$|.+@.+..+/).test(values.email) ? '' : 'pppp'
-        temp.password = values.password ? '' : 'Please Provide Password';
-        temp.conformPassword = (values.conformPassword) ? '' : 'Conform Your Password';
-        temp.conformPassword = (values.conformPassword.length > 1 && values.password === values.conformPassword) ? '' : 'Conform password does not match';
-        // temp.conformPassword = (values.password === values.conformPassword) ? '' : 'Conform Password is not matched';
-        setErrors({
-            ...temp
-        });
-        return Object.values(temp).every(x => x === "");
+        const result = Joi.validate(values, schema, { abortEarly: false });
+        if (!result.error) return null;
+
+        let errors = {};
+        for (let item of result.error.details) {
+            errors[item.path[0]] = item.message;
+        }
+        if (values.conformPassword.length < 4) {
+            errors.conformPassword = "Conform password must be atleast 4 characters long"
+        }
+        return errors;
+    }
+    var schema = {
+        name: Joi.string().required().min(3).max(30).label('Name'),
+        email: Joi.string().required().email().max(30).label('Email'),
+        password: Joi.string().required().min(4).max(30).label('Password'),
+        conformPassword: Joi.string().min(4).max(30).required().label('Conform Password').valid(Joi.ref('password')).options({ language: { any: { allowOnly: 'must match with password' } } })
     }
 
     return (
@@ -208,17 +223,15 @@ export default function SignUp(props) {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            {...(registering && { disabled: true })}
                         >
-                            Create Account
-            </Button>
+                            {registering ? (<Spinner />) : 'Create Account'}
+                        </Button>
                         <Grid container>
                             <Grid item xs>
-                                {/* <Link href="#" variant="body2">
-                                    Forgot password?
-                </Link> */}
                             </Grid>
                             <Grid item>
-                                <Link component={LinkBehavior} variant="body2">
+                                <Link component={RouterLink} to="/login" variant="body2">
                                     {"I've an account? Sign In"}
                                 </Link>
                             </Grid>

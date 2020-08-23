@@ -64,8 +64,10 @@ router.post('/', async (req, res) => {
  * @description update course
  * @access Private
  */
-router.put('/:id', (req, res) => {
-    res.send('update contact!');
+router.put('/:id', async (req, res) => {
+
+
+
 });
 
 /**
@@ -74,7 +76,7 @@ router.put('/:id', (req, res) => {
  * @access Private
  */
 router.delete('/:id', (req, res) => {
-    res.send('Removex contact!');
+
 });
 
 // Schema Validation 
