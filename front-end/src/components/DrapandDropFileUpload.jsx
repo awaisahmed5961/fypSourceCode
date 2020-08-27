@@ -19,9 +19,9 @@ const useStyles = makeStyles((theme) => (
             flexDirection: 'column',
             alignItems: 'center',
             height: '200px',
-            borderColor: 'green',
+            borderColor: 'grey',
             borderStyle: 'dashed',
-            backgroundColor: '#fafafa',
+            backgroundColor: '#f5fcff',
             borderWidth: '2px',
             borderRadius: '2px',
             color: '#272727',
@@ -51,6 +51,9 @@ export default function ImageUpload(props) {
         getInputProps,
         open,
         acceptedFiles,
+        isDragActive,
+        isDragAccept,
+        isDragReject
 
     } = useDropzone({
         noClick: true,
@@ -89,11 +92,15 @@ export default function ImageUpload(props) {
                     <Button variant="contained" color="primary" onClick={open}>
                         Upload Image
                     </Button>
+                    {isDragReject && (<p>Image should be JPEG / PNG </p>)}
                     {
                         matches ? (<div>
 
-                            <p>Drag 'n' drop Image here</p>
-                            <em>(Only *.jpeg and *.png images will be accepted)</em>
+                            {isDragActive ? (<p>Drop Image here</p>) : (<>
+                                <p>Drag 'n' drop Image here</p>
+                                <em>(Only *.jpeg and *.png images will be accepted)</em>
+                            </>)}
+
 
                         </div>) : ''
                     }
@@ -102,7 +109,7 @@ export default function ImageUpload(props) {
             <aside>
                 {
                     files.length !== 0 ? (<div>
-                        <h4>Files</h4>
+                        <h4>Image</h4>
                         <div>{files}</div>
                     </div>) : null
                 }

@@ -31,7 +31,7 @@ router.get('/',
     });
 
 /**
- * @route POST / api/auth
+ * @route POST / api/auth/learner
  * @description Authorize user & get token
  * @access Public
  */

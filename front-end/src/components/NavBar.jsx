@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AuthContext from '../context/auth/authcontext';
+import CourseContext from '../context/course/courseContext';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
@@ -23,10 +24,20 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import PersonIcon from '@material-ui/icons/Person';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import courseContext from '../context/course/courseContext';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+    },
+    AppBar: {
+        zIndex: theme.zIndex.modal + 1
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -42,6 +53,16 @@ const useStyles = makeStyles((theme) => ({
     custom_button: {
         borderColor: '#f7f7f7',
         color: '#f7f7f7'
+    },
+    drawerIconContainer: {
+        "&:hover": {
+            backgroundColor: 'transparent'
+        }
+    }, drawerIcon: {
+        color: '#fff'
+    }, userName: {
+        textTransform: 'capitalize',
+        letterSpacing: '.5px'
     }
 }));
 
@@ -53,9 +74,18 @@ export default function ButtonAppBar(props) {
 
     const classes = useStyles();
     const authContext = useContext(AuthContext);
+    const { user } = authContext;
+    const courseContext = useContext(CourseContext)
+    const { clearCourses } = courseContext;
+    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    const [openDrawer, setOpenDrawer] = useState(false);
+
     const { logOut } = authContext;
+
     const handleLogOut = () => {
         logOut();
+        clearCourses();
     }
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -75,7 +105,7 @@ export default function ButtonAppBar(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="static" className={classes.AppBar}>
                 <Toolbar>
                     <Typography
                         variant="h6"
@@ -100,15 +130,55 @@ export default function ButtonAppBar(props) {
                     ) : null}
                     {
                         matches ? (
-                            <div aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                                Awais
+                            <div aria-controls="simple-menu"
+                                aria-haspopup="true"
+                                onClick={handleClick}
+                                className={classes.userName}>
+                                {user && user.name}
                             </div>
                         ) : null}
                     {
                         matches ? (<ExpandMoreIcon />) : null
                     }
                     {
-                        !matches ? (<MenuIcon />) : null
+                        !matches ? (
+                            <>
+                                <IconButton
+                                    onClick={() => setOpenDrawer(!openDrawer)}
+                                    disableRipple
+                                    className={classes.drawerIconContainer}
+                                >
+                                    <MenuIcon className={classes.drawerIcon}
+                                    />
+                                </IconButton>
+                                <SwipeableDrawer
+                                    disableBackdropTransition={!iOS}
+                                    disableDiscovery={iOS}
+                                    open={openDrawer}
+                                    onClose={() => setOpenDrawer(false)}
+                                    onOpen={() => setOpenDrawer(true)}
+                                    className={classes.drawer} >
+                                    <List disablePadding>
+                                        <ListItem onClick={() => setOpenDrawer(false)} divider button component={Link} to='#'>
+                                            <ListItemIcon>
+                                                <PersonIcon />
+                                            </ListItemIcon>
+                                            <ListItemText disableTypography>
+                                                Profile
+                                            </ListItemText>
+                                        </ListItem>
+                                        <ListItem onClick={() => setOpenDrawer(false)} divider button component={Link} to='#'>
+                                            <ListItemIcon>
+                                                <ExitToAppIcon />
+                                            </ListItemIcon>
+                                            <ListItemText disableTypography>
+                                                Log Out
+                                            </ListItemText>
+                                        </ListItem>
+                                    </List>
+                                </SwipeableDrawer>
+                            </>
+                        ) : null
                     }
                     <Popper open={Boolean(anchorEl)} anchorEl={anchorEl} role={undefined} transition disablePortal>
                         {({ TransitionProps, placement }) => (
@@ -132,6 +202,6 @@ export default function ButtonAppBar(props) {
                     </Popper>
                 </Toolbar>
             </AppBar>
-        </div>
+        </div >
     );
 }

@@ -40,7 +40,9 @@ const useStyles = makeStyles((theme) => ({
     coursesContainer: {
         marginTop: '30px'
     },
-
+    noCouresError: {
+        marginBottom: '20px'
+    }
 
 }));
 
@@ -49,22 +51,25 @@ export default function Dashboard() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
-    const { courses, deleteCourse } = courseContext;
+    const { courses, deleteCourse, clearCurrent, getCourses, loading } = courseContext;
     const [tabIndex, setTabIndex] = useState(0);
     const currentIndex = (newValue) => {
         setTabIndex(newValue);
     };
     useEffect(() => {
         authContext.loadUser();
+        getCourses();
+        console.log('useeffect runs')
         // eslint-disable-next-line
     }, []);
 
     const handleCourseDelete = () => {
-        console.log('show a model for conformation of the course. after that the course will be deleted')
+        alert('show a model for conformation of the course. after that the course will be deleted')
         deleteCourse(1);
+        clearCurrent();
+
 
     }
-
     return (
         <div>
             <NavBar haveButton={true}
@@ -94,12 +99,36 @@ export default function Dashboard() {
                         </Grid>
                         <Grid item sm={false} xs={12} >
                             {
-                                courses.length === 0 ? (<div style={{
+                                loading ? ([0, 1, 2, 3].map((num) => { console.log(num) })) : (
+                                    <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
+                                        {
+                                            courses.map((course) => {
+                                                return (
+                                                    <Grid item key={course._id}>
+                                                        <CourseCard
+                                                            id={course._id}
+                                                            title={course.title}
+                                                            subTitle={course.subTitle}
+                                                            description={course.description}
+                                                            publicationStatus={course.publicationStatus}
+                                                            pageRoute={`/${course.title.split(' ').join('-')}`}
+                                                            onDelete={handleCourseDelete}
+                                                        />
+                                                    </Grid>);
+                                            })
+                                        }
+                                    </Grid>
+                                )
+
+                            }
+                            {/* {
+                                courses !== null && courses.length === 0 && !loading ? (<div style={{
                                     textAlign: 'center'
                                 }} className={classes.coursesContainer} >
                                     <Typography variant="h6" className={classes.noCouresError}>
                                         There is no Course.
                                     </Typography>
+
                                     <Button variant="contained" color="primary">
                                         Create Course
                                         </Button>
@@ -108,11 +137,12 @@ export default function Dashboard() {
                                             {
                                                 courses.map((course) => {
                                                     return (
-                                                        <Grid item key={course.id}>
+                                                        <Grid item key={course._id}>
                                                             <CourseCard
-                                                                id={course.id}
+                                                                id={course._id}
                                                                 title={course.title}
                                                                 subTitle={course.subTitle}
+                                                                description={course.description}
                                                                 publicationStatus={course.publicationStatus}
                                                                 pageRoute={`/${course.title.split(' ').join('-')}`}
                                                                 onDelete={handleCourseDelete}
@@ -122,7 +152,7 @@ export default function Dashboard() {
                                             }
                                         </Grid>
                                     )
-                            }
+                            } */}
                         </Grid>
                     </Grid>
                 </Grid>

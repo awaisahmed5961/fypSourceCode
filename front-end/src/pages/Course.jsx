@@ -13,12 +13,14 @@ import Joi from 'joi-browser';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import AuthContext from '../context/auth/authcontext'
+import CourseContext from '../context/course/courseContext';
 const useStyles = makeStyles((theme) => ({
     formContainer: {
         width: '75%',
         margin: '0 auto',
         marginTop: '30px',
-        background: 'yellow'
+        background: 'yellow',
+        marginBottom: '60px'
     },
     heading_primary: {
         padding: '25px'
@@ -54,35 +56,41 @@ export default function Course(props) {
     const matches = useMediaQuery(theme.breakpoints.down('sm'));
     const classes = useStyles();
     const authContext = useContext(AuthContext);
+    const courseContext = useContext(CourseContext);
+    const { user } = authContext;
+    const { addCourse, current, clearCurrent } = courseContext;
+    const { id } = props.match.params;
     useEffect(() => {
         authContext.loadUser();
         // eslint-disable-next-line
         if (props.match.params.id) {
-            const course = {
-                title: 'dumy title',
-                subTitle: 'dumy subtitle',
-                description: 'dumy description'
-            }
+
             setCourse({
-                ...course
+                ...current
             })
         }
         else {
-            console.log('add new coruse')
+            setCourse({
+                title: '',
+                subTitle: '',
+                description: ''
+            })
         }
     }, []);
     const [course, setCourse] = useState({
         title: '',
         subTitle: '',
         description: '',
-        // imagePath: ''
+        // imagePath: '',
     });
+
     const [loading, setLoading] = useState(false);
     const [validationErrors, setvalidationErrors] = useState({
         title: '',
         subTitle: '',
         description: '',
-        // imagePath: ''
+        // imagePath: '',
+
 
     });
     const handleInputOnChange = e => {
@@ -100,11 +108,26 @@ export default function Course(props) {
                 ...errors
             }
             );
-            alert('errors submitting')
         }
         else {
-            alert('form  is submitting')
-            setvalidationErrors({})
+            alert(props.match.params.id)
+            if (props.match.params.id === undefined) {
+                alert('form  is created');
+
+                addCourse(course);
+                setCourse({
+                    title: '',
+                    subTitle: '',
+                    description: '',
+                });
+                setvalidationErrors({})
+            }
+            else {
+                alert('course  is updating')
+                // setvalidationErrors({});
+                // clearCurrent()
+            }
+
         }
 
         // console.log(errors)
@@ -115,7 +138,7 @@ export default function Course(props) {
     var schema = {
         title: Joi.string().required().label('Title'),
         subTitle: Joi.string().required().label('Sub Title'),
-        description: Joi.string().required().label('Description')
+        description: Joi.string().max(300).required().label('Description')
     }
     const formValidation = () => {
         const result = Joi.validate(course, schema, { abortEarly: false });
@@ -127,6 +150,7 @@ export default function Course(props) {
         return errors;
     }
     return (
+
         <div>
             <NavBar
                 haveButton={true
@@ -163,7 +187,7 @@ export default function Course(props) {
                     md={12}
                     component={Paper}
                     elevation={2} >
-                    <form className={classes.form} noValidate onSubmit={handleOnSubmit}>
+                    <form className={classes.form} noValidate onSubmit={handleOnSubmit} encType="multipart/form-data">
 
                         <Grid container
                             direction="row"
@@ -175,7 +199,7 @@ export default function Course(props) {
                                             margin="normal"
                                             fullWidth
                                             id="Title"
-                                            value={course.title}
+                                            value={course.title || ""}
                                             name="title"
                                             label="Title"
                                             variant="filled"
@@ -190,7 +214,7 @@ export default function Course(props) {
                                         <TextField margin="normal"
                                             fullWidth
                                             id="filled-basic"
-                                            value={course.subTitle}
+                                            value={course.subTitle || ""}
                                             label="Sub Title"
                                             variant="filled"
                                             required
@@ -208,7 +232,7 @@ export default function Course(props) {
                                             label="Description"
                                             variant="filled"
                                             name="description"
-                                            value={course.description}
+                                            value={course.description || ""}
                                             multiline
                                             rows={matches ? '5' : '10'}
                                             rowsMax={10}
@@ -218,8 +242,8 @@ export default function Course(props) {
                                                 && { error: true, helperText: validationErrors.description })}
                                         />
                                         <div className={classes.textareaWordConunterContainer}>
-                                            <span>{course.description.length}</span>/300
-                                            </div>
+                                            {/* <span>{course.description.length || 0}</span>/300 */}
+                                        </div>
                                     </Grid>
 
                                 </Grid>

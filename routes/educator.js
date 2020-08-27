@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const router = express.Router();
 const Educator = require('../models/Educator');
-const { required } = require('@hapi/joi');
+
 /**
  * @route POST/ api/user
  * @description Register a user

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,8 +12,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { Link as RouterLink } from 'react-router-dom'
 import collapseLargeString from '../utils/collapseLargeString';
-
+import CourseContext from '../context/course/courseContext';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 const useStyles = makeStyles((theme) => ({
     root: {
         color: '#fff'
@@ -27,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     publicationBadge: {
         padding: '7px',
         display: 'inline-block',
+        width: '200px',
         borderRadius: '2px',
         margin: '20px',
         textTransform: 'capitalize',
@@ -42,12 +51,52 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#018377'
         // rgb(227, 116, 0)
     },
-
-
+    cardAction: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    publisheMetaData: {
+        display: 'flex',
+        flexDirection: 'column'
+    }, cta: {
+        textAlign: 'right',
+    }
 }));
 
 export default function CourseCard(props) {
-    const { id, title, subTitle, publicationStatus, pageRoute, onDelete } = props;
+    const { _id, title, description, subTitle, publicationStatus, pageRoute, onDelete } = props;
+    const courseContext = useContext(CourseContext);
+    const { setCurrent } = courseContext;
+
+    const handleEditCourse = () => {
+        const Course = {
+            _id,
+            title,
+            subTitle,
+            description,
+            publicationStatus
+        }
+        setCurrent(Course)
+    }
+
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const [isDeleteAble, setisDeleteAble] = useState(false);
+
+    const handlecourseDelete = (e) => {
+        const { value } = e.target;
+        if (value === title) {
+            alert('you can delete the course');
+        }
+
+
+    }
 
     const classes = useStyles();
     return (
@@ -103,26 +152,83 @@ export default function CourseCard(props) {
                                     subTitle, 25)
                             }
                         </Typography>
-                        {/* <Typography variant={'caption'}>
-                        Snow storm coming in Sommaroy island, Arctic Norway. This is something
-                        that you definitely wanna see in your life.
-        </Typography> */}
+
                     </CardContent>
                 </CardActionArea>
                 <CardActions >
-                    <Typography variant={'caption'}>
+                    {/* <Typography variant={'caption'}>
                         Created at:
                         <Link href="#" underline={'none'}>
                             March 8, 2016
           </Link>
-                    </Typography>
-                    <div>
-                        <IconButton component={RouterLink} to={`/course/${id}`}>
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={() => { onDelete() }} >
-                            <DeleteIcon />
-                        </IconButton>
+                    </Typography> */}
+                    <div className={classes.cardAction}>
+                        <div className={classes.publisheMetaData}>
+                            <Typography variant={'caption'}>
+                                Created at
+                            </Typography>
+                            <Typography variant={'caption'}>
+                                <Link href="#" underline={'none'}>
+                                    March 8, 2016
+          </Link>
+                            </Typography>
+                        </div>
+                        <div className={classes.cta}>
+                            <IconButton
+                                component={RouterLink}
+                                to={`/course/${_id}`}
+                                onClick={handleEditCourse}
+                                aria-label="Edit Coures">
+                                <EditIcon />
+                            </IconButton >
+                            <IconButton onClick={() => { handleClickOpen(); }}
+                                aria-label="Delete"
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                                <DialogTitle id="form-dialog-title">
+                                    <ReportProblemOutlinedIcon
+                                        style={{
+                                            color: 'red',
+                                            fontSize: 40,
+                                            verticalAlign: 'bottom',
+                                            paddingRight: '15px'
+                                        }} />
+                                        Delete Course
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Once the course is deleted, all couse content releated to this course will also be deleted.
+                                        To delete course enter the course title <b>{title}</b> below.
+                                </DialogContentText>
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        id="name"
+                                        label="Course Title"
+                                        type="text"
+                                        error
+                                        // {...(isDeleteAble && { error: true, helperText: 'error' })}
+                                        fullWidth
+                                        onChange={handlecourseDelete}
+                                    />
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleClose} color="primary">
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        onClick={handleClose}
+                                        variant="contained"
+                                        color="secondary"
+
+                                    >
+                                        Delete
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
+                        </div>
                     </div>
                 </CardActions>
             </Card>

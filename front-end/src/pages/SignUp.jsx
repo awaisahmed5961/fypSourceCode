@@ -117,12 +117,12 @@ export default function SignUp(props) {
         else {
             setErrors({});
             setRegistering(true);
-            alert('registeration method is disabled')
-            // register({
-            //     name,
-            //     email,
-            //     password
-            // });
+            // alert('registeration method is disabled')
+            register({
+                name,
+                email,
+                password
+            });
         }
     }
 

@@ -81,10 +81,10 @@ export default function SignIn(props) {
             alert('invalid credintials');
             clearErrors();
             setValues({
-                loagging: false,
                 email: '',
                 password: ''
             });
+            setLoagging(false);
             setErrors({
                 email: 'Invalid Credentials',
                 password: 'Invalid Credentials'
@@ -203,8 +203,7 @@ export default function SignIn(props) {
                             className={classes.submit}
                             {...(loagging && { disabled: true })}
                         >
-                            {loagging ? (<Spinner />) : 'Sign In'}
-                            {/* // Authenticating... */}
+                            {loagging ? (<><Spinner /> </>) : 'Sign In'}
                         </Button>
                         <Grid container>
                             <Grid item xs>
