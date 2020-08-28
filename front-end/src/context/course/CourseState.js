@@ -10,57 +10,17 @@ import {
     FILTER_COURSE,
     SET_CURRENT,
     CLEAR_CURRENT,
-    CLEAR_COURSES
+    CLEAR_COURSES,
+    COURSE_ERROR,
+    CLEAR_COURSE_ERRORS
 } from '../types';
 import { NavItem } from 'react-bootstrap';
 
 const CourseState = props => {
     const initialState = {
         courses: [], loading: true
-        // {
-        //     id: 0,
-        //     title: 'Dynamic physics',
-        //     subTitle: 'Compulasary part II',
-        //     description: 'djfhdjhfkjdshf',
-        //     publicationStatus: 'published'
-        // },
-        // {
-        //     id: 1,
-        //     title: 'Chemistary',
-        //     subTitle: 'part I',
-        //     description: 'djfhdjhfkjdshf',
-        //     publicationStatus: 'draft'
-        // },
-        // {
-        //     id: 2,
-        //     title: 'Dynamic physics',
-        //     subTitle: 'Compulasary part II',
-        //     description: 'djfhdjhfkjdshf',
-        //     publicationStatus: 'draft'
-        // },
-        // {
-        //     id: 3,
-        //     title: 'Dynamic physics',
-        //     subTitle: 'Compulasary part II',
-        //     description: 'djfhdjhfkjdshf',
-        //     publicationStatus: 'published'
-        // },
-        // {
-        //     id: 4,
-        //     title: 'Dynamic physics',
-        //     subTitle: 'Compulasary part II',
-        //     description: 'djfhdjhfkjdshf',
-        //     publicationStatus: 'archived'
-        // },
-        // {
-        //     id: 5,
-        //     title: 'Dynamic physics',
-        //     subTitle: 'Compulasary part II',
-        //     description: 'djfhdjhfkjdshf',
-        //     publicationStatus: 'archived'
-        // },
-        // ],
-        , current: null
+        , current: null,
+        error: null
     };
 
     const [state, dispatch] = useReducer(courseReducer, initialState);
@@ -93,7 +53,9 @@ const CourseState = props => {
             dispatch({ type: ADD_COURSE, payload: res.data })
         }
         catch (err) {
-            console.log('errro in couse add course state js')
+            dispatch({
+                type: COURSE_ERROR
+            });
         }
 
     }
@@ -114,6 +76,9 @@ const CourseState = props => {
     const clearCurrent = () => {
         dispatch({ type: CLEAR_CURRENT })
     }
+    const clearCourseError = () => {
+        dispatch({ type: CLEAR_COURSE_ERRORS })
+    }
 
     return (
         <CourseContext.Provider
@@ -121,12 +86,14 @@ const CourseState = props => {
                 courses: state.courses,
                 current: state.current,
                 loading: state.loading,
+                error: state.error,
                 getCourses,
                 addCourse,
                 deleteCourse,
                 setCurrent,
                 clearCurrent,
-                clearCourses
+                clearCourses,
+                clearCourseError
             }}
         >
             {props.children}

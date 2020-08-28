@@ -6,7 +6,9 @@ import {
     FILTER_COURSE,
     SET_CURRENT,
     CLEAR_CURRENT,
-    CLEAR_COURSES
+    CLEAR_COURSES,
+    COURSE_ERROR,
+    CLEAR_COURSE_ERRORS
 } from '../types';
 
 export default (state, action) => {
@@ -23,6 +25,19 @@ export default (state, action) => {
                 courses: [...state.courses, action.payload],
                 loading: false
             };
+        case COURSE_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            }
+        case CLEAR_COURSE_ERRORS:
+            return {
+                ...state,
+                loading: false,
+                error: null
+            }
+
         case DELETE_COURSE:
             return {
                 ...state,

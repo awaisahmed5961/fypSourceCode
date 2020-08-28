@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import NavBar from '../components/NavBar'
 import BreadCrumbs from '../components/BreadCrumbs'
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +14,22 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import AuthContext from '../context/auth/authcontext'
 import CourseContext from '../context/course/courseContext';
+import { ReactComponent as FireCracker } from '../app assetrs/icons/congratulation.svg';
+import DownloadButton from '../app assetrs/Images/download button.png'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import QRCode from "react-qr-code";
+import InputAdornment from '@material-ui/core/InputAdornment';
+
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import IconButton from '@material-ui/core/IconButton';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import Input from '@material-ui/core/Input';
 const useStyles = makeStyles((theme) => ({
     formContainer: {
         width: '75%',
@@ -46,7 +62,30 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'right',
         paddingRight: '8px',
         color: '#333'
-    }
+    },
+    orderedList: {
+        counterReset: 'item',
+        '& li': {
+            display: 'block',
+            marginBottom: '.5em',
+            marginLeft: '-25px',
+            '&::before': {
+                display: 'inline-block',
+                content: 'counter(item) "."',
+                color: theme.palette.primary.main,
+                fontWeight: 'bold',
+                fontSize: '20px',
+                counterIncrement: 'item',
+                width: '1.5em',
+            }
+        }
+
+    }, courseUriFieldHelperText: {
+        paddingTop: '10px',
+        textAlign: 'left'
+
+    },
+
 
 }));
 
@@ -58,10 +97,17 @@ export default function Course(props) {
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
     const { user } = authContext;
-    const { addCourse, current, clearCurrent } = courseContext;
+    const { addCourse, current, clearCurrent, error, clearCourseError } = courseContext;
+    const [copySuccess, setCopySuccess] = useState('');
+    const textAreaRef = useRef(null);
     const { id } = props.match.params;
     useEffect(() => {
         authContext.loadUser();
+
+        if (error === 'Server Error') {
+            alert('course failed to Create');
+            clearCourseError();
+        }
         // eslint-disable-next-line
         if (props.match.params.id) {
 
@@ -76,7 +122,7 @@ export default function Course(props) {
                 description: ''
             })
         }
-    }, []);
+    }, [error]);
     const [course, setCourse] = useState({
         title: '',
         subTitle: '',
@@ -93,6 +139,15 @@ export default function Course(props) {
 
 
     });
+    const [openModal, setOpenModal] = useState(true);
+
+    const handleClickOpen = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
     const handleInputOnChange = e => {
         const { name, value } = e.target;
         setCourse({
@@ -110,11 +165,18 @@ export default function Course(props) {
             );
         }
         else {
-            alert(props.match.params.id)
             if (props.match.params.id === undefined) {
-                alert('form  is created');
 
-                addCourse(course);
+                // addCourse(course);
+
+                if (error === "Server Error") {
+                    alert('add alert that says course registeration falied');
+                }
+                else {
+                    setOpenModal(true);
+
+                }
+
                 setCourse({
                     title: '',
                     subTitle: '',
@@ -149,6 +211,17 @@ export default function Course(props) {
         }
         return errors;
     }
+    function copyToClipboard(e) {
+        // textAreaRef.current.select();
+        document.execCommand('copy');
+        // This is just personal preference.
+        // I prefer to not show the whole text area selected.
+        e.target.focus();
+        setCopySuccess('Copied!');
+        setTimeout(() => {
+            setCopySuccess('');
+        }, 4000)
+    };
     return (
 
         <div>
@@ -264,7 +337,108 @@ export default function Course(props) {
                             </Button>
                         </Grid>
                     </form>
+                    <Dialog open={openModal}
+                        onClose={handleClose}
+                        aria-labelledby="form-dialog-title"
+                        maxWidth={'md'}
+                    >
 
+                        <DialogTitle id="form-dialog-title" disableTypography={true}>
+                            Congratulations {' '} <FireCracker style={{
+                                width: '30px',
+                                height: '30px',
+                            }} />
+                            <Typography variant="subtitle2">
+                                Share your content with your learners.
+                            </Typography>
+                        </DialogTitle>
+                        <DialogContent>
+                            <Grid container direction="row" className={classes.modalContainer}>
+                                <Grid item xs={12} sm={12} md={6} >
+                                    <DialogContentText>
+                                        Once the course is deleted, all couse content releated to this course will also be deleted.
+                                        </DialogContentText>
+                                    <ol className={classes.orderedList}>
+                                        <li>
+                                            Download the application from Playstore.
+                                                <a href="#" target="_blank" rel="noopner noreffer">
+                                                <img src={DownloadButton} style={
+                                                    {
+                                                        width: '140px',
+                                                        height: '140px',
+                                                        marginTop: '-28px',
+                                                        marginBottom: '-28px',
+                                                        display: 'block',
+                                                        marginLeft: 'auto',
+                                                        marginRight: 'auto'
+                                                    }
+                                                } />
+                                            </a>
+
+                                        </li>
+                                        <li>
+                                            Register free account in the application.
+                                            </li>
+                                        <li>
+                                            Scan the QR on the mobile to register course.
+                                            </li>
+                                        <li>
+                                            Have fun, Learn with Agumented Reality.
+                                            </li>
+                                    </ol>
+
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} align="center">
+                                    <QRCode value="kjsdji3u4uiueuncew" />
+                                    <div>
+
+                                        <form >
+                                            <FormControl style={{
+                                                marginTop: '20px'
+                                            }}>
+                                                {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
+                                                <OutlinedInput
+                                                    id="outlined-adornment-password"
+                                                    // type={values.showPassword ? 'text' : 'password'}
+                                                    type='text'
+                                                    value="akdjfkdjkf"
+                                                    inputRef={textAreaRef}
+                                                    notched={false}
+                                                    readOnly
+                                                    endAdornment={
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="toggle password visibility"
+                                                                // onClick={handleClickShowPassword}
+                                                                // onMouseDown={handleMouseDownPassword}
+                                                                edge="end"
+                                                                onClick={copyToClipboard}
+                                                            >
+                                                                <FileCopyOutlinedIcon />
+                                                                {/* {values.showPassword ? <Visibility /> : <VisibilityOff />} */}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    }
+                                                    labelWidth={70}
+                                                />
+                                                <div className={classes.courseUriFieldHelperText} >
+                                                    {copySuccess || ''}
+
+                                                </div>
+                                            </FormControl>
+                                        </form>
+
+                                    </div>
+                                </Grid>
+                            </Grid>
+
+                        </DialogContent>
+                        <div style={{
+                            height: '30px'
+                        }}>
+
+                        </div>
+                    </Dialog>
                 </Grid>
             </Grid>
         </div >

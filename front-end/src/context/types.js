@@ -15,5 +15,8 @@ export const UPDATE_COURSE = 'UPDATE_COURSE';
 export const FILTER_COURSE = 'FILTER_COURSE';
 export const SET_CURRENT = 'SET_CURRENT';
 export const CLEAR_CURRENT = 'CLEAR_CURRENT';
+export const COURSE_ERROR = 'COURSE_ERROR';
+export const CLEAR_COURSE_ERRORS = 'CLEAR_COURSE_ERRORS';
+
 
 

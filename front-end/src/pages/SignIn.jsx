@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthContext from '../context/auth/authcontext';
 import { Spinner } from '../components/Spinner'
+import SliderImage from '../app assetrs/Images/image1.jpg'
 import Joi from 'joi-browser'
 function Copyright() {
     return (
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '8vh auto'
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: `url(${SliderImage})`,
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -151,8 +152,9 @@ export default function SignIn(props) {
         <Grid container component="main" className={classes.root}>
 
             <CssBaseline />
-            {/* <Grid item xs={false} sm={4} md={6} className={classes.image} >
-            </Grid> */}
+            <Grid item xs={false} sm={4} md={6} className={classes.image} >
+
+            </Grid>
             <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
