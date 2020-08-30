@@ -139,7 +139,7 @@ export default function Course(props) {
 
 
     });
-    const [openModal, setOpenModal] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
 
     const handleClickOpen = () => {
         setOpenModal(true);
@@ -344,11 +344,13 @@ export default function Course(props) {
                     >
 
                         <DialogTitle id="form-dialog-title" disableTypography={true}>
-                            Congratulations {' '} <FireCracker style={{
-                                width: '30px',
-                                height: '30px',
-                            }} />
-                            <Typography variant="subtitle2">
+                            <Typography variant='h5'>
+                                Congratulations {' '} <FireCracker style={{
+                                    width: '30px',
+                                    height: '30px',
+                                }} />
+                            </Typography>
+                            <Typography variant="subtitle">
                                 Share your content with your learners.
                             </Typography>
                         </DialogTitle>

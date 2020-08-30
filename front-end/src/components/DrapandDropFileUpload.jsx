@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -47,15 +47,21 @@ export default function ImageUpload(props) {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
+    const onDrop = useCallback(acceptedFiles => {
+        // Do something with the files
+        console.log('file is droped ')
+    }, [])
+
     const { getRootProps,
         getInputProps,
         open,
         acceptedFiles,
         isDragActive,
         isDragAccept,
-        isDragReject
-
+        isDragReject,
     } = useDropzone({
+
+        onDrop,
         noClick: true,
         noKeyboard: true,
         multiple: false,
