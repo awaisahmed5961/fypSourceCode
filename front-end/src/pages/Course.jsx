@@ -425,15 +425,12 @@ export default function Course(props) {
                                                 />
                                                 <div className={classes.courseUriFieldHelperText} >
                                                     {copySuccess || ''}
-
                                                 </div>
                                             </FormControl>
                                         </form>
-
                                     </div>
                                 </Grid>
                             </Grid>
-
                         </DialogContent>
                         <div style={{
                             height: '30px'
