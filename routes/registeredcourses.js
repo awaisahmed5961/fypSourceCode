@@ -14,9 +14,7 @@ const router = express.Router();
  */
 router.get('/', auth, async (req, res) => {
     const listOfCourses = await RegisterCourse
-        // .find({ educator_id: req.user.id })
-        // .populate('educator_id', '-password')
-        .find()
+        .find({ learner_id: req.user.id })
         .populate('course_id', '-_id -ImagePlaceholder ')
         .populate({
             path: 'course_id',

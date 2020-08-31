@@ -96,7 +96,7 @@ export default function Course(props) {
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
     const { user } = authContext;
-    const { addCourse, current, clearCurrent, error, clearCourseError, courseadded } = courseContext;
+    const { addCourse, current, clearCurrent, error, clearCourseError, courseadded, updateCourse } = courseContext;
     const [copySuccess, setCopySuccess] = useState('');
     const [image, setImage] = useState(null);
     const textAreaRef = useRef(null);
@@ -109,26 +109,26 @@ export default function Course(props) {
             clearCourseError();
         }
         // eslint-disable-next-line
-        if (props.match.params.id) {
-            setCourse({
-                ...current
-            })
+        if (current !== null) {
+            setCourse(current)
         }
         else {
             setCourse({
                 title: '',
                 subTitle: '',
-                description: ''
+                description: '',
+                publicationStatus: 1
             })
         }
-    }, [error, courseadded]);
+    }, [courseContext, current]);
     const [course, setCourse] = useState({
         title: '',
         subTitle: '',
         description: '',
+        publicationStatus: 1
 
     });
-
+    const { title, subTitle, description } = course;
     const [loading, setLoading] = useState(false);
     const [validationErrors, setvalidationErrors] = useState({
         title: '',
@@ -154,67 +154,97 @@ export default function Course(props) {
     }
     const handleOnSubmit = (e) => {
         e.preventDefault();
-        const errors = formValidation();
-        if (errors) {
-            setvalidationErrors({
-                ...errors
-            }
-            );
+        if (current === null) {
+            const fd = new FormData();
+            fd.append('title', course.title);
+            fd.append('subTitle', course.subTitle);
+            fd.append('description', course.description);
+            // fd.append('ImagePlaceholder', image);
+            addCourse(fd);
+            setCourse({
+                title: '',
+                subTitle: '',
+                description: '',
+                publicationStatus: 1
+            })
+            console.log('create course')
+            // const errors = formValidation();
+            // if (errors) {
+            //     setvalidationErrors({
+            //         ...errors
+            //     }
+            //     );
+            //     return;
+            // }
+            // else {
+            // }
         }
         else {
-            if (props.match.params.id === undefined) {
-                console.log('onsubmit click')
-            }
-            else {
-                console.log('edit the cour')
-            }
-
-            //     if (props.match.params.id === undefined) {
-            //         if (error === "Server Error") {
-            //             alert('add alert that says course registeration falied...');
-            //         }
-            //         else {
-
-            //             // addCourse(course);
-            //             const fd = new FormData();
-            //             fd.append('title', course.title);
-            //             fd.append('subTitle', course.subTitle);
-            //             fd.append('description', course.description);
-            //             fd.append('ImagePlaceholder', image);
-            //             for (var data of fd.entries()) {
-            //                 console.log(data[0] + ', ' + data[1]);
-            //             }
-            //             addCourse(fd)
-            //             setTimeout(() => {
-            //                 console.log('adding course');
-            //                 console.log(courseadded)
-            //             }, 3000)
-
-            //             if (courseadded) {
-            //                 setOpenModal(true);
-            //             }
-            //             else {
-            //                 alert('add alert that says course registeration falied')
-            //                 console.log('add alert that says course registeration falied')
-            //             }
-
-
-            //         }
-
-            //         setCourse({
-            //             title: '',
-            //             subTitle: '',
-            //             description: '',
-            //         });
-            //         setvalidationErrors({})
-            //     }
-            //     else {
-            //         alert('course is updating')
-            //         // setvalidationErrors({});
-            //         // clearCurrent()
-            //     }
+            updateCourse(course);
+            console.log('edited course')
 
         }
+        // const errors = formValidation();
+        // if (errors) {
+        //     setvalidationErrors({
+        //         ...errors
+        //     }
+        //     );
+        // }
+        // else {
+        //     if (current !== null) {
+        //         console.log('edit the cour')
+        //     }
+        //     else {
+        //         console.log('onsubmit click')
+        //     }
+
+        //     if (props.match.params.id === undefined) {
+        //         if (error === "Server Error") {
+        //             alert('add alert that says course registeration falied...');
+        //         }
+        //         else {
+
+        //  addCourse(course);
+        //             const fd = new FormData();
+        //             fd.append('title', course.title);
+        //             fd.append('subTitle', course.subTitle);
+        //             fd.append('description', course.description);
+        //             fd.append('ImagePlaceholder', image);
+        //             for (var data of fd.entries()) {
+        //                 console.log(data[0] + ', ' + data[1]);
+        //             }
+        //             addCourse(fd)
+        //             setTimeout(() => {
+        //                 console.log('adding course');
+        //                 console.log(courseadded)
+        //             }, 3000)
+
+        //             if (courseadded) {
+        //                 setOpenModal(true);
+        //             }
+        //             else {
+        //                 alert('add alert that says course registeration falied')
+        //                 console.log('add alert that says course registeration falied')
+        //             }
+
+
+        //         }
+
+        //         setCourse({
+        //             title: '',
+        //             subTitle: '',
+        //             description: '',
+        //         });
+        //         setvalidationErrors({})
+        //     }
+        //     else {
+        //         alert('course is updating')
+        //         // setvalidationErrors({});
+        //         // clearCurrent()
+        //     }
+
+        // }
 
     }
     var schema = {
@@ -224,8 +254,8 @@ export default function Course(props) {
     }
     const formValidation = () => {
         const result = Joi.validate(course, schema, { abortEarly: false });
-        if (!result.error) return null;
         let errors = {};
+        if (!result.error) return null;
         for (let item of result.error.details) {
             errors[item.path[0]] = item.message;
         }
@@ -288,7 +318,7 @@ export default function Course(props) {
                                             margin="normal"
                                             fullWidth
                                             id="Title"
-                                            value={course.title || ""}
+                                            value={title || ""}
                                             name="title"
                                             label="Title"
                                             variant="filled"
@@ -303,7 +333,7 @@ export default function Course(props) {
                                         <TextField margin="normal"
                                             fullWidth
                                             id="filled-basic"
-                                            value={course.subTitle || ""}
+                                            value={subTitle || ""}
                                             label="Sub Title"
                                             variant="filled"
                                             required
@@ -321,7 +351,7 @@ export default function Course(props) {
                                             label="Description"
                                             variant="filled"
                                             name="description"
-                                            value={course.description || ""}
+                                            value={description || ""}
                                             multiline
                                             rows={matches ? '5' : '10'}
                                             rowsMax={10}

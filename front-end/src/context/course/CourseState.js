@@ -17,10 +17,12 @@ import {
 
 const CourseState = props => {
     const initialState = {
-        courses: [], loading: true
+        courses: [],
+        loading: true
         , current: null,
         error: null,
-        courseadded: null
+        courseadded: null,
+        serverResponseWating: null
     };
 
     const [state, dispatch] = useReducer(courseReducer, initialState);
@@ -73,9 +75,32 @@ const CourseState = props => {
             });
         }
     }
+
     // update Course
-    const updateCourse = (contact) => {
-        dispatch({ type: UPDATE_COURSE, payload: contact })
+    const updateCourse = async (course) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.put(
+                `/api/courses/${course.id}`,
+                course,
+                config
+            );
+
+            dispatch({
+                type: UPDATE_COURSE,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: COURSE_ERROR,
+                payload: err.response.msg
+            });
+        }
     }
     // Filter Course
     // setCurrentMethod
@@ -100,6 +125,7 @@ const CourseState = props => {
                 courseadded: state.courseadded,
                 getCourses,
                 addCourse,
+                updateCourse,
                 deleteCourse,
                 setCurrent,
                 clearCurrent,

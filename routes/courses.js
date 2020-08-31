@@ -96,11 +96,13 @@ router.post('/', auth, upload.single('ImagePlaceholder'), async (req, res) => {
  * @description update course
  * @access Private
  */
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
 
-    let { error } = courseValidationSchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message) }
-    // Pulling required Information from the Request 
+    // let { error } = courseValidationSchema.validate(req.body);
+    // console.log('looking for')
+    // if (error) { return res.status(400).send(error.details[0].message) }
+    // Pulling required Information from the Request
+
     const { title, subTitle, description } = req.body;
 
     // Build contact object
@@ -110,8 +112,8 @@ router.put('/:id', async (req, res) => {
     if (description) updatedCourse.description = description;
 
     try {
-        let course = await Course.findById(req.params.id);
 
+        let course = await Course.findById(req.params.id);
         if (!course) return res.status(404).json({ msg: 'Course not found' });
 
         // Make sure user owns contact

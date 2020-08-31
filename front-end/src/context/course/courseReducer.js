@@ -48,7 +48,7 @@ export default (state, action) => {
         case UPDATE_COURSE:
             return {
                 ...state,
-                // courses: state.courses.filter(course => course.id !== action.payload),
+                courses: state.courses.map(course => course.id === action.payload.id ? action.payload : course),
                 loading: false
             };
         case CLEAR_COURSES:
