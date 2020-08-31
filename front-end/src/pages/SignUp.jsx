@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Joi from 'joi-browser';
 import { Spinner } from '../components/Spinner'
+import SliderImage from '../app assetrs/Images/image1.jpg'
 
 
 import AuthContext from '../context/auth/authcontext';
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '8vh auto'
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: `url(${SliderImage})`,
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

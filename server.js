@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const morgan = require('morgan');
 
+app.use('/api/uploads', express.static('uploads'))
 // Connect DataBase
 connectDB();
 app.use(morgan('dev'));

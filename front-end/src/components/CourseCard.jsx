@@ -22,6 +22,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
+import getPublicationStatus from '../utils/getPublicationStatus';
+import defaultImage from '../app assetrs/Images/default image placeholder.png'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         color: '#fff'
@@ -64,13 +67,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CourseCard(props) {
-    const { _id, title, description, subTitle, publicationStatus, pageRoute, onDelete } = props;
+    const { id, title, description, subTitle, publicationStatus, pageRoute, onDelete } = props;
     const courseContext = useContext(CourseContext);
-    const { setCurrent } = courseContext;
+    const { setCurrent, deleteCourse } = courseContext;
 
     const handleEditCourse = () => {
         const Course = {
-            _id,
+            id,
             title,
             subTitle,
             description,
@@ -80,19 +83,21 @@ export default function CourseCard(props) {
     }
 
     const [open, setOpen] = useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleClickOpen = (id) => {
+        // setOpen(true);
+        deleteCourse(id);
+        console.log('deleted')
     };
 
     const handleClose = () => {
         setOpen(false);
     };
     const [isDeleteAble, setisDeleteAble] = useState(false);
-
     const handlecourseDelete = (e) => {
         const { value } = e.target;
         if (value === title) {
-            alert('you can delete the course');
+            // deleteCourse(id);
+            // remove disable button attribute
         }
 
 
@@ -121,14 +126,14 @@ export default function CourseCard(props) {
                                     textTransform: 'capitalize'
                                 }}
                                 className={
-                                    publicationStatus === 'published'
+                                    publicationStatus === '1'
                                         ? (classes.publishBadge)
                                         :
-                                        (publicationStatus === 'draft'
+                                        (publicationStatus === '2'
                                             ? classes.draftBadge
                                             : classes.archiveBadge)}
                             >
-                                {publicationStatus}
+                                {getPublicationStatus(publicationStatus)}
                             </Typography>
                         </div>
 
@@ -176,12 +181,12 @@ export default function CourseCard(props) {
                         <div className={classes.cta}>
                             <IconButton
                                 component={RouterLink}
-                                to={`/course/${_id}`}
                                 onClick={handleEditCourse}
+                                to={`/course/${id}`}
                                 aria-label="Edit Coures">
                                 <EditIcon />
                             </IconButton >
-                            <IconButton onClick={() => { handleClickOpen(); }}
+                            <IconButton onClick={() => { handleClickOpen(id); }}
                                 aria-label="Delete"
                             >
                                 <DeleteIcon />
@@ -222,7 +227,6 @@ export default function CourseCard(props) {
                                         onClick={handleClose}
                                         variant="contained"
                                         color="secondary"
-
                                     >
                                         Delete
                                     </Button>
@@ -237,9 +241,9 @@ export default function CourseCard(props) {
 }
 function getPublicationBadge(publicationstatus) {
     switch (publicationstatus) {
-        case 'published':
+        case 1:
             return 'classes.publishBadge';
-        case 'archived':
+        case 2:
             return 'classes.archiveBadge';
         default:
             return 'classes.draftBadge';

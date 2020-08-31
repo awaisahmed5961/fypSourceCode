@@ -4,6 +4,30 @@ const Course = require('../models/Course');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
 Joi.objectId = require('joi-objectid')(Joi)
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true)
+    }
+    else {
+        cb(null, false);
+    }
+}
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 4
+    },
+    fileFilter: fileFilter
+});
 
 const router = express.Router();
 
@@ -38,12 +62,11 @@ router.get('/:id', auth, async (req, res) => {
  * @description Add course
  * @access Private
  */
-router.post('/', auth, async (req, res) => {
-
+router.post('/', auth, upload.single('ImagePlaceholder'), async (req, res) => {
     let { error } = courseValidationSchema.validate(req.body);
     if (error) { return res.status(400).send(error.details[0].message) }
     // Pulling required Information from the Request 
-    const { title, subTitle, description } = req.body;
+    const { title, subTitle, description, } = req.body;
 
     try {
         // Creation object of the Course Model
@@ -51,7 +74,12 @@ router.post('/', auth, async (req, res) => {
             title,
             subTitle,
             description,
-            educator_id: req.user.id
+            educator_id: req.user.id,
+            ImagePlaceholder: (req.file && req.file.path
+                ?
+                req.file.path
+                :
+                'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80')
         });
 
         await course.save();

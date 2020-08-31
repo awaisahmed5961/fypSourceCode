@@ -23,6 +23,7 @@ export default (state, action) => {
             return {
                 ...state,
                 courses: [...state.courses, action.payload],
+                courseadded: action.payload,
                 loading: false
             };
         case COURSE_ERROR:
@@ -41,7 +42,7 @@ export default (state, action) => {
         case DELETE_COURSE:
             return {
                 ...state,
-                courses: state.courses.filter(course => course.id !== action.payload),
+                courses: state.courses.filter(course => course._id !== action.payload),
                 loading: false
             };
         case UPDATE_COURSE:

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { number } = require('@hapi/joi');
 
 const CourseSchema = mongoose.Schema({
     title: {
@@ -20,6 +21,10 @@ const CourseSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    publication_Status: {
+        type: Number,
+        default: 1
     },
     educator_id: [{
         type: mongoose.Schema.Types.ObjectId,

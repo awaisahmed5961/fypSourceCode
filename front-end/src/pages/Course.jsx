@@ -17,7 +17,6 @@ import CourseContext from '../context/course/courseContext';
 import { ReactComponent as FireCracker } from '../app assetrs/icons/congratulation.svg';
 import DownloadButton from '../app assetrs/Images/download button.png'
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -97,8 +96,9 @@ export default function Course(props) {
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
     const { user } = authContext;
-    const { addCourse, current, clearCurrent, error, clearCourseError } = courseContext;
+    const { addCourse, current, clearCurrent, error, clearCourseError, courseadded } = courseContext;
     const [copySuccess, setCopySuccess] = useState('');
+    const [image, setImage] = useState(null);
     const textAreaRef = useRef(null);
     const { id } = props.match.params;
     useEffect(() => {
@@ -110,7 +110,6 @@ export default function Course(props) {
         }
         // eslint-disable-next-line
         if (props.match.params.id) {
-
             setCourse({
                 ...current
             })
@@ -122,12 +121,12 @@ export default function Course(props) {
                 description: ''
             })
         }
-    }, [error]);
+    }, [error, courseadded]);
     const [course, setCourse] = useState({
         title: '',
         subTitle: '',
         description: '',
-        // imagePath: '',
+
     });
 
     const [loading, setLoading] = useState(false);
@@ -135,8 +134,6 @@ export default function Course(props) {
         title: '',
         subTitle: '',
         description: '',
-        // imagePath: '',
-
 
     });
     const [openModal, setOpenModal] = useState(false);
@@ -166,36 +163,59 @@ export default function Course(props) {
         }
         else {
             if (props.match.params.id === undefined) {
-
-                // addCourse(course);
-
-                if (error === "Server Error") {
-                    alert('add alert that says course registeration falied');
-                }
-                else {
-                    setOpenModal(true);
-
-                }
-
-                setCourse({
-                    title: '',
-                    subTitle: '',
-                    description: '',
-                });
-                setvalidationErrors({})
+                console.log('onsubmit click')
             }
             else {
-                alert('course  is updating')
-                // setvalidationErrors({});
-                // clearCurrent()
+                console.log('edit the cour')
             }
+
+            //     if (props.match.params.id === undefined) {
+            //         if (error === "Server Error") {
+            //             alert('add alert that says course registeration falied...');
+            //         }
+            //         else {
+
+            //             // addCourse(course);
+            //             const fd = new FormData();
+            //             fd.append('title', course.title);
+            //             fd.append('subTitle', course.subTitle);
+            //             fd.append('description', course.description);
+            //             fd.append('ImagePlaceholder', image);
+            //             for (var data of fd.entries()) {
+            //                 console.log(data[0] + ', ' + data[1]);
+            //             }
+            //             addCourse(fd)
+            //             setTimeout(() => {
+            //                 console.log('adding course');
+            //                 console.log(courseadded)
+            //             }, 3000)
+
+            //             if (courseadded) {
+            //                 setOpenModal(true);
+            //             }
+            //             else {
+            //                 alert('add alert that says course registeration falied')
+            //                 console.log('add alert that says course registeration falied')
+            //             }
+
+
+            //         }
+
+            //         setCourse({
+            //             title: '',
+            //             subTitle: '',
+            //             description: '',
+            //         });
+            //         setvalidationErrors({})
+            //     }
+            //     else {
+            //         alert('course is updating')
+            //         // setvalidationErrors({});
+            //         // clearCurrent()
+            //     }
 
         }
 
-        // console.log(errors)
-        // console.log(eerrors)
-        // if (errors) {
-        // }
     }
     var schema = {
         title: Joi.string().required().label('Title'),
@@ -212,10 +232,7 @@ export default function Course(props) {
         return errors;
     }
     function copyToClipboard(e) {
-        // textAreaRef.current.select();
         document.execCommand('copy');
-        // This is just personal preference.
-        // I prefer to not show the whole text area selected.
         e.target.focus();
         setCopySuccess('Copied!');
         setTimeout(() => {
@@ -261,7 +278,6 @@ export default function Course(props) {
                     component={Paper}
                     elevation={2} >
                     <form className={classes.form} noValidate onSubmit={handleOnSubmit} encType="multipart/form-data">
-
                         <Grid container
                             direction="row"
                             align="center" >
@@ -322,7 +338,8 @@ export default function Course(props) {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sm={12} md={6}>
-                                <ImageUpload />
+                                {/* <ImageUpload onImageUpload={setImage} />*/}
+                                <ImageUpload state={course} onImageUpload={setCourse} />
                             </Grid>
                             <Button
                                 {
@@ -337,7 +354,8 @@ export default function Course(props) {
                             </Button>
                         </Grid>
                     </form>
-                    <Dialog open={openModal}
+                    <Dialog
+                        open={openModal}
                         onClose={handleClose}
                         aria-labelledby="form-dialog-title"
                         maxWidth={'md'}
@@ -350,7 +368,7 @@ export default function Course(props) {
                                     height: '30px',
                                 }} />
                             </Typography>
-                            <Typography variant="subtitle">
+                            <Typography variant="subtitle1">
                                 Share your content with your learners.
                             </Typography>
                         </DialogTitle>

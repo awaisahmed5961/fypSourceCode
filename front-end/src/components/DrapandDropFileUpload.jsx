@@ -48,8 +48,12 @@ export default function ImageUpload(props) {
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     const onDrop = useCallback(acceptedFiles => {
-        // Do something with the files
-        console.log('file is droped ')
+        // props.onImageUpload(acceptedFiles);
+        props.onImageUpload({
+            ...props.state,
+            image: acceptedFiles
+        })
+
     }, [])
 
     const { getRootProps,

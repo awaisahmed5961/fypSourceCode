@@ -4,7 +4,7 @@ const RegisterCourse = require('../models/RegisterCourse');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
 Joi.objectId = require('joi-objectid')(Joi)
-
+const Course = require('../models/Course');
 const router = express.Router();
 
 /**
@@ -12,17 +12,18 @@ const router = express.Router();
  * @description Get List of registerdcourses
  * @access Private
  */
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const listOfCourses = await RegisterCourse
         // .find({ educator_id: req.user.id })
         // .populate('educator_id', '-password')
         .find()
-        // .populate('course_id', '-_id -ImagePlaceholder ')
+        .populate('course_id', '-_id -ImagePlaceholder ')
         .populate({
             path: 'course_id',
             populate: {
                 path: 'educator_id',
-                model: 'educator'
+                model: 'educator',
+                select: 'name  email  _id'
             }
         })
     res.send(listOfCourses);
@@ -32,7 +33,7 @@ router.get('/', async (req, res) => {
  * @description Get single of courses
  * @access Private
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
     const course = await RegisterCourse.find({ course_id: req.params.id });
     if (!course) {
         res.status(404).send('Ooops no register course found with this id');
@@ -46,17 +47,38 @@ router.get('/:id', async (req, res) => {
  * @description Add course
  * @access Private
  */
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 
     let { error } = RegistercourseSchemaValidation.validate(req.body);
     if (error) { return res.status(400).send(error.details[0].message) }
     // Pulling required course Id from the Request 
     const { course_id } = req.body;
 
+    const course = await Course.findById(course_id);
+    if (!course) {
+        res.status(404).send('Ooops no course with this detail is found');
+        return;
+    }
+    if (!course.publication_Status === 1) {
+        res.status(401).send('Course is not published and you can not register untill the course is published')
+    }
+
+    // const alreadyRegistered = await RegisterCourse.find({ course_id: course_id });
+    // // res.send(alreadyRegistered)
+    // if (alreadyRegistered) {
+    //     res.send('Course already registered')
+    // }
+    // else {
+    //     res.send('new record here')
+    // }
+
     try {
+
+
         // Creation object of the RegisterCourse Model
         registerCourse = new RegisterCourse({
-            course_id
+            course_id,
+            learner_id: req.user.id
         });
 
         await registerCourse.save();
@@ -74,7 +96,7 @@ router.post('/', async (req, res) => {
  * @description update course
  * @access Private
  */
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
 
     // let { error } = courseValidationSchema.validate(req.body);
     // if (error) { return res.status(400).send(error.details[0].message) }
@@ -116,7 +138,7 @@ router.put('/:id', async (req, res) => {
  * @description remove course
  * @access Private
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     try {
 
         const course = await RegisterCourse.findById(req.params.id);
@@ -140,7 +162,7 @@ router.delete('/:id', async (req, res) => {
 // Schema Validation 
 const RegistercourseSchemaValidation = Joi.object({
     learner_id: Joi.objectId(),
-    course_id: Joi.objectId(),
+    course_id: Joi.objectId().required(),
     educator_id: Joi.objectId()
 });
 module.exports = router;

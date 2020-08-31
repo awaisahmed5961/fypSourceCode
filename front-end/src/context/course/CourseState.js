@@ -14,13 +14,13 @@ import {
     COURSE_ERROR,
     CLEAR_COURSE_ERRORS
 } from '../types';
-import { NavItem } from 'react-bootstrap';
 
 const CourseState = props => {
     const initialState = {
         courses: [], loading: true
         , current: null,
-        error: null
+        error: null,
+        courseadded: null
     };
 
     const [state, dispatch] = useReducer(courseReducer, initialState);
@@ -45,7 +45,7 @@ const CourseState = props => {
     const addCourse = async (course) => {
         const config = {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'multipart/form-data'
             }
         }
         try {
@@ -60,8 +60,18 @@ const CourseState = props => {
 
     }
     // delete Course
-    const deleteCourse = (id) => {
-        dispatch({ type: DELETE_COURSE, payload: id })
+    const deleteCourse = async (id) => {
+        try {
+            await axios.delete(`/api/courses/${id}`);
+
+            dispatch({ type: DELETE_COURSE, payload: id })
+
+        } catch (err) {
+            dispatch({
+                type: COURSE_ERROR,
+                payload: err.response.msg
+            });
+        }
     }
     // update Course
     const updateCourse = (contact) => {
@@ -87,6 +97,7 @@ const CourseState = props => {
                 current: state.current,
                 loading: state.loading,
                 error: state.error,
+                courseadded: state.courseadded,
                 getCourses,
                 addCourse,
                 deleteCourse,

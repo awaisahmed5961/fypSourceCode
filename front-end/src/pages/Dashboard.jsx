@@ -13,7 +13,7 @@ import { ReactComponent as ListIcon } from '../app assetrs/icons/list icon.svg';
 import Tabf from '../components/Tabf';
 import CourseCard from '../components/CourseCard';
 import Typography from '@material-ui/core/Typography';
-
+import { Link as RouterLink } from 'react-router-dom'
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '90%',
@@ -59,13 +59,11 @@ export default function Dashboard() {
     useEffect(() => {
         authContext.loadUser();
         getCourses();
-        console.log('useeffect runs')
         // eslint-disable-next-line
     }, []);
 
     const handleCourseDelete = () => {
         alert('show a model for conformation of the course. after that the course will be deleted')
-        deleteCourse(1);
         clearCurrent();
 
 
@@ -99,37 +97,15 @@ export default function Dashboard() {
                         </Grid>
                         <Grid item sm={false} xs={12} >
                             {
-                                loading ? ([0, 1, 2, 3].map((num) => { console.log(num) })) : (
-                                    <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
-                                        {
-                                            courses.map((course) => {
-                                                return (
-                                                    <Grid item key={course._id}>
-                                                        <CourseCard
-                                                            id={course._id}
-                                                            title={course.title}
-                                                            subTitle={course.subTitle}
-                                                            description={course.description}
-                                                            publicationStatus={course.publicationStatus}
-                                                            pageRoute={`/${course.title.split(' ').join('-')}`}
-                                                            onDelete={handleCourseDelete}
-                                                        />
-                                                    </Grid>);
-                                            })
-                                        }
-                                    </Grid>
-                                )
-
-                            }
-                            {/* {
                                 courses !== null && courses.length === 0 && !loading ? (<div style={{
                                     textAlign: 'center'
                                 }} className={classes.coursesContainer} >
-                                    <Typography variant="h6" className={classes.noCouresError}>
+                                    <Typography variant="h6"
+                                        className={classes.noCouresError}>
                                         There is no Course.
                                     </Typography>
 
-                                    <Button variant="contained" color="primary">
+                                    <Button variant="contained" component={RouterLink} to="/course" color="primary">
                                         Create Course
                                         </Button>
                                 </div>) : (
@@ -143,7 +119,7 @@ export default function Dashboard() {
                                                                 title={course.title}
                                                                 subTitle={course.subTitle}
                                                                 description={course.description}
-                                                                publicationStatus={course.publicationStatus}
+                                                                publicationStatus={course.publication_Status}
                                                                 pageRoute={`/${course.title.split(' ').join('-')}`}
                                                                 onDelete={handleCourseDelete}
                                                             />
@@ -152,7 +128,7 @@ export default function Dashboard() {
                                             }
                                         </Grid>
                                     )
-                            } */}
+                            }
                         </Grid>
                     </Grid>
                 </Grid>
