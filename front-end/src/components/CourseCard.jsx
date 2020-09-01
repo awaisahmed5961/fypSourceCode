@@ -170,11 +170,11 @@ export default function CourseCard(props) {
                     <div className={classes.cardAction}>
                         <div className={classes.publisheMetaData}>
                             <Typography variant={'caption'}>
-                                Created at
+                                {getPublicationStatus(publicationStatus)} {' '} {"at"}
                             </Typography>
                             <Typography variant={'caption'}>
                                 <Link href="#" underline={'none'}>
-                                    March 8, 2016
+                                    Sep 1, 2020
           </Link>
                             </Typography>
                         </div>

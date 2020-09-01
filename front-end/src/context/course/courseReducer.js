@@ -23,7 +23,7 @@ export default (state, action) => {
             return {
                 ...state,
                 courses: [...state.courses, action.payload],
-                courseadded: action.payload,
+                serverResponseWating: action.payload,
                 loading: false
             };
         case COURSE_ERROR:
@@ -48,7 +48,7 @@ export default (state, action) => {
         case UPDATE_COURSE:
             return {
                 ...state,
-                courses: state.courses.map(course => course.id === action.payload.id ? action.payload : course),
+                courses: state.courses.map(course => course._id === action.payload.id ? action.payload : course),
                 loading: false
             };
         case CLEAR_COURSES:

@@ -82,7 +82,6 @@ const useStyles = makeStyles((theme) => ({
     }, courseUriFieldHelperText: {
         paddingTop: '10px',
         textAlign: 'left'
-
     },
 
 
@@ -96,7 +95,15 @@ export default function Course(props) {
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
     const { user } = authContext;
-    const { addCourse, current, clearCurrent, error, clearCourseError, courseadded, updateCourse } = courseContext;
+    const {
+        addCourse,
+        current, clearCurrent, error,
+        clearCourseError,
+        serverResponseWating,
+        courseadded,
+        updateCourse,
+        courses,
+        loading } = courseContext;
     const [copySuccess, setCopySuccess] = useState('');
     const [image, setImage] = useState(null);
     const textAreaRef = useRef(null);
@@ -114,14 +121,17 @@ export default function Course(props) {
         }
         else {
             setCourse({
+                id: null,
                 title: '',
                 subTitle: '',
                 description: '',
                 publicationStatus: 1
             })
         }
+
     }, [courseContext, current]);
     const [course, setCourse] = useState({
+        id: null,
         title: '',
         subTitle: '',
         description: '',
@@ -129,11 +139,12 @@ export default function Course(props) {
 
     });
     const { title, subTitle, description } = course;
-    const [loading, setLoading] = useState(false);
     const [validationErrors, setvalidationErrors] = useState({
+        id: null,
         title: '',
         subTitle: '',
         description: '',
+        publicationStatus: 1
 
     });
     const [openModal, setOpenModal] = useState(false);
@@ -154,20 +165,38 @@ export default function Course(props) {
     }
     const handleOnSubmit = (e) => {
         e.preventDefault();
-        if (current === null) {
-            const fd = new FormData();
-            fd.append('title', course.title);
-            fd.append('subTitle', course.subTitle);
-            fd.append('description', course.description);
-            // fd.append('ImagePlaceholder', image);
-            addCourse(fd);
-            setCourse({
-                title: '',
-                subTitle: '',
-                description: '',
-                publicationStatus: 1
-            })
-            console.log('create course')
+        if (id === undefined) {
+            const errors = formValidation();
+            console.log(errors)
+            if (errors) {
+                setvalidationErrors({
+                    ...errors
+                }
+                );
+                return;
+            }
+            else {
+                const fd = new FormData();
+                fd.append('title', course.title);
+                fd.append('subTitle', course.subTitle);
+                fd.append('description', course.description);
+                // fd.append('ImagePlaceholder', image);
+                addCourse(fd);
+                setCourse({
+                    id: null,
+                    title: '',
+                    subTitle: '',
+                    description: '',
+                    publicationStatus: 1
+                })
+
+                console.log('loading.....')
+
+                setTimeout(() => {
+                    setOpenModal(true)
+                }, 1000)
+            }
+            // setOpenModal(true);
             // const errors = formValidation();
             // if (errors) {
             //     setvalidationErrors({
@@ -180,9 +209,18 @@ export default function Course(props) {
             // }
         }
         else {
-            updateCourse(course);
-            console.log('edited course')
-
+            const errors = formValidation();
+            if (errors) {
+                setvalidationErrors({
+                    ...errors
+                }
+                );
+            }
+            else {
+                updateCourse(course);
+                clearCurrent()
+                props.history.push('/')
+            }
         }
         // const errors = formValidation();
         // if (errors) {
@@ -248,9 +286,11 @@ export default function Course(props) {
 
     }
     var schema = {
+        id: Joi.string().allow(null),
         title: Joi.string().required().label('Title'),
         subTitle: Joi.string().required().label('Sub Title'),
-        description: Joi.string().max(300).required().label('Description')
+        description: Joi.string().max(300).required().label('Description'),
+        publicationStatus: Joi.number()
     }
     const formValidation = () => {
         const result = Joi.validate(course, schema, { abortEarly: false });
@@ -361,7 +401,7 @@ export default function Course(props) {
                                                 && { error: true, helperText: validationErrors.description })}
                                         />
                                         <div className={classes.textareaWordConunterContainer}>
-                                            {/* <span>{course.description.length || 0}</span>/300 */}
+                                            <span>{description.length || 0}</span>/300
                                         </div>
                                     </Grid>
 

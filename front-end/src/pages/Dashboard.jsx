@@ -51,7 +51,7 @@ export default function Dashboard() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
-    const { courses, deleteCourse, clearCurrent, getCourses, loading } = courseContext;
+    const { courses, clearCurrent, getCourses, loading } = courseContext;
     const [tabIndex, setTabIndex] = useState(0);
     const currentIndex = (newValue) => {
         setTabIndex(newValue);

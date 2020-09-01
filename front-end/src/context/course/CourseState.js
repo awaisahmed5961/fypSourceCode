@@ -22,7 +22,7 @@ const CourseState = props => {
         , current: null,
         error: null,
         courseadded: null,
-        serverResponseWating: null
+        serverResponseWating: {}
     };
 
     const [state, dispatch] = useReducer(courseReducer, initialState);
@@ -52,7 +52,8 @@ const CourseState = props => {
         }
         try {
             const res = await axios.post('/api/courses', course, config);
-            dispatch({ type: ADD_COURSE, payload: res.data })
+            dispatch({ type: ADD_COURSE, payload: res.data });
+
         }
         catch (err) {
             dispatch({
@@ -123,6 +124,7 @@ const CourseState = props => {
                 loading: state.loading,
                 error: state.error,
                 courseadded: state.courseadded,
+                serverResponseWating: state.serverResponseWating,
                 getCourses,
                 addCourse,
                 updateCourse,
