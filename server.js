@@ -7,8 +7,8 @@ const morgan = require('morgan');
 app.use('/api/uploads', express.static('uploads'))
 // Connect DataBase
 connectDB();
-app.use(morgan('dev'));
 
+app.use(morgan('dev'));
 // Init Middleware
 app.use(express.json({ extended: false }));
 

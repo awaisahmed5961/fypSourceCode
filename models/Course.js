@@ -26,6 +26,7 @@ const CourseSchema = mongoose.Schema({
         type: Number,
         default: 1
     },
+    // act as a forign key
     educator_id: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'educator'

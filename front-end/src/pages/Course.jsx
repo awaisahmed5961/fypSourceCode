@@ -128,7 +128,10 @@ export default function Course(props) {
                 publicationStatus: 1
             })
         }
-
+        return () => {
+            // clean up
+            clearCurrent();
+        };
     }, [courseContext, current]);
     const [course, setCourse] = useState({
         id: null,

@@ -14,7 +14,7 @@ const router = express.Router();
  * @access Private
  */
 router.get('/',
-    // MiddleWare Functions for exteracion User Id from Token
+    // MiddleWare Functions for exteracion of User Information from Token
     auth,
     async (req, res) => {
         try {

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const RegisterCourseSchema = mongoose.Schema({
 
     registerationDate: {
