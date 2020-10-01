@@ -1,23 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AuthContext from '../context/auth/authcontext'
-import CourseContext from '../context/course/courseContext';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../components/NavBar'
 import BreadCrumbs from '../components/BreadCrumbs';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Box from "@material-ui/core/Box";
 import { ReactComponent as GridIcon } from '../app assetrs/icons/grid view icon.svg';
 import { ReactComponent as FilterIcon } from '../app assetrs/icons/filter icon filled.svg';
 import { ReactComponent as ListIcon } from '../app assetrs/icons/list icon.svg';
 import Tabf from '../components/Tabf';
-import CourseCard from '../components/CourseCard';
-import Typography from '@material-ui/core/Typography';
-import { Link as RouterLink } from 'react-router-dom'
+import Courses from '../components/Courses';
+import AppsIcon from '@material-ui/icons/Apps';
+import ReorderSharpIcon from '@material-ui/icons/ReorderSharp';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '90%',
         margin: '0 auto',
+        display: 'flex',
+        alignItems: 'center',
         [theme.breakpoints.down('sm')]: {
             width: '100%',
 
@@ -37,37 +39,25 @@ const useStyles = makeStyles((theme) => ({
         border: '1px solid #555',
         background: 'none'
     },
-    coursesContainer: {
-        marginTop: '30px'
-    },
-    noCouresError: {
-        marginBottom: '20px'
-    }
-
 }));
 
 
 export default function Dashboard() {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
-    const courseContext = useContext(CourseContext);
-    const { courses, clearCurrent, getCourses, loading } = courseContext;
     const [tabIndex, setTabIndex] = useState(0);
+    const [courseView, setCourseView] = useState('grid_view');
     const currentIndex = (newValue) => {
         setTabIndex(newValue);
+        console.log(newValue);
+        console.log('dashboard line 46')
     };
     useEffect(() => {
         authContext.loadUser();
-        getCourses();
+        // getCourses();
         // eslint-disable-next-line
     }, []);
 
-    const handleCourseDelete = () => {
-        alert('show a model for conformation of the course. after that the course will be deleted')
-        clearCurrent();
-
-
-    }
     return (
         <div>
             <NavBar haveButton={true}
@@ -90,45 +80,25 @@ export default function Dashboard() {
                         </Grid>
                         <Grid item >
                             <Grid direction='row' container>
-                                <GridIcon className={classes.icons} />
+                                <IconButton aria-label="delete" size="small" onClick={() => setCourseView('grid_view')}>
+                                    <AppsIcon fontSize="inherit" />
+                                </IconButton>
+                                <IconButton aria-label="delete" size="small" onClick={() => setCourseView('list_view')}>
+                                    <ReorderSharpIcon fontSize="inherit" />
+                                </IconButton>
+                                <IconButton aria-label="delete" size="small" onClick={() => alert('filter view')}>
+                                    <SearchIcon fontSize="inherit" />
+                                </IconButton>
+
+                                {/* <ReorderSharpIcon />
+                                <SearchIcon /> */}
+                                {/* <GridIcon className={classes.icons} />
                                 <ListIcon className={classes.icons} />
-                                <FilterIcon className={classes.icons} />
+                                <FilterIcon className={classes.icons} /> */}
                             </Grid>
                         </Grid>
                         <Grid item sm={false} xs={12} >
-                            {
-                                courses !== null && courses.length === 0 && !loading ? (<div style={{
-                                    textAlign: 'center'
-                                }} className={classes.coursesContainer} >
-                                    <Typography variant="h6"
-                                        className={classes.noCouresError}>
-                                        There is no Course.
-                                    </Typography>
-
-                                    <Button variant="contained" component={RouterLink} to="/course" color="primary">
-                                        Create Course
-                                        </Button>
-                                </div>) : (
-                                        <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
-                                            {
-                                                courses.map((course) => {
-                                                    return (
-                                                        <Grid item key={course._id}>
-                                                            <CourseCard
-                                                                id={course._id}
-                                                                title={course.title}
-                                                                subTitle={course.subTitle}
-                                                                description={course.description}
-                                                                publicationStatus={course.publication_Status}
-                                                                pageRoute={`/${course.title.split(' ').join('-')}`}
-                                                                onDelete={handleCourseDelete}
-                                                            />
-                                                        </Grid>);
-                                                })
-                                            }
-                                        </Grid>
-                                    )
-                            }
+                            <Courses publicationFilter={tabIndex} courseView={courseView} />
                         </Grid>
                     </Grid>
                 </Grid>

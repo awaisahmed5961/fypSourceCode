@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
 
 // Schema Validation 
 const learnerValidationSchema = Joi.object({
-    name: Joi.string().alphanum().min(1).max(15).required(),
+    name: Joi.string().min(1).max(15).required(),
     email: Joi.string().email().required(),
     password: Joi.string().required().max(20),
 });

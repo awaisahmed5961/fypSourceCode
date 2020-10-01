@@ -24,7 +24,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import getPublicationStatus from '../utils/getPublicationStatus';
 import defaultImage from '../app assetrs/Images/default image placeholder.png'
-
+import CustomDialog from '../components/layouts/LoadingDialog';
+import { LoadingSpinner } from './LoadinSpinner';
+import SuccessSpinner from './Ui/successSpinner/successSpinner';
+import formatDate from '../utils/formatDate';
 const useStyles = makeStyles((theme) => ({
     root: {
         color: '#fff'
@@ -66,11 +69,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function CourseCard(props) {
-    const { id, title, description, subTitle, publicationStatus, pageRoute, onDelete } = props;
+export default function ICourse(props) {
+    const { id, title, description, subTitle, date, publicationStatus, pageRoute, onDelete } = props;
     const courseContext = useContext(CourseContext);
     const { setCurrent, deleteCourse } = courseContext;
-
+    const [deleteConformationModalOpen, setdeleteConformationModalOpen] = useState(false);
+    const [loadingSpinnerModalOpen, setLoadingSpinnerModalOpen] = useState(false);
+    const [actionSuccess, setActionSuccess] = useState(false);
     const handleEditCourse = () => {
         const Course = {
             id,
@@ -81,25 +86,46 @@ export default function CourseCard(props) {
         }
         setCurrent(Course)
     }
-
-    const [open, setOpen] = useState(false);
-    const handleClickOpen = (id) => {
-        // setOpen(true);
-        deleteCourse(id);
-        console.log('deleted')
+    const [isDeleteAble, setisDeleteAble] = useState(false);
+    const [deleteThisCourse, setDeletethisCourse] = useState(null);
+    const handleCourseDelte = (id) => {
+        setdeleteConformationModalOpen(true);
+        // deleteCourse(id);
+        // console.log('deleted')
+        setDeletethisCourse(id);
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setdeleteConformationModalOpen(false);
     };
-    const [isDeleteAble, setisDeleteAble] = useState(false);
-    const handlecourseDelete = (e) => {
+
+    const verifyCourseDelete = (e) => {
         const { value } = e.target;
         if (value === title) {
             // deleteCourse(id);
             // remove disable button attribute
+            setisDeleteAble(true);
         }
+        else {
+            setisDeleteAble(false)
+        }
+    }
+    const courseConformed = () => {
+        setTimeout(() => {
+            deleteCourse(deleteThisCourse)
+                .then((course) => {
+                    setLoadingSpinnerModalOpen(false);
 
+                    // setTimeout(() => {
+                    //     setActionSuccess(false);
+                    // }, 2000);
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
+        }, 2000)
+
+        setLoadingSpinnerModalOpen(true)
 
     }
 
@@ -126,10 +152,10 @@ export default function CourseCard(props) {
                                     textTransform: 'capitalize'
                                 }}
                                 className={
-                                    publicationStatus === '1'
+                                    publicationStatus == '1'
                                         ? (classes.publishBadge)
                                         :
-                                        (publicationStatus === '2'
+                                        (publicationStatus == '2'
                                             ? classes.draftBadge
                                             : classes.archiveBadge)}
                             >
@@ -174,8 +200,8 @@ export default function CourseCard(props) {
                             </Typography>
                             <Typography variant={'caption'}>
                                 <Link href="#" underline={'none'}>
-                                    Sep 1, 2020
-          </Link>
+                                    {formatDate(date)}
+                                </Link>
                             </Typography>
                         </div>
                         <div className={classes.cta}>
@@ -186,12 +212,14 @@ export default function CourseCard(props) {
                                 aria-label="Edit Coures">
                                 <EditIcon />
                             </IconButton >
-                            <IconButton onClick={() => { handleClickOpen(id); }}
+                            <IconButton onClick={() => { handleCourseDelte(id); }}
                                 aria-label="Delete"
                             >
                                 <DeleteIcon />
                             </IconButton>
-                            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                            <Dialog open={deleteConformationModalOpen}
+                                onClose={handleClose}
+                                aria-labelledby="form-dialog-title">
                                 <DialogTitle id="form-dialog-title">
                                     <ReportProblemOutlinedIcon
                                         style={{
@@ -213,10 +241,10 @@ export default function CourseCard(props) {
                                         id="name"
                                         label="Course Title"
                                         type="text"
-                                        error
-                                        // {...(isDeleteAble && { error: true, helperText: 'error' })}
+                                        // error
+                                        {...(!isDeleteAble && { error: true })}
                                         fullWidth
-                                        onChange={handlecourseDelete}
+                                        onChange={verifyCourseDelete}
                                     />
                                 </DialogContent>
                                 <DialogActions>
@@ -224,14 +252,32 @@ export default function CourseCard(props) {
                                         Cancel
                                     </Button>
                                     <Button
-                                        onClick={handleClose}
+                                        onClick={courseConformed}
                                         variant="contained"
                                         color="secondary"
+                                        disabled={!isDeleteAble}
                                     >
+
                                         Delete
                                     </Button>
+                                    {/* {console.log(isDeleteAble)} */}
                                 </DialogActions>
                             </Dialog>
+                            <CustomDialog open={loadingSpinnerModalOpen}
+                                aria-labelledby="Deleting Course Please Wait..."
+                                disableBackdropClick={true} >
+                                <LoadingSpinner style={{ width: '40px', marginRight: '20px' }} />
+                                {''} Deleting Course...
+                            </CustomDialog>
+                            <CustomDialog open={actionSuccess}
+                                aria-labelledby="Course deleted successfully."
+                                disableBackdropClick={true} >
+                                <SuccessSpinner style={{
+                                    paddingRight: '20px'
+                                }} />{' '} {'Course Deleted Successfully.'}
+                            </CustomDialog>
+
+
                         </div>
                     </div>
                 </CardActions>

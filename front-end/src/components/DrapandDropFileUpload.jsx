@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => (
     {
         container: {
             flex: 1,
-
         },
         dropzoon: {
             display: 'flex',
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => (
     }));
 
 export default function ImageUpload(props) {
-
+    console.log(props);
     const classes = useStyles();
 
     const theme = useTheme();

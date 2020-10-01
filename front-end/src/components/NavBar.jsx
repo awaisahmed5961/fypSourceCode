@@ -29,9 +29,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import courseContext from '../context/course/courseContext';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import Divider from '@material-ui/core/Divider';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -63,6 +63,27 @@ const useStyles = makeStyles((theme) => ({
     }, userName: {
         textTransform: 'capitalize',
         letterSpacing: '.5px'
+    },
+    customMenuList: {
+
+        width: '200px',
+        marginTop: '14px',
+        position: 'relative',
+        '&::before': {
+            content: '""',
+            display: 'inline-block',
+            minWidth: '20px',
+            minHeight: '20px',
+            backgroundColor: '#fff',
+            position: 'absolute',
+            top: '-8px',
+            left: '136px',
+            transform: 'rotate(45deg)'
+        },
+    },
+    iconMarginLeft: {
+        marginRight: '10px',
+        fill: 'rgba(0, 0, 0, 0.54)'
     }
 }));
 
@@ -161,7 +182,7 @@ export default function ButtonAppBar(props) {
                                     <List disablePadding>
                                         <ListItem onClick={() => setOpenDrawer(false)} divider button component={Link} to='#'>
                                             <ListItemIcon>
-                                                <PersonIcon />
+                                                <PermIdentityIcon />
                                             </ListItemIcon>
                                             <ListItemText disableTypography>
                                                 Profile
@@ -188,12 +209,18 @@ export default function ButtonAppBar(props) {
                             >
                                 <Paper >
                                     <ClickAwayListener onClickAway={handleClose}>
-                                        <MenuList id="simple-menu" onKeyDown={handleListKeyDown}  >
-                                            <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                        <MenuList classes={{
+                                            root: classes.customMenuList
+                                        }} id="simple-menu" onKeyDown={handleListKeyDown}  >
+                                            <MenuItem onClick={handleClose}>   <PermIdentityIcon fontSize="small" className={classes.iconMarginLeft} /> {'  '} Profile</MenuItem>
+                                            <Divider variant="middle" />
                                             <MenuItem onClick={() => {
                                                 handleClose();
                                                 handleLogOut();
-                                            }}>Logout</MenuItem>
+                                            }}>
+
+                                                <ExitToAppIcon fontSize="small" className={classes.iconMarginLeft} /> Log Out
+                                            </MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>

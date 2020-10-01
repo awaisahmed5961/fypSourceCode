@@ -21,8 +21,6 @@ const CourseState = props => {
         loading: true
         , current: null,
         error: null,
-        courseadded: null,
-        serverResponseWating: {}
     };
 
     const [state, dispatch] = useReducer(courseReducer, initialState);
@@ -33,9 +31,11 @@ const CourseState = props => {
         try {
             const res = await axios.get('/api/courses');
             dispatch({ type: GET_COURSES, payload: res.data })
+            return res;
         }
         catch (err) {
-            console.log('errro in couse add course state js')
+            console.log('errro in couse add course state js');
+            return err;
         }
 
     }
@@ -53,27 +53,31 @@ const CourseState = props => {
         try {
             const res = await axios.post('/api/courses', course, config);
             dispatch({ type: ADD_COURSE, payload: res.data });
+            return res;
 
         }
         catch (err) {
             dispatch({
                 type: COURSE_ERROR
             });
+            return err;
         }
 
     }
     // delete Course
     const deleteCourse = async (id) => {
         try {
-            await axios.delete(`/api/courses/${id}`);
+            const res = await axios.delete(`/api/courses/${id}`);
 
             dispatch({ type: DELETE_COURSE, payload: id })
+            return res;
 
         } catch (err) {
             dispatch({
                 type: COURSE_ERROR,
                 payload: err.response.msg
             });
+            return err;
         }
     }
 
@@ -96,11 +100,13 @@ const CourseState = props => {
                 type: UPDATE_COURSE,
                 payload: res.data
             });
+            return res;
         } catch (err) {
             dispatch({
                 type: COURSE_ERROR,
                 payload: err.response.msg
             });
+            return err;
         }
     }
     // Filter Course
