@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Courses(props) {
     console.log(props);
     console.log('courses.jsx at line 22')
-
+    const { courseView, publicationFilter } = props;
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
     const { courses, getCourses, loading } = courseContext;
@@ -45,6 +45,14 @@ export default function Courses(props) {
         }
         // eslint-disable-next-line
     }, []);
+    const getCourseslist = (publicationFilterValue) => {
+        switch (publicationFilterValue) {
+            case 1:
+                return courses.map((course) => course.publicationStatus === publicationFilterValue);
+            default:
+                return courses;
+        }
+    }
     return (
         <div>
             {
@@ -62,26 +70,30 @@ export default function Courses(props) {
                 </div>) : (
                         <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
                             {
-                                courses.map((course) => {
-                                    return loadingCourse ? (
-                                        <Grid item key={course._id}>
-                                            <CardSkelton />
-                                        </Grid>
-                                    ) : (
 
+                                courseView === 'grid_view' ? (
+                                    courses.map((course) => {
+                                        return loadingCourse ? (
                                             <Grid item key={course._id}>
-                                                <ICourse
-                                                    id={course._id}
-                                                    title={course.title}
-                                                    subTitle={course.subTitle}
-                                                    description={course.description}
-                                                    date={course.date}
-                                                    publicationStatus={course.publication_Status}
-                                                    pageRoute={`/${course.title.split(' ').join('-')}`}
-                                                />
-                                            </Grid>);
-                                }
-                                )
+                                                <CardSkelton />
+                                            </Grid>
+                                        ) : (
+                                                <Grid item key={course._id}>
+                                                    <ICourse
+                                                        id={course._id}
+                                                        title={course.title}
+                                                        subTitle={course.subTitle}
+                                                        description={course.description}
+                                                        date={course.date}
+                                                        publicationStatus={course.publication_Status}
+                                                        pageRoute={`/${course.title.split(' ').join('-')}`}
+                                                    />
+                                                </Grid>);
+                                    }
+                                    )
+                                ) : (
+                                        "list view here"
+                                    )
                             }
                         </Grid>
                     )
