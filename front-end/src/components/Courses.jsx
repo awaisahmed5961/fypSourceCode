@@ -18,9 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Courses(props) {
-    console.log(props);
-    console.log('courses.jsx at line 22')
-    const { courseView, publicationFilter } = props;
+    const { courseView, publicationFilter, searchFilter } = props;
     const authContext = useContext(AuthContext);
     const courseContext = useContext(CourseContext);
     const { courses, getCourses, loading } = courseContext;
@@ -48,11 +46,18 @@ export default function Courses(props) {
     const getCourseslist = (publicationFilterValue) => {
         switch (publicationFilterValue) {
             case 1:
-                return courses.map((course) => course.publicationStatus === publicationFilterValue);
+                return courses.filter((course) => course.publication_Status === 1);
+            case 2:
+                return courses.filter((course) => course.publication_Status === 2);
+            case 3:
+                return courses.filter((course) => course.publication_Status === 3);
             default:
                 return courses;
         }
     }
+
+    let courseList = getCourseslist(publicationFilter);
+    courseList = courseList.filter((course) => course.title.includes(searchFilter.toLowerCase()));
     return (
         <div>
             {
@@ -70,30 +75,56 @@ export default function Courses(props) {
                 </div>) : (
                         <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
                             {
-
-                                courseView === 'grid_view' ? (
-                                    courses.map((course) => {
-                                        return loadingCourse ? (
-                                            <Grid item key={course._id}>
-                                                <CardSkelton />
-                                            </Grid>
-                                        ) : (
-                                                <Grid item key={course._id}>
-                                                    <ICourse
-                                                        id={course._id}
-                                                        title={course.title}
-                                                        subTitle={course.subTitle}
-                                                        description={course.description}
-                                                        date={course.date}
-                                                        publicationStatus={course.publication_Status}
-                                                        pageRoute={`/${course.title.split(' ').join('-')}`}
-                                                    />
-                                                </Grid>);
-                                    }
-                                    )
+                                courseList.length === 0 && !loading ? (
+                                    <h5>There is no Course</h5>
                                 ) : (
-                                        "list view here"
+                                        courseView === 'grid_view' ? (
+                                            courseList.map((course) => {
+                                                return loadingCourse ? (
+                                                    <Grid item key={course._id}>
+                                                        <CardSkelton />
+                                                    </Grid>
+                                                ) : (
+                                                        <Grid item key={course._id}>
+                                                            <ICourse
+                                                                id={course._id}
+                                                                title={course.title}
+                                                                subTitle={course.subTitle}
+                                                                description={course.description}
+                                                                date={course.date}
+                                                                publicationStatus={course.publication_Status}
+                                                                pageRoute={`/${course.title.split(' ').join('-')}`}
+                                                            />
+                                                        </Grid>);
+                                            }
+                                            )
+                                        ) : (
+                                                "list view here"
+                                            )
                                     )
+                                // courseView === 'grid_view' ? (
+                                //     courses.map((course) => {
+                                //         return loadingCourse ? (
+                                //             <Grid item key={course._id}>
+                                //                 <CardSkelton />
+                                //             </Grid>
+                                //         ) : (
+                                //                 <Grid item key={course._id}>
+                                //                     <ICourse
+                                //                         id={course._id}
+                                //                         title={course.title}
+                                //                         subTitle={course.subTitle}
+                                //                         description={course.description}
+                                //                         date={course.date}
+                                //                         publicationStatus={course.publication_Status}
+                                //                         pageRoute={`/${course.title.split(' ').join('-')}`}
+                                //                     />
+                                //                 </Grid>);
+                                //     }
+                                //     )
+                                // ) : (
+                                //         "list view here"
+                                //     )
                             }
                         </Grid>
                     )

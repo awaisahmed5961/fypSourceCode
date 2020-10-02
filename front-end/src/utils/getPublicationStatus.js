@@ -3,9 +3,9 @@ const getPublicationStatus = (publication_status) => {
         case 1:
             return 'Published';
         case 2:
-            return 'Archived';
+            return 'Draft';
         default:
-            return 'Draft'
+            return 'Archived'
     }
 }
 export default getPublicationStatus;
