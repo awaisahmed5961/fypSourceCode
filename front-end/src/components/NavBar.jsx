@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -96,6 +96,7 @@ export default function ButtonAppBar(props) {
     const classes = useStyles();
     const authContext = useContext(AuthContext);
     const { user } = authContext;
+
     const courseContext = useContext(CourseContext)
     const { clearCourses } = courseContext;
     const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -123,6 +124,11 @@ export default function ButtonAppBar(props) {
             // setOpen(false);
         }
     }
+    useEffect(() => {
+        authContext.loadUser();
+        // getCourses();
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <div className={classes.root}>

@@ -14,6 +14,8 @@ import Dashboard from './pages/Dashboard';
 import Course from './pages/Course';
 import CourseDetail from './pages/CourseDetail';
 import TopicDetail from './pages/TopicDetail';
+import Topic from './pages/Topic';
+
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -33,6 +35,7 @@ function App() {
                 <Route exact path="/register_user" component={SignUp} />
                 <PrivateRoute exact path="/" label="Home" component={Dashboard} />
                 <PrivateRoute exact path="/course/:id?" component={Course} />
+                <PrivateRoute exact path="/topic" component={Topic} />
                 <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
                 <PrivateRoute exact path="/:title" component={CourseDetail} />
                 <Route path="" component={NotFound} />

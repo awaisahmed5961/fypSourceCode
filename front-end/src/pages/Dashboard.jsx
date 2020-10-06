@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        color: 'currentColor'
     },
     inputRoot: {
         color: 'inherit',
@@ -90,11 +91,7 @@ export default function Dashboard() {
     const currentIndex = (newValue) => {
         setTabIndex(newValue);
     };
-    useEffect(() => {
-        authContext.loadUser();
-        // getCourses();
-        // eslint-disable-next-line
-    }, []);
+
 
     return (
         <div>
