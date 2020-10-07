@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import ICourse from './ICourse';
 import CardSkelton from './Ui/CardSkelton';
+import ListView from './ListView';
 const useStyles = makeStyles((theme) => ({
     coursesContainer: {
         marginTop: '30px'
@@ -71,7 +72,7 @@ export default function Courses(props) {
 
                     <Button variant="contained" color="primary">
                         Create Course
-                                        </Button>
+                    </Button>
                 </div>) : (
                         <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
                             {
@@ -99,7 +100,26 @@ export default function Courses(props) {
                                             }
                                             )
                                         ) : (
-                                                "list view here"
+                                                courseList.map(course => {
+                                                    return loadingCourse ? (
+                                                        <Grid item key={course._id}>
+                                                            <CardSkelton />
+                                                        </Grid>
+                                                    ) : (
+                                                            <Grid item key={course._id} style={{ padding: '0px' }}>
+                                                                <ListView
+                                                                    id={course._id}
+                                                                    title={course.title}
+                                                                    subTitle={course.subTitle}
+                                                                    description={course.description}
+                                                                    date={course.date}
+                                                                    publicationStatus={course.publication_Status}
+                                                                    pageRoute={`/${course.title.split(' ').join('-')}`}
+                                                                />
+                                                            </Grid>
+                                                        );
+                                                })
+
                                             )
                                     )
                                 // courseView === 'grid_view' ? (

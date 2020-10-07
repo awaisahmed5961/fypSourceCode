@@ -23,7 +23,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
 import getPublicationStatus from '../utils/getPublicationStatus';
-import defaultImage from '../app assetrs/Images/default image placeholder.png'
+import defaultImage from '../app assetrs/Images/g placeholder.jpg'
 import CustomDialog from '../components/layouts/LoadingDialog';
 import { LoadingSpinner } from './LoadinSpinner';
 import SuccessSpinner from './Ui/successSpinner/successSpinner';
@@ -137,7 +137,8 @@ export default function ICourse(props) {
                     <CardMedia
                         className={classes.cardImage}
                         image={
-                            'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80'
+                            // 'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80'
+                            defaultImage
                         }
                     >
                         <div  >
@@ -171,7 +172,6 @@ export default function ICourse(props) {
                             {
                                 collapseLargeString(title, 20)
                             }
-
 
                         </Typography>
                         <Typography

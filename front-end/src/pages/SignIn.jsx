@@ -17,6 +17,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AuthContext from '../context/auth/authcontext';
 import { Spinner } from '../components/Spinner'
 import SliderImage from '../app assetrs/Images/image1.jpg'
+import CarouselSlider from '../components/slider';
+import Hidden from '@material-ui/core/Hidden';
 import Joi from 'joi-browser'
 function Copyright() {
     return (
@@ -152,8 +154,8 @@ export default function SignIn(props) {
         <Grid container component="main" className={classes.root}>
 
             <CssBaseline />
-            <Grid item xs={false} sm={4} md={6} className={classes.image} >
-
+            <Grid item xs={false} sm={6} md={6} className={classes.image} >
+                <CarouselSlider />
             </Grid>
             <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
                 <div className={classes.paper}>

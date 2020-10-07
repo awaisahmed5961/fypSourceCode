@@ -11,7 +11,9 @@ import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-
+import TopicContentForm from '../components/Ui/TopicContentForm';
+import TopicExerciseForm from '../components/Ui/TopicExerciseForm';
+import AgumentedContentForm from '../components/Ui/AgumentedContentForm';
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
         width: '90%',
@@ -38,7 +40,11 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
-
+    step: {
+        display: 'block',
+        width: '80%',
+        margin: '0 auto'
+    }
 }));
 
 function getSteps() {
@@ -48,11 +54,11 @@ function getSteps() {
 function getStepContent(step) {
     switch (step) {
         case 0:
-            return 'Step 1: Select campaign settings...';
+            return (<TopicContentForm />);
         case 1:
-            return 'Step 2: What is an ad group anyways?';
+            return (<TopicExerciseForm />);
         case 2:
-            return 'Step 3: This is the bit I really care about!';
+            return (<AgumentedContentForm />);
         default:
             return 'Unknown step';
     }
@@ -207,8 +213,8 @@ export default function Topic() {
                                     </div>
                                 ) : (
                                         <div>
-                                            <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-                                            <div>
+                                            {/* <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography> */}
+                                            {/* <div>
                                                 <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                                                     Back
                                                 </Button>
@@ -241,11 +247,15 @@ export default function Topic() {
                                                                 {completedSteps() === totalSteps() - 1 ? 'Finish' : 'Complete Step'}
                                                             </Button>
                                                         ))}
-                                            </div>
+                                            </div> */}
                                         </div>
                                     )}
                             </div>
-                            <div className={classes.step}></div>
+                            <div className={classes.step}>
+                                {
+                                    getStepContent(activeStep)
+                                }
+                            </div>
                         </div>
                     </div>
                 </Grid>

@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     },
     search: {
         position: 'relative',
-        borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         borderBottom: '2px solid #D8D8D8',
         '&:hover': {
@@ -139,15 +138,7 @@ export default function Dashboard() {
                                 <IconButton aria-label="delete" size="small" onClick={() => setCourseView('list_view')}>
                                     <ReorderSharpIcon fontSize="inherit" />
                                 </IconButton>
-                                {/* <IconButton aria-label="delete" size="small" onClick={() => alert('filter view')}>
-                                    <SearchIcon fontSize="inherit" />
-                                </IconButton> */}
 
-                                {/* <ReorderSharpIcon />
-                                <SearchIcon /> */}
-                                {/* <GridIcon className={classes.icons} />
-                                <ListIcon className={classes.icons} />
-                                <FilterIcon className={classes.icons} /> */}
                             </Grid>
                         </Grid>
                         <Grid item sm={false} xs={12} >
