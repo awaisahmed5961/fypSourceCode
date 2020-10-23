@@ -280,7 +280,6 @@ export default function Course(props) {
         }
         return errors;
     }
-    console.log('cause rerender')
     return (
 
         <div>

@@ -44,25 +44,12 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
         width: '80%',
         margin: '0 auto'
+    },
+    bottomButtons: {
+        marginBottom: '20px'
     }
 }));
 
-function getSteps() {
-    return ['Create Topic ', 'Create Assesment Exercise', 'Create Agumented Content'];
-}
-
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return (<TopicContentForm />);
-        case 1:
-            return (<TopicExerciseForm />);
-        case 2:
-            return (<AgumentedContentForm />);
-        default:
-            return 'Unknown step';
-    }
-}
 
 
 export default function Topic() {
@@ -72,6 +59,10 @@ export default function Topic() {
     const [skipped, setSkipped] = React.useState(new Set());
     const steps = getSteps();
 
+    const currentTab = (newValue) => {
+        setActiveStep(newValue);
+    };
+
     const totalSteps = () => {
         return getSteps().length;
     };
@@ -79,6 +70,24 @@ export default function Topic() {
     const isStepOptional = (step) => {
         return step === 1;
     };
+    function getSteps() {
+        return ['Create Topic ', 'Create Assesment Exercise', 'Create Agumented Content'];
+    }
+
+
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return (<TopicContentForm onComplete={handleComplete} />);
+            case 1:
+                return (<TopicExerciseForm />);
+            case 2:
+                return (<AgumentedContentForm />);
+            default:
+                return 'Unknown step';
+        }
+    }
 
     const handleSkip = () => {
         if (!isStepOptional(activeStep)) {
@@ -195,6 +204,7 @@ export default function Topic() {
                                             <StepButton
                                                 onClick={handleStep(index)}
                                                 completed={isStepComplete(index)}
+
                                                 {...buttonProps}
                                             >
                                                 {label}
@@ -213,8 +223,11 @@ export default function Topic() {
                                     </div>
                                 ) : (
                                         <div>
-                                            {/* <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography> */}
-                                            {/* <div>
+                                            <Typography component={'span'} variant={'body2'} className={classes.instructions}>
+                                                {getStepContent(activeStep)}
+                                            </Typography>
+
+                                            {/* <div className={classes.bottomButtons}>
                                                 <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                                                     Back
                                                 </Button>
@@ -251,11 +264,7 @@ export default function Topic() {
                                         </div>
                                     )}
                             </div>
-                            <div className={classes.step}>
-                                {
-                                    getStepContent(activeStep)
-                                }
-                            </div>
+
                         </div>
                     </div>
                 </Grid>

@@ -28,6 +28,8 @@ import CustomDialog from '../components/layouts/LoadingDialog';
 import { LoadingSpinner } from './LoadinSpinner';
 import SuccessSpinner from './Ui/successSpinner/successSpinner';
 import formatDate from '../utils/formatDate';
+import ShareIcon from '@material-ui/icons/Share';
+import PublicationDialog from './layouts/PublicationDialog';
 const useStyles = makeStyles((theme) => ({
     root: {
         color: '#fff'
@@ -76,6 +78,7 @@ export default function ICourse(props) {
     const [deleteConformationModalOpen, setdeleteConformationModalOpen] = useState(false);
     const [loadingSpinnerModalOpen, setLoadingSpinnerModalOpen] = useState(false);
     const [actionSuccess, setActionSuccess] = useState(false);
+    const [openCoursePublicationModal, setOpenCoursePublicationModal] = useState(false);
     const handleEditCourse = () => {
         const Course = {
             id,
@@ -98,7 +101,9 @@ export default function ICourse(props) {
     const handleClose = () => {
         setdeleteConformationModalOpen(false);
     };
-
+    const handlePublicationModalClose = () => {
+        setOpenCoursePublicationModal(false);
+    };
     const verifyCourseDelete = (e) => {
         const { value } = e.target;
         if (value === title) {
@@ -212,11 +217,23 @@ export default function ICourse(props) {
                                 aria-label="Edit Coures">
                                 <EditIcon />
                             </IconButton >
+
                             <IconButton onClick={() => { handleCourseDelte(id); }}
                                 aria-label="Delete"
                             >
                                 <DeleteIcon />
                             </IconButton>
+                            <IconButton
+                                // component={RouterLink}
+                                onClick={(id) => {
+                                    setOpenCoursePublicationModal(true);
+                                    console.log(id)
+                                }}
+                            // to={`/course/${id}`}
+                            // aria-label="Edit Coures"
+                            >
+                                <ShareIcon />
+                            </IconButton >
                             <Dialog open={deleteConformationModalOpen}
                                 onClose={handleClose}
                                 aria-labelledby="form-dialog-title">
@@ -276,12 +293,16 @@ export default function ICourse(props) {
                                     paddingRight: '20px'
                                 }} />{' '} {'Course Deleted Successfully.'}
                             </CustomDialog>
-
-
                         </div>
                     </div>
                 </CardActions>
             </Card>
+            <PublicationDialog
+                open={openCoursePublicationModal}
+                onClose={handlePublicationModalClose}
+                arialabelledby="form-dialog-title"
+                publishedCourse={id}
+            />
         </div >
     )
 }
