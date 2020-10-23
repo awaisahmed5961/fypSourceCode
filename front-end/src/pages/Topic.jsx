@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import AuthContext from '../context/auth/authcontext'
 import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../components/NavBar'
@@ -14,6 +14,10 @@ import Paper from '@material-ui/core/Paper';
 import TopicContentForm from '../components/Ui/TopicContentForm';
 import TopicExerciseForm from '../components/Ui/TopicExerciseForm';
 import AgumentedContentForm from '../components/Ui/AgumentedContentForm';
+
+
+import queryString from 'query-string';
+
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
         width: '90%',
@@ -52,12 +56,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Topic() {
+export default function Topic(props) {
+
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState(new Set());
     const [skipped, setSkipped] = React.useState(new Set());
     const steps = getSteps();
+
+
+    const queryStringParameters = queryString.parse(props.location.search);
+    const { course_id } = queryStringParameters;
 
     const currentTab = (newValue) => {
         setActiveStep(newValue);
@@ -79,7 +88,7 @@ export default function Topic() {
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return (<TopicContentForm onComplete={handleComplete} />);
+                return (<TopicContentForm onComplete={handleComplete} courseId={course_id} />);
             case 1:
                 return (<TopicExerciseForm />);
             case 2:

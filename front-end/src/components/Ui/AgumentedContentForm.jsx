@@ -33,7 +33,8 @@ export default function AgumentedContentForm() {
                     <Button
                         type="button"
                         variant="contained"
-                        color="primary">
+                        color="primary"
+                        onClick={() => window.open("/editor", "_blank")}>
                         Create Augmentation
                         </Button>
                 </div>

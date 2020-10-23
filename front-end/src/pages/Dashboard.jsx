@@ -96,7 +96,7 @@ export default function Dashboard() {
         <div>
             <NavBar haveButton={true}
                 buttonTxt="Create Course"
-                buttonPath={`/course/`} />
+                buttonPath={`/courseform?action=new`} />
             <Grid container >
                 <Box
                     component={Grid}

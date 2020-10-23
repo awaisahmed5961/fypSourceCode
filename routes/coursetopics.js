@@ -1,33 +1,14 @@
 const express = require('express');
-
+const Topic = require('../models/Topic');
+const Course = require('../models/Course')
+const mongoose = require('mongoose');
 // const Course = require('../models/Course');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
-Joi.objectId = require('joi-objectid')(Joi)
-// const multer = require('multer');
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, './uploads');
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, file.originalname);
-//     }
-// });
-// const fileFilter = (req, file, cb) => {
-//     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-//         cb(null, true)
-//     }
-//     else {
-//         cb(null, false);
-//     }
-// }
-// const upload = multer({
-//     storage: storage,
-//     limits: {
-//         fileSize: 1024 * 1024 * 4
-//     },
-//     fileFilter: fileFilter
-// });
+// const { findById } = require('../models/Topic');
+Joi.objectId = require('joi-objectid')(Joi);
+const validate = require('../util/mangoId-Validator');
+
 
 const router = express.Router();
 
@@ -36,62 +17,80 @@ const router = express.Router();
  * * @description Get List of coursestopics
  * @access Private
  */
-router.get('/', async (req, res) => {
-    // const course = await Course
-    //     .find({ educator_id: req.user.id })
-    //     .populate('educator_id', '-password')
-    //     .sort('date');
-    // res.send(course);
-    res.send('course list here');
+router.get('/', auth, async (req, res) => {
+    let course_id = '';
+    if (req.header('course_id')) {
+        course_id = req.header('course_id');
+    }
+    else {
+        course_id = req.body.course_id;
+    }
+
+    // const { course_id } = req.body;
+
+    if (!validate(course_id)) {
+        res.status(400).send('Please Provide Valid Course Id');
+        return;
+    }
+
+    const topic = await Topic.find({ course_id: mongoose.Types.ObjectId(course_id) });
+    if (!topic)
+        return (res.status(404).send('Course id is invalid'));
+    else res.send(topic);
+
 });
+
 /**
  * @route GET/ api/coursestopic
  * @description Get single of courses
  * @access Private
  */
-router.get('/:id', async (req, res) => {
-    // const course = await Course.findById(req.params.id);
-    // if (!course) {
-    //     res.status(404).send('Ooops required Course is not existing in the server');
-    //     return;
-    res.send('course topic single');
-    // }
-    // res.send(course);
+router.get('/:id', auth, async (req, res) => {
+    if (!validate(req.params.id)) {
+        res.status(400).send('Please Provide Valid Id... ');
+    }
+
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+        res.status(404).send('Ooops required Course is not existing in the server');
+        return;
+
+    }
+    const topic = await Topic.findById(req.params.id);
+    if (!topic) {
+        res.status(404).send('topic id is invalid');
+    }
+    res.send(topic);
 });
+
 
 /**
  * @route POST / api/coursestopic
  * @description Add coursetopic
  * @access Private
  */
-router.post('/', async (req, res) => {
-    // let { error } = courseValidationSchema.validate(req.body);
-    // if (error) { return res.status(400).send(error.details[0].message) }
-    // // Pulling required Information from the Request 
-    // const { title, subTitle, description, } = req.body;
+router.post('/', auth, async (req, res) => {
 
-    // try {
-    //     // Creation object of the Course Model
-    //     course = new Course({
-    //         title,
-    //         subTitle,
-    //         description,
-    //         educator_id: req.user.id,
-    //         ImagePlaceholder: (req.file && req.file.path
-    //             ?
-    //             req.file.path
-    //             :
-    //             'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80')
-    //     });
-
-    //     await course.save();
-
-    //     res.status(200).send(course);
-    res.send('course topic added');
-    // }
-    //     catch (error) {
-    //     res.status(500).send('Server Error');
-    // }
+    let { error } = topicSchemaValidation.validate(req.body);
+    if (error) { return res.status(400).send(error.details[0].message) }
+    const { course_id, TopicTitle, TopicDescription } = req.body;
+    const course = await Course.findById(course_id);
+    if (!course) {
+        res.status(404).send('course id is incorrect');
+        return;
+    }
+    try {
+        topic = new Topic({
+            course_id,
+            TopicTitle,
+            TopicDescription
+        });
+        await topic.save();
+        res.status(200).send(topic);
+    }
+    catch (error) {
+        res.status(500).send('Server Error');
+    }
 });
 
 /**
@@ -134,8 +133,35 @@ router.put('/:id', async (req, res) => {
     //         console.error(err.message);
     //         res.status(500).send('Server error');
     //     }
-    res.send('course topic update')
+
+    const { TopicTitle, TopicDescription } = req.body;
+    const updateTopic = {};
+    if (TopicTitle) {
+        updateTopic.TopicTitle = TopicTitle;
+    }
+    if (TopicDescription) {
+        updateTopic.TopicDescription = TopicDescription;
+    }
+    try {
+        const topic = await Topic.findById(req.params.id);
+        if (!topic) {
+            res.status(404).send('Topic id is invalid');
+        }
+
+        const coursetopic = await Topic.findByIdAndUpdate(req.params.id,
+            { $set: updateTopic },
+            { mew: true });
+
+
+        res.status(200).send('Course topic updated');
+        console.log('successful');
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+
 });
+
 
 /**
  * @route DELETE / api/course
@@ -143,33 +169,31 @@ router.put('/:id', async (req, res) => {
  * @access Private
  */
 router.delete('/:id', async (req, res) => {
-    // try {
-    //     const course = await Course.findById(req.params.id);
+    try {
+        const topic = await Topic.findById(req.params.id);
 
-    //     if (!course) return res.status(404).json({ msg: 'Course with this id does not exists' });
+        if (!topic) return res.status(404).send('Topic with this id does not exists');
 
-    //     // Make sure user owns course
-    //     if (course.educator_id.toString() !== req.user.id)
-    //         return res.status(401).json({ msg: 'Not authorized' });
+        // // Make sure user owns course
+        // if (course.educator_id.toString() !== req.user.id)
 
-    //     await Course.findByIdAndRemove(req.params.id);
-    //     res.status(200).json({ msg: 'Course removed' });
 
-    // } catch (err) {
-    //     console.error(err.message);
-    //     res.status(500).send('Server error');
-    // }
-    res.send('course topic remove');
+        //     return res.status(401).json({ msg: 'Not authorized' });
+
+        await Topic.findByIdAndRemove(req.params.id);
+        res.status(200).json('Topic deleted');
+
+    } catch (err) {
+        res.status(500).send('Server error');
+    }
+
 });
 
 // Schema Validation
-const courseValidationSchema = Joi.object({
-    title: Joi.string()
-        .min(1).max(50).required(),
-    subTitle: Joi.string().min(1).max(50).required(),
-    description: Joi.string().required().max(300),
-    ImagePlaceholder: Joi.string(),
-    date: Joi.date(),
-    educator_id: Joi.objectId()
+const topicSchemaValidation = Joi.object({
+    course_id: Joi.objectId().required().label('Course Id'),
+    TopicTitle: Joi.string().max(200).required().label('Topic Title'),
+    TopicDescription: Joi.string().required().label('Topic Description')
+
 });
 module.exports = router;

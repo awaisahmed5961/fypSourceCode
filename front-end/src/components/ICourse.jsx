@@ -213,7 +213,7 @@ export default function ICourse(props) {
                             <IconButton
                                 component={RouterLink}
                                 onClick={handleEditCourse}
-                                to={`/course/${id}`}
+                                to={`/courseform?action=edit&id=${id}`}
                                 aria-label="Edit Coures">
                                 <EditIcon />
                             </IconButton >

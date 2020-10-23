@@ -18,42 +18,42 @@ const BreadCrumbs = (props) => {
     const { history, location: { pathname } } = props;
     const pathnames = pathname.split('/').filter(x => x);
     return (
+        <div></div>
+        // <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb" className={classes.root}>
+        //     {
+        //         pathnames.length > 0 ? (
+        //             <Link color="inherit" onClick={() => history.push('/')} >
+        //                 Dashboard
+        //             </Link>
+        //         ) : (
+        //                 <Typography> Dashboard </Typography>
+        //             )
+        //     }
 
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb" className={classes.root}>
-            {
-                pathnames.length > 0 ? (
-                    <Link color="inherit" onClick={() => history.push('/')} >
-                        Dashboard
-                    </Link>
-                ) : (
-                        <Typography> Dashboard </Typography>
-                    )
-            }
+        //     {pathnames.map((name, index) => {
+        //         const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+        //         const isLast = index === pathnames.length - 1;
+        //         name = name.split('-').join(' ');
+        //         return (
+        //             isLast ? (
+        //                 <Typography color="textPrimary"
+        //                     key={name} style={{ textTransform: 'capitalize' }}>
+        //                     {name}
+        //                 </Typography>
+        //             )
+        //                 :
+        //                 (
+        //                     <Link color="inherit"
+        //                         key={name}
+        //                         onClick={() => history.push(routeTo)}
+        //                         style={{ textTransform: 'capitalize' }} >
+        //                         {name}
+        //                     </Link>
+        //                 )
 
-            {pathnames.map((name, index) => {
-                const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-                const isLast = index === pathnames.length - 1;
-                name = name.split('-').join(' ');
-                return (
-                    isLast ? (
-                        <Typography color="textPrimary"
-                            key={name} style={{ textTransform: 'capitalize' }}>
-                            {name}
-                        </Typography>
-                    )
-                        :
-                        (
-                            <Link color="inherit"
-                                key={name}
-                                onClick={() => history.push(routeTo)}
-                                style={{ textTransform: 'capitalize' }} >
-                                {name}
-                            </Link>
-                        )
-
-                );
-            })}
-        </Breadcrumbs >
+        //         );
+        //     })}
+        // </Breadcrumbs >
     );
 }
 export default withRouter(BreadCrumbs);

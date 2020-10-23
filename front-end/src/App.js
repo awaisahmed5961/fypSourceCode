@@ -15,6 +15,7 @@ import Course from './pages/Course';
 import CourseDetail from './pages/CourseDetail';
 import TopicDetail from './pages/TopicDetail';
 import Topic from './pages/Topic';
+import TopicState from './context/topic/TopicState';
 
 
 if (localStorage.token) {
@@ -27,23 +28,47 @@ function App() {
   return (
     <AuthState>
       <CourseState>
-        <ThemeProvider theme={theme}>
-          <Router>
-            <div >
-              <Switch>
-                <Route exact path="/login" component={SignIn} />
-                <Route exact path="/register_user" component={SignUp} />
-                <PrivateRoute exact path="/" label="Home" component={Dashboard} />
-                <PrivateRoute exact path="/course/:id?" component={Course} />
-                <PrivateRoute exact path="/topic" component={Topic} />
-                <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
-                <PrivateRoute exact path="/:title" component={CourseDetail} />
-                <Route path="" component={NotFound} />
+        <TopicState>
+          <ThemeProvider theme={theme}>
+            <Router>
+              <div >
+                <Switch>
+                  <Route exact path="/login" component={SignIn} />
+                  <Route exact path="/register_user" component={SignUp} />
+                  <PrivateRoute exact path="/" label="Home" component={Dashboard} />
+                  <PrivateRoute exact path="/courseform" component={Course} />
+                  <PrivateRoute exact path="/topic" component={Topic} />
+                  <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
+                  <PrivateRoute exact path="/editor" component={() => {
+                    return (
+                      <div>Hello from editor</div>
+                    )
+                  }} />
+                  <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
 
-              </Switch>
-            </div>
-          </Router>
-        </ThemeProvider>
+
+                  <Route path="" component={NotFound} />
+
+                  {/* <Route exact path="/login" component={SignIn} />
+                  <Route exact path="/register_user" component={SignUp} />
+                  <PrivateRoute exact path="/" label="Home" component={Dashboard} />
+                  <PrivateRoute exact path="/course/:id?" component={Course} />
+                  <PrivateRoute exact path="/topic" component={Topic} />
+                  <PrivateRoute exact path="/editor" component={() => {
+                    return (
+                      <div>Hello from editor</div>
+                    )
+                  }} />
+                  <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
+                  <PrivateRoute exact path="/:title" component={CourseDetail} />
+
+                  <Route path="" component={NotFound} /> */}
+
+                </Switch>
+              </div>
+            </Router>
+          </ThemeProvider>
+        </TopicState>
       </CourseState>
     </AuthState>
   );

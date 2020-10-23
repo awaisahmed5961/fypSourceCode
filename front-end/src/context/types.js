@@ -20,3 +20,7 @@ export const CLEAR_COURSE_ERRORS = 'CLEAR_COURSE_ERRORS';
 
 
 
+// Course Topics
+export const GET_TOPICS = 'GET_TOPICS';
+export const ADD_TOPIC = 'ADD_TOPIC';
+export const TOPIC_ERROR = 'TOPIC_ERROR';

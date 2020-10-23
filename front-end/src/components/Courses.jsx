@@ -94,7 +94,8 @@ export default function Courses(props) {
                                                                 description={course.description}
                                                                 date={course.date}
                                                                 publicationStatus={course.publication_Status}
-                                                                pageRoute={`/${course.title.split(' ').join('-')}`}
+                                                                // pageRoute={`/${course.title.split(' ').join('-')}`}
+                                                                pageRoute={`/course/${course._id}`}
                                                             />
                                                         </Grid>);
                                             }

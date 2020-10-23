@@ -19,6 +19,8 @@ import { LoadingSpinner } from '../components/LoadinSpinner';
 import SuccessSpinner from '../components/Ui/successSpinner/successSpinner';
 import PublicationDialog from '../components/layouts/PublicationDialog';
 
+import queryString from 'query-string';
+
 const useStyles = makeStyles((theme) => ({
     formContainer: {
         width: '75%',
@@ -67,10 +69,13 @@ export default function Course(props) {
         current,
         clearCurrent, error,
         clearCourseError,
-        updateCourse } = courseContext;
+        updateCourse
+    } = courseContext;
     // const [image, setImage] = useState(null);
     const [actionSucessResponse, setActionSucessResponse] = useState(null);
     const { id } = props.match.params;
+    const queryStringParameters = queryString.parse(props.location.search);
+    const { action } = queryStringParameters;
     useEffect(() => {
         authContext.loadUser();
 
@@ -135,7 +140,8 @@ export default function Course(props) {
     }
     const handleOnSubmit = (e) => {
         e.preventDefault();
-        if (id === undefined) {
+        if (action === 'new') {
+            console.log('course add')
             const errors = formValidation();
             if (errors) {
                 setvalidationErrors({
@@ -154,8 +160,9 @@ export default function Course(props) {
                 setTimeout(() => {
                     addCourse(courseFormData).then(course => {
                         setOpenLoadingModal(false);
-                        setActionSucessResponse(course.data._id)
-                        setOpenCoursePublicationModal(true)
+                        setActionSucessResponse(course.data._id);
+                        setOpenCoursePublicationModal(true);
+
                     }).catch(err => {
                         console.log(err)
                     });
