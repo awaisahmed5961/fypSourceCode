@@ -21,12 +21,11 @@ router.get('/', auth, async (req, res) => {
     let course_id = '';
     if (req.header('course_id')) {
         course_id = req.header('course_id');
+
     }
     else {
         course_id = req.body.course_id;
     }
-
-    // const { course_id } = req.body;
 
     if (!validate(course_id)) {
         res.status(400).send('Please Provide Valid Course Id');
@@ -35,7 +34,7 @@ router.get('/', auth, async (req, res) => {
 
     const topic = await Topic.find({ course_id: mongoose.Types.ObjectId(course_id) });
     if (!topic)
-        return (res.status(404).send('Course id is invalid'));
+        return (res.status(404).send('No topic found'));
     else res.send(topic);
 
 });
@@ -150,7 +149,7 @@ router.put('/:id', async (req, res) => {
 
         const coursetopic = await Topic.findByIdAndUpdate(req.params.id,
             { $set: updateTopic },
-            { mew: true });
+            { new: true });
 
 
         res.status(200).send('Course topic updated');

@@ -7,7 +7,8 @@ import axios from 'axios';
 import {
     GET_TOPICS,
     ADD_TOPIC,
-    TOPIC_ERROR
+    TOPIC_ERROR,
+    DELETE_TOPIC
     // UPDATE_COURSE,
     // DELETE_COURSE,
     // FILTER_COURSE,
@@ -28,16 +29,21 @@ const TopicState = props => {
     const [state, dispatch] = useReducer(topicReducer, initialState);
 
     // getTopics
-    const getTopics = async () => {
+    const getTopics = async (courseId) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                course_id: courseId.course_id,
+            }
+        }
 
         try {
-            const res = await axios.get('/api/coursetopics');
+            const res = await axios.get('/api/coursetopics', config);
             dispatch({ type: GET_TOPICS, payload: res.data })
             return res;
         }
         catch (err) {
-            console.log('errro in get topics');
-            console.log(err)
+
             return err;
         }
 
@@ -66,27 +72,29 @@ const TopicState = props => {
         }
 
     }
+
+    // delete Topic
+    const deleteTopic = async (id) => {
+        try {
+            const res = await axios.delete(`/api/coursetopics/${id}`);
+            dispatch({ type: DELETE_TOPIC, payload: id })
+            return res;
+
+        } catch (err) {
+            dispatch({
+                type: TOPIC_ERROR,
+                payload: err.response.msg
+            });
+            return err;
+        }
+    }
+
     // clearContacts
     // const clearCourses = () => {
     //     dispatch({ type: CLEAR_COURSES })
     // }
 
-    // // delete Course
-    // const deleteCourse = async (id) => {
-    //     try {
-    //         const res = await axios.delete(`/api/courses/${id}`);
 
-    //         dispatch({ type: DELETE_COURSE, payload: id })
-    //         return res;
-
-    //     } catch (err) {
-    //         dispatch({
-    //             type: COURSE_ERROR,
-    //             payload: err.response.msg
-    //         });
-    //         return err;
-    //     }
-    // }
 
     // // update Course
     // const updateCourse = async (course) => {
@@ -137,6 +145,7 @@ const TopicState = props => {
             error: state.error,
             getTopics,
             addTopic,
+            deleteTopic
         }}>
             {props.children}
         </TopicContext.Provider>

@@ -9,7 +9,7 @@ import TopicContext from '../../context/topic/topicContext';
 import CustomDialog from '../layouts/LoadingDialog';
 import { LoadingSpinner } from '../LoadinSpinner';
 import SuccessSpinner from './successSpinner/successSpinner';
-
+import queryString from 'query-string';
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: '10px',
@@ -37,8 +37,10 @@ export default function TopicContentForm(props) {
     const [openloadingModal, setOpenLoadingModal] = useState(false);
     const [openActionModal, setOpenActionModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-
-
+    // const queryStringParameters = queryString.parse(props.location.search);
+    // const { action } = queryStringParameters;
+    // console.log(action);
+    // console.log('TopicContentForm line 44')
 
     const classes = useStyles();
     const [topicContent, setTopicContent] = useState({

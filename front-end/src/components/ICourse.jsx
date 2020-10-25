@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     cardAction: {
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between'
     },
     publisheMetaData: {
         display: 'flex',

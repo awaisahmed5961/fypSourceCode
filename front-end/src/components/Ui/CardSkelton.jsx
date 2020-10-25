@@ -104,6 +104,10 @@ export default function CardSkelton() {
                     >
                         <Skeleton variant="circle" width={40} height={40} />
                     </IconButton>
+                    <IconButton
+                    >
+                        <Skeleton variant="circle" width={40} height={40} />
+                    </IconButton>
                 </div>
             </CardActions>
         </Card >

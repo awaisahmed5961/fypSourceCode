@@ -32,6 +32,7 @@ app.use('/api/auth/learner', require('./routes/auth/learner'));
 app.use('/api/courses', require('./routes/courses'));
 app.use('/api/coursetopics', require('./routes/coursetopics'));
 app.use('/api/registercourses', require('./routes/registeredcourses'));
+app.use('/api/unregistercourse', require('./routes/unregistercourse'));
 
 // app.use((req, res, next) => {
 //     const error = new Error('not found');

@@ -2,6 +2,7 @@ import {
     GET_TOPICS,
     ADD_TOPIC,
     TOPIC_ERROR,
+    DELETE_TOPIC
     // UPDATE_COURSE,
     // DELETE_COURSE,
     // FILTER_COURSE,
@@ -31,6 +32,12 @@ export default (state, action) => {
                 loading: false,
                 error: action.payload
             }
+        case DELETE_TOPIC:
+            return {
+                ...state,
+                topic: state.topic.filter(t => t._id !== action.payload),
+                loading: false
+            };
         // case CLEAR_COURSE_ERRORS:
         //     return {
         //         ...state,
@@ -38,12 +45,7 @@ export default (state, action) => {
         //         error: null
         //     }
 
-        // case DELETE_COURSE:
-        //     return {
-        //         ...state,
-        //         courses: state.courses.filter(course => course._id !== action.payload),
-        //         loading: false
-        //     };
+
         // case UPDATE_COURSE:
         //     return {
         //         ...state,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import NavBar from '../components/NavBar'
 import BreadCrumbs from '../components/BreadCrumbs'
 import Grid from '@material-ui/core/Grid';
@@ -8,6 +8,14 @@ import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 import { makeStyles, fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
+import TopicContext from '../context/topic/topicContext';
+import { useEffect } from 'react';
+import SingleTopic from '../components/SingleTopic';
+import { Link } from 'react-router-dom';
+import CourseContext from '../context/course/courseContext';
+import getPublicationStatus from '../utils/getPublicationStatus';
+import Badge from '@material-ui/core/Badge';
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -75,9 +83,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CourseDetail(props) {
+    useEffect(() => {
+        getTopics({ course_id: id });
+        getCourses();
+    }, []);
     const { id } = props.match.params;
     const classes = useStyles();
     const [searchFilter, setSearchFilter] = useState('');
+    const topicContext = useContext(TopicContext);
+    const courseContext = useContext(CourseContext);
+
+    const { getTopics, topic } = topicContext;
+
+    const { courses, getCourses } = courseContext;
+    const currentCourse = courses.filter((course) => course._id === id)
+
+    const defaultProps = {
+        color: 'secondary',
+
+    };
 
     return (
         <div>
@@ -98,13 +122,20 @@ export default function CourseDetail(props) {
                         alignItems="center">
                         <Grid item >
                             <Typography variant="subtitle1" >
-                                Course Name: abc
-                    </Typography>
+                                Course Name: {currentCourse[0] === undefined ? '' : currentCourse[0].title}
+                            </Typography>
                         </Grid>
                         <Grid item >
                             <Typography variant="subtitle1" >
-                                Course Status: Published
-                    </Typography>
+                                Course Status: {getPublicationStatus(currentCourse[0] === undefined ? '' : currentCourse[0].publication_Status)}
+                            </Typography>
+                        </Grid>
+                        <Grid item >
+                            <Typography variant="subtitle1" >
+                                Total Topics:
+                                <Badge badgeContent={topic.length} {...defaultProps} />
+
+                            </Typography>
                         </Grid>
                         {/* course Name: abc
                         couse staus: published
@@ -144,29 +175,31 @@ export default function CourseDetail(props) {
                     </Grid>
                 </Grid>
             </Grid>
-            {/* {
-                topics.length === 0 ? (<div style={{
+            {
+                topic.length === 0 ? (<div style={{
                     textAlign: 'center'
                 }}  >
                     <Typography variant="h6" >
-                        There is no Course.
-                                    </Typography>
-                    <Button variant="contained" color="primary">
-                        Create Course
-                                        </Button>
+                        There is no Topic.
+                    </Typography>
+                    <Button component={Link} to={`/topic?course_id=${id}`} variant="contained" color="primary">
+                        Create Topic
+                    </Button>
                 </div>) : (
-                        <Grid container spacing={6} direction="row" justify='center'  >
+                        <Grid container spacing={6} direction="row" justify='center' style={{ marginTop: '30px' }}  >
 
                             {
-                                topics.map((topic) => {
-                                    return (<Grid item key={topic.id} >
-                                        <CourseCard id={topic.id} title={topic.title} subTitle={topic.subTitle} publicationStatus={topic.publicationStatus} pageRoute={`/${topic.title}`} />
+                                topic.map((topic) => {
+                                    return (<Grid item key={topic._id} style={{ padding: '0px' }} >
+                                        {/* <CourseCard id={topic._id} title={topic.TopicTitle} subTitle={topic.subTitle} publicationStatus={topic.publicationStatus} pageRoute={`/${topic.title}`} /> */}
+
+                                        <SingleTopic topic={topic} />
                                     </Grid>);
                                 })
                             }
                         </Grid>
-                    ) */}
-            {/* } */}
+                    )
+            }
         </div>
     )
 }
