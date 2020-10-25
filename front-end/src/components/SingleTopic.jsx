@@ -11,7 +11,8 @@ import ConformationDialog from '../components/layouts/ConformationDialoge';
 import TopicContext from '../context/topic/topicContext';
 import CustomDialog from '../components/layouts/LoadingDialog';
 import { LoadingSpinner } from '../components/LoadinSpinner';
-
+import exerciseIcon from '../app assetrs/icons/quiz.svg';
+import ArIcons from '../app assetrs/icons/mobile.svg';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -32,6 +33,22 @@ const useStyles = makeStyles((theme) => ({
     },
     listCta: {
         marginRight: '10px'
+    },
+    IconBox: {
+        display: 'flex',
+        alignItems: 'center',
+        height: '30px'
+    },
+    icon: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: '30px',
+        '& img': {
+            marginRight: '5px'
+        },
+        '& span': {
+            color: '#272727'
+        }
     }
 
 }));
@@ -40,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ListView(props) {
     const classes = useStyles();
     const { _id, TopicTitle, TopicDescription } = props.topic;
+    const { courseId } = props;
     const [openConformationDialog, setOpenConformationDialog] = useState(false);
     const [openloadingModal, setOpenLoadingModal] = useState(false);
     const topicContext = useContext(TopicContext);
@@ -68,7 +86,7 @@ export default function ListView(props) {
                     alignItems="center"
                 >
                     <Grid item xs>
-                        <CardActionArea component={RouterLink} to={`/topic/${_id}`}>
+                        <CardActionArea component={RouterLink} to={`/topic?course_id=${courseId}&topic_id=${_id}`}>
                             <div className={classes.titleInfo}>
                                 <Typography
                                     color={'inherit'}
@@ -77,13 +95,23 @@ export default function ListView(props) {
                                     {TopicTitle}
 
                                 </Typography>
-                                <Typography
-                                    color={'inherit'}
-                                    variant={'subtitle1'}
-                                >
-                                    ar contentent,
-                                    excercises
-                </Typography>
+                                <div className={classes.IconBox}>
+                                    <div className={classes.icon}>
+                                        <img src={exerciseIcon} style={{
+                                            width: '15px',
+                                            height: '15px'
+                                        }} />
+                                        <span>10</span>
+                                    </div>
+                                    <div className={classes.icon}>
+                                        <img src={ArIcons} style={{
+                                            width: '15px',
+                                            height: '15px'
+                                        }} />
+                                        <span>12</span>
+                                    </div>
+
+                                </div>
                             </div>
                         </CardActionArea>
                     </Grid>
@@ -92,7 +120,7 @@ export default function ListView(props) {
                             <IconButton
                                 component={RouterLink}
                                 // onClick={handleEditCourse}
-                                to={`/topic?course_id=${123}&topic_id=${_id}`}
+                                to={`/topiceditor?course_id=${courseId}&topic_id=${_id}`}
                                 aria-label="Edit Coures">
                                 <EditIcon />
                             </IconButton >

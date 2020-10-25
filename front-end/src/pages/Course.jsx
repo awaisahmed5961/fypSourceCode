@@ -18,7 +18,6 @@ import CustomDialog from '../components/layouts/LoadingDialog';
 import { LoadingSpinner } from '../components/LoadinSpinner';
 import SuccessSpinner from '../components/Ui/successSpinner/successSpinner';
 import PublicationDialog from '../components/layouts/PublicationDialog';
-
 import queryString from 'query-string';
 
 const useStyles = makeStyles((theme) => ({
@@ -141,7 +140,6 @@ export default function Course(props) {
     const handleOnSubmit = (e) => {
         e.preventDefault();
         if (action === 'new') {
-            console.log('course add')
             const errors = formValidation();
             if (errors) {
                 setvalidationErrors({

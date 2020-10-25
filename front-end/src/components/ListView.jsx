@@ -5,7 +5,8 @@ import Link from '@material-ui/core/Link';
 import getPublicationStatus from '../utils/getPublicationStatus';
 import formatDate from '../utils/formatDate';
 import defaultImage from '../app assetrs/Images/list placeholder.jpg'
-
+import CardActionArea from '@material-ui/core/CardActionArea';
+import { Link as RouterLink } from 'react-router-dom'
 const useStyles = makeStyles((theme) => ({
     title: {
         backgroundColor: 'white',
@@ -69,58 +70,60 @@ export default function ListView(props) {
     const { id, title, description, subTitle, date, publicationStatus, pageRoute, onDelete } = props;
     return (
         <div>
-            <div className={classes.title}>
-                <img className={classes.titleImage} style={{
-                    backgroundImage: `url(${defaultImage})`
-                }} />
-                <div className={classes.publicationStatusBadge}
+            <CardActionArea component={RouterLink} to={`/course/${id}`}>
+                <div className={classes.title}>
+                    <img className={classes.titleImage} style={{
+                        backgroundImage: `url(${defaultImage})`
+                    }} />
+                    <div className={classes.publicationStatusBadge}
 
-                >
-                    {/* {getPublicationStatus(publicationStatus)} */}
-                    <Typography
-                        color={'inherit'}
-                        variant={'subtitle2'}
-                        className={
-                            publicationStatus == '1'
-                                ? (classes.publishBadge)
-                                :
-                                (publicationStatus == '2'
-                                    ? classes.draftBadge
-                                    : classes.archiveBadge)}
                     >
-                        {getPublicationStatus(publicationStatus)}
-                    </Typography>
-                </div>
-                <div className={classes.publicationMetaBox}>
-                    <Typography variant={'caption'}>
-                        {getPublicationStatus(publicationStatus)} {' '} {"at"}
-                    </Typography>
-                    <Typography variant={'caption'}>
-                        <Link href="#" underline={'none'}>
-                            {formatDate(date)}
-                        </Link>
-                    </Typography>
-                    {/* <span>published on</span>
+                        {/* {getPublicationStatus(publicationStatus)} */}
+                        <Typography
+                            color={'inherit'}
+                            variant={'subtitle2'}
+                            className={
+                                publicationStatus == '1'
+                                    ? (classes.publishBadge)
+                                    :
+                                    (publicationStatus == '2'
+                                        ? classes.draftBadge
+                                        : classes.archiveBadge)}
+                        >
+                            {getPublicationStatus(publicationStatus)}
+                        </Typography>
+                    </div>
+                    <div className={classes.publicationMetaBox}>
+                        <Typography variant={'caption'}>
+                            {getPublicationStatus(publicationStatus)} {' '} {"at"}
+                        </Typography>
+                        <Typography variant={'caption'}>
+                            <Link href="#" underline={'none'}>
+                                {formatDate(date)}
+                            </Link>
+                        </Typography>
+                        {/* <span>published on</span>
                     <span>12 june, 2000</span> */}
-                </div>
-                <div className={classes.titleInfo}>
-                    <Typography
-                        color={'inherit'}
-                        variant={'h6'}
-                    >
-                        {title}
-                    </Typography>
-                    <Typography
-                        color={'inherit'}
-                        variant={'subtitle1'}
-                    >
-                        {subTitle}
-                    </Typography>
+                    </div>
+                    <div className={classes.titleInfo}>
+                        <Typography
+                            color={'inherit'}
+                            variant={'h6'}
+                        >
+                            {title}
+                        </Typography>
+                        <Typography
+                            color={'inherit'}
+                            variant={'subtitle1'}
+                        >
+                            {subTitle}
+                        </Typography>
 
-                    {/* <h1>Title</h1>
+                        {/* <h1>Title</h1>
                     <p>You can write anything you want here.</p> */}
+                    </div>
                 </div>
-            </div>
+            </CardActionArea>
         </div>
     )
 }

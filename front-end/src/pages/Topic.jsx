@@ -66,7 +66,7 @@ export default function Topic(props) {
 
 
     const queryStringParameters = queryString.parse(props.location.search);
-    const { course_id } = queryStringParameters;
+    const { course_id, topic_id } = queryStringParameters;
 
     const currentTab = (newValue) => {
         setActiveStep(newValue);
@@ -88,7 +88,7 @@ export default function Topic(props) {
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return (<TopicContentForm onComplete={handleComplete} courseId={course_id} />);
+                return (<TopicContentForm onComplete={handleComplete} courseId={course_id} topicId={topic_id} />);
             case 1:
                 return (<TopicExerciseForm />);
             case 2:

@@ -9,7 +9,7 @@ import TopicContext from '../../context/topic/topicContext';
 import CustomDialog from '../layouts/LoadingDialog';
 import { LoadingSpinner } from '../LoadinSpinner';
 import SuccessSpinner from './successSpinner/successSpinner';
-import queryString from 'query-string';
+import { useEffect } from 'react';
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: '10px',
@@ -31,16 +31,32 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function TopicContentForm(props) {
-    const { courseId } = props;
+    const { courseId, topicId } = props;
+    useEffect(() => {
+        if (topicId !== undefined) {
+            getTopics({ course_id: courseId }).then((t) => {
+
+                let abc = t.data.filter((topic) => topic._id === topicId);
+                const { TopicTitle, TopicDescription } = abc[0];
+                let currentTopic = {
+                    TopicTitle,
+                    TopicDescription
+                }
+                console.log(currentTopic)
+                setTopicContent(currentTopic);
+                console.log(topicContent);
+            })
+
+        }
+    }, []);
+
+
+
     const topicContext = useContext(TopicContext);
-    const { addTopic } = topicContext;
+    const { addTopic, topic, getTopics } = topicContext;
     const [openloadingModal, setOpenLoadingModal] = useState(false);
     const [openActionModal, setOpenActionModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    // const queryStringParameters = queryString.parse(props.location.search);
-    // const { action } = queryStringParameters;
-    // console.log(action);
-    // console.log('TopicContentForm line 44')
 
     const classes = useStyles();
     const [topicContent, setTopicContent] = useState({
@@ -51,6 +67,8 @@ export default function TopicContentForm(props) {
         TopicTitle: '',
         TopicDescription: '',
     });
+
+
     const handleInputOnChange = e => {
         const { name, value } = e.target;
         setTopicContent({
@@ -62,6 +80,7 @@ export default function TopicContentForm(props) {
         TopicTitle: Joi.string().required().label('Course Title'),
         TopicDescription: Joi.string().required().label('Topic Discription')
     }
+
     const topicContentValidation = () => {
 
         const result = Joi.validate(topicContent, courseTopicSchema, { abortEarly: false });
@@ -77,36 +96,48 @@ export default function TopicContentForm(props) {
         e.preventDefault();
         // let { email, password } =;
 
-        const eerrors = topicContentValidation();
 
-        if (eerrors) {
-            // console.log(eerrors)
-            setTopicContentErrors({ ...eerrors });
+        if (topicId === undefined) {
+            const eerrors = topicContentValidation();
+            if (eerrors) {
+                // console.log(eerrors)
+                setTopicContentErrors({ ...eerrors });
+            }
+            else {
+                setTopicContentErrors({});
+                topicContent.course_id = courseId;
+
+                setTimeout(() => {
+                    addTopic(topicContent).then(topic => {
+                        setOpenLoadingModal(false);
+                        setOpenActionModal(true);
+                        setTimeout(() => {
+                            setOpenActionModal(false);
+                            props.onComplete();
+                        }, 1000)
+
+                    }).catch(err => {
+                        console.log(err)
+                        alert('error....')
+                    });
+                }, 2000)
+                setOpenLoadingModal(true);
+                setTopicContent({
+                    id: null,
+                    TopicTitle: '',
+                    TopicDescription: ''
+                })
+            }
         }
         else {
-            setTopicContentErrors({});
-            topicContent.course_id = courseId;
-
-            setTimeout(() => {
-                addTopic(topicContent).then(topic => {
-                    setOpenLoadingModal(false);
-                    setOpenActionModal(true);
-                    setTimeout(() => {
-                        setOpenActionModal(false);
-                        props.onComplete();
-                    }, 1000)
-
-                }).catch(err => {
-                    console.log(err)
-                    alert('error....')
-                });
-            }, 2000)
-            setOpenLoadingModal(true);
-            setTopicContent({
-                id: null,
-                TopicTitle: '',
-                TopicDescription: ''
-            })
+            const eerrors = topicContentValidation();
+            if (eerrors) {
+                // console.log(eerrors)
+                setTopicContentErrors({ ...eerrors });
+            }
+            else {
+                alert('no error, update the ocures')
+            }
         }
     }
     return (
@@ -134,6 +165,7 @@ export default function TopicContentForm(props) {
                                 '|', 'undo', 'redo']
                         }}
                         data={topicContent.TopicDescription}
+
                         onInit={editor => {
                             // You can store the "editor" and use when it is needed.
                             console.log('Editor is ready to use!', editor);
@@ -158,8 +190,8 @@ export default function TopicContentForm(props) {
                         variant="contained"
                         color="primary"
                     >
-                        Create Topic
-                </Button>
+                        {topicId === undefined ? "Create Topic" : "Edit Topic"}
+                    </Button>
                 </div>
 
             </form>

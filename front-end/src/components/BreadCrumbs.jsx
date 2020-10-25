@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         margin: '20px'
     },
+    dummyClass: {
+        height: '40px'
+    }
 
 }));
 
@@ -18,7 +21,7 @@ const BreadCrumbs = (props) => {
     const { history, location: { pathname } } = props;
     const pathnames = pathname.split('/').filter(x => x);
     return (
-        <div></div>
+        <div className={classes.dummyClass}> </div>
         // <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb" className={classes.root}>
         //     {
         //         pathnames.length > 0 ? (

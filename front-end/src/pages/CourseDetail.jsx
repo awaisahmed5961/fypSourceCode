@@ -14,7 +14,7 @@ import SingleTopic from '../components/SingleTopic';
 import { Link } from 'react-router-dom';
 import CourseContext from '../context/course/courseContext';
 import getPublicationStatus from '../utils/getPublicationStatus';
-import Badge from '@material-ui/core/Badge';
+import SortIcon from '@material-ui/icons/Sort';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -80,6 +80,12 @@ const useStyles = makeStyles((theme) => ({
             width: '20ch',
         },
     },
+    Badge: {
+        backgroundColor: '#018377',
+        padding: '2px 5px',
+        borderRadius: '3px',
+        marginLeft: '2px'
+    }
 }));
 
 export default function CourseDetail(props) {
@@ -103,9 +109,11 @@ export default function CourseDetail(props) {
 
     };
 
+    let topicList = topic.filter((t) => t.TopicTitle.includes(searchFilter.toLowerCase()));
+    // console.log(topic.filter((t) => t.TopicTitle.includes(searchFilter.toLowerCase())));
     return (
         <div>
-            <NavBar haveButton={true} buttonTxt="Course Topic" buttonPath={`/topic?course_id=${id}`} />
+            <NavBar haveButton={true} buttonTxt="Course Topic" buttonPath={`/topiceditor?course_id=${id}`} />
             <Box
                 component={Grid}
                 item
@@ -116,25 +124,24 @@ export default function CourseDetail(props) {
             </Box>
             <Grid container direction="row"
                 justify="space-between" className={classes.container} >
-                <Grid item >
+                <Grid item xs={9}>
                     <Grid container direction="row"
                         justify="space-between"
                         alignItems="center">
                         <Grid item >
                             <Typography variant="subtitle1" >
-                                Course Name: {currentCourse[0] === undefined ? '' : currentCourse[0].title}
+                                <b>Course Name:</b> {currentCourse[0] === undefined ? '' : currentCourse[0].title}
                             </Typography>
                         </Grid>
                         <Grid item >
                             <Typography variant="subtitle1" >
-                                Course Status: {getPublicationStatus(currentCourse[0] === undefined ? '' : currentCourse[0].publication_Status)}
+                                <b>Course Status:</b> {getPublicationStatus(currentCourse[0] === undefined ? '' : currentCourse[0].publication_Status)}
                             </Typography>
                         </Grid>
                         <Grid item >
                             <Typography variant="subtitle1" >
-                                Total Topics:
-                                <Badge badgeContent={topic.length} {...defaultProps} />
-
+                                <b>Total Topics:</b>
+                                <span className={classes.Badge}>{topic.length}</span>
                             </Typography>
                         </Grid>
                         {/* course Name: abc
@@ -146,8 +153,8 @@ export default function CourseDetail(props) {
 
                 </Grid>
                 <Grid item >
-                    <Grid direction='row' container>
 
+                    <Grid direction='row' container>
                         <form>
                             <div className={classes.search}>
                                 <div className={classes.searchIcon}>
@@ -176,24 +183,22 @@ export default function CourseDetail(props) {
                 </Grid>
             </Grid>
             {
-                topic.length === 0 ? (<div style={{
+                topicList.length === 0 ? (<div style={{
                     textAlign: 'center'
                 }}  >
                     <Typography variant="h6" >
                         There is no Topic.
                     </Typography>
-                    <Button component={Link} to={`/topic?course_id=${id}`} variant="contained" color="primary">
+                    <Button component={Link} to={`/topiceditor?course_id=${id}`} variant="contained" color="primary">
                         Create Topic
                     </Button>
                 </div>) : (
                         <Grid container spacing={6} direction="row" justify='center' style={{ marginTop: '30px' }}  >
 
                             {
-                                topic.map((topic) => {
+                                topicList.map((topic) => {
                                     return (<Grid item key={topic._id} style={{ padding: '0px' }} >
-                                        {/* <CourseCard id={topic._id} title={topic.TopicTitle} subTitle={topic.subTitle} publicationStatus={topic.publicationStatus} pageRoute={`/${topic.title}`} /> */}
-
-                                        <SingleTopic topic={topic} />
+                                        <SingleTopic topic={topic} courseId={id} />
                                     </Grid>);
                                 })
                             }

@@ -37,10 +37,10 @@ function App() {
                   <Route exact path="/register_user" component={SignUp} />
                   <PrivateRoute exact path="/" label="Home" component={Dashboard} />
                   <PrivateRoute exact path="/courseform" component={Course} />
-                  <PrivateRoute exact path="/topic" component={Topic} />
+                  <PrivateRoute exact path="/topiceditor" component={Topic} />
                   {/* <PrivateRoute exact path="/topic" render={props => <Topic {...props} key={this.props.location.search} />} /> */}
                   <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
-                  <PrivateRoute exact path="/topic/:id?" component={TopicDetail} />
+                  <PrivateRoute exact path="/topic" component={TopicDetail} />
                   <PrivateRoute exact path="/editor" component={() => {
                     return (
                       <div>Hello from editor</div>
