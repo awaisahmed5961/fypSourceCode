@@ -42,9 +42,9 @@ export default function TopicContentForm(props) {
                     TopicTitle,
                     TopicDescription
                 }
-                console.log(currentTopic)
+
                 setTopicContent(currentTopic);
-                console.log(topicContent);
+
             })
 
         }

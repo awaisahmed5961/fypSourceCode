@@ -228,7 +228,6 @@ export default function ICourse(props) {
                                 // component={RouterLink}
                                 onClick={(id) => {
                                     setOpenCoursePublicationModal(true);
-                                    console.log(id)
                                 }}
                             // to={`/course/${id}`}
                             // aria-label="Edit Coures"

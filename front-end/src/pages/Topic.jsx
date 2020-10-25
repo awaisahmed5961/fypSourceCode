@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     mainContainer: {
         width: '90%',
         margin: '0 auto',
-
+        height: "100%",
         [theme.breakpoints.down('sm')]: {
             width: '100%',
 
