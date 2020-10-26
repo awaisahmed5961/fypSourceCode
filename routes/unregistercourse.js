@@ -14,7 +14,7 @@ router.delete('/:id', auth, async (req, res) => {
     try {
         const courseID = req.params.id;
 
-        const courseUnregister = await RegisterCourse.find({ course_id: courseID });
+        const courseUnregister = await RegisterCourse.find({ course_id: courseID, learner_id: req.user.id });
         if (courseUnregister.length == 0) {
             return res.status(404).send("not found");
         }

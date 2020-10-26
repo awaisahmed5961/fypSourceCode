@@ -57,33 +57,34 @@ router.post('/', auth, async (req, res) => {
         res.status(404).send('Ooops no course with this detail is found');
         return;
     }
-    if (!course.publication_Status === 1) {
-        res.status(401).send('Course is not published and you can not register untill the course is published')
-    }
 
     const alreadyRegistered = await RegisterCourse.findOne({ course_id: course_id, learner_id: req.user.id });
     // res.send(alreadyRegistered)
     if (alreadyRegistered) {
-        res.status(200).send('Course already registered')
+        res.status(401).send('Course already registered')
     }
     else {
+        if (course.publication_Status === 1) {
+            try {
 
-        try {
+                // Creation object of the RegisterCourse Model
+                registerCourse = new RegisterCourse({
+                    course_id,
+                    learner_id: req.user.id
+                });
 
+                await registerCourse.save();
 
-            // Creation object of the RegisterCourse Model
-            registerCourse = new RegisterCourse({
-                course_id,
-                learner_id: req.user.id
-            });
-
-            await registerCourse.save();
-
-            res.status(200).send(registerCourse);
+                res.status(200).send(registerCourse);
+            }
+            catch (error) {
+                res.status(500).send('Server Error');
+            }
         }
-        catch (error) {
-            res.status(500).send('Server Error');
+        else {
+            res.status(401).send('Course is not published and you can not register untill the course is published')
         }
+
     }
 
 
