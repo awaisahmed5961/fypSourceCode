@@ -13,21 +13,59 @@ const router = express.Router();
  */
 
 router.get('/', auth, async (req, res) => {
-    let AssessmentExercise_id = '';
-    if (req.header('AssessmentExercise_id')) {
-        AssessmentExercise_id = req.header('AssessmentExercise_id');
+    let topic_id = '';
+    if (req.header('topic_id')) {
+        topic_id = req.header('topic_id');
+    }
+    else {
+        topic_id = req.body.topic_id;
+    }
+    // let AssessmentExercise_id = '';
+    // if (req.header('AssessmentExercise_id')) {
+    //     AssessmentExercise_id = req.header('AssessmentExercise_id');
+    // }
+    // else {
+    //     AssessmentExercise_id = req.body.AssessmentExercise_id;
+    // }
 
-    }
-    else {
-        AssessmentExercise_id = req.body.AssessmentExercise_id;
-    }
-    const exerciseQuestions = await ExerciseQuestions.find({ AssessmentExercise_id: mongoose.Types.ObjectId(AssessmentExercise_id) });
-    if (!exerciseQuestions) {
-        return (res.status(404).send('No Question with this exercise Id'));
-    }
-    else {
-        res.send(exerciseQuestions);
-    }
+    ExerciseQuestions.aggregate([
+        { $match: { topic_id: mongoose.Types.ObjectId(topic_id) } },
+        {
+            $lookup: {
+                from: "questionoptions", // collection name in db
+                localField: "_id",
+                foreignField: "Question_id",
+                as: "Options"
+            }
+        },
+        // { $unwind: "$Options" },
+        // {
+        //     $project: {
+        //         Question: 1,
+        //         CorrectOption: 1,
+        //         Options: '$Options'
+        //         // Options: {
+        //         // "$map": {
+        //         //     '$input': '$Options',
+        //         //     '$as': 'o',
+        //         //     '$in': {
+        //         //         option: '$Options.option'
+        //         //     }
+        //         // }
+        //         // }
+        //     }
+        // }
+    ]).exec(function (err, options) {
+        // students contain WorksnapsTimeEntries
+        res.send(options)
+    });
+    // const exerciseQuestions = await ExerciseQuestions.find({ AssessmentExercise_id: mongoose.Types.ObjectId(AssessmentExercise_id) })
+    // if (!exerciseQuestions) {
+    //     return (res.status(404).send('No Question with this exercise Id'));
+    // }
+    // else {
+    //     res.send(exerciseQuestions);
+    // }
 
 });
 
@@ -58,13 +96,13 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, async (req, res) => {
 
 
-    const { AssessmentExercise_id, Question, CorrectOption } = req.body;
+    const { topic_id, Question, CorrectOption } = req.body;
 
     try {
         exerciseQuestion = new ExerciseQuestions({
             Question,
             CorrectOption,
-            AssessmentExercise_id,
+            topic_id,
         });
         await exerciseQuestion.save();
         res.status(200).send(exerciseQuestion);

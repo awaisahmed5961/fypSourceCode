@@ -1,5 +1,4 @@
 const express = require('express');
-
 const Course = require('../models/Course');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
@@ -79,7 +78,8 @@ router.post('/', auth, upload.single('ImagePlaceholder'), async (req, res) => {
                 ?
                 req.file.path
                 :
-                'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80')
+                // 'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80')
+                'https://guarded-shelf-88919.herokuapp.com/api/uploads/g placeholder.jpg')
         });
 
         await course.save();

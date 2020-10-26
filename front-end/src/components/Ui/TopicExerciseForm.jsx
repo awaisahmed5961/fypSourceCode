@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
+import Joi from 'joi-browser'
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: '10px',
@@ -26,6 +27,20 @@ const useStyles = makeStyles((theme) => ({
     option: {
         display: 'flex',
         alignItems: 'center'
+    },
+    question: {
+        backgroundColor: '#f4f6f6',
+        paddingLeft: '15px',
+        paddingTop: '15px',
+        marginBottom: '15px',
+        minHeight: '100px',
+        borderRadius: '4px',
+        display: 'block',
+        width: '80%',
+        margin: '0 auto',
+    },
+    Questionoption: {
+        paddingLeft: "30px"
     }
 }));
 
@@ -59,6 +74,9 @@ export default function TopicExerciseForm() {
         setSelectedValue(0);
     }
     const createQuestion = () => {
+
+        // validate here
+
         let newQuestion = {
             question: Question,
             options: options,
@@ -69,7 +87,22 @@ export default function TopicExerciseForm() {
         setOptions(["", ""])
         setSelectedValue(0)
     }
-    console.log(questions)
+    var ExerciseSchema = {
+        Question: Joi.string().required().label('Question'),
+        // password: Joi.string().required().label('Password')
+    }
+    const formValidation = () => {
+
+        const result = Joi.validate(Question, ExerciseSchema, { abortEarly: false });
+        if (!result.error) return null;
+
+        let errors = {};
+        //     for (let item of result.error.details) {
+        //         errors[item.path[0]] = item.message;
+        //     }
+        //     return errors;
+    }
+
     const createUI = () => {
 
         return options.map((el, i) =>
@@ -86,6 +119,8 @@ export default function TopicExerciseForm() {
                     label={`Option ${i + 1}`}
                     value={el || ''}
                     onChange={(e) => handleChange(e, i)}
+                    error
+                    helperText="Incorrect entry."
                 />
                 <div>
                     <IconButton aria-label="Drop Option"
@@ -107,6 +142,7 @@ export default function TopicExerciseForm() {
                     variant="contained"
                     color="primary"
                     onClick={() => setEnableForm(true)}
+                    {...(enableForm && { disabled: true })}
                 >
                     Create Exercise
                 </Button>
@@ -116,11 +152,14 @@ export default function TopicExerciseForm() {
                     enableForm && (<form className={classes.form}>
 
                         <TextField
+                            error
                             id="standard-basic"
                             label="Question"
+                            name={Question}
                             fullWidth
                             value={Question.Question}
                             onChange={(e) => setQuestion(e.target.value)}
+                            helperText="Incorrect entry."
                         />
                         <div className={classes.options}>
                             {
@@ -137,6 +176,9 @@ export default function TopicExerciseForm() {
                                     addClick();
                                 }
                                 }
+                                style={{
+                                    marginRight: '20px'
+                                }}
                             >
                                 Add Option
                     </Button>
@@ -156,16 +198,24 @@ export default function TopicExerciseForm() {
                     </form>)
                 }
             </div>
-            <div>
+            <div >
                 {
                     questions.length !== 0 ? (
-                        <ul>
+                        <>
                             {
-                                questions.map((q) => (
-                                    <li>{q.question}</li>
+                                questions.map((q, i) => (
+                                    <div className={classes.question} key={i}>
+                                        Q no: {i + 1}
+                                        {' '}
+                                        {q.question}
+
+                                        {q.options.map((option, l) => (
+                                            <p className={classes.Questionoption} key={l}>{option}</p>
+                                        ))}
+                                    </div>
                                 ))
                             }
-                        </ul>
+                        </>
                     ) : ''
                 }
             </div>

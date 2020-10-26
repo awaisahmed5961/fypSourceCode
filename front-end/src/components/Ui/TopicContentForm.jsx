@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: '10px',
-        height: '50vh'
+        minHeight: '70vh'
     },
     editor: {
         margin: '30px 0px'

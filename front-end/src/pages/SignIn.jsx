@@ -155,7 +155,7 @@ export default function SignIn(props) {
 
             <CssBaseline />
             <Grid item xs={false} sm={6} md={6} className={classes.image} >
-                <CarouselSlider />
+                {/* <CarouselSlider /> */}
             </Grid>
             <Grid item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
                 <div className={classes.paper}>

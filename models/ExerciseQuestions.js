@@ -15,6 +15,10 @@ const exerciseQuestionSchema = mongoose.Schema({
     AssessmentExercise_id: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'accessmentExercise'
+    }],
+    topic_id: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'topic'
     }]
 
 

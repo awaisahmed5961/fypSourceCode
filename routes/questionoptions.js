@@ -1,52 +1,34 @@
 const express = require('express');
-const Topic = require('../models/Topic');
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
-const { findById } = require('../models/Topic');
-const AssessmentExercise = require('../models/AssessmentExercise');
-const exerciseQuestions = require('../models/ExerciseQuestions');
+const QuestionsOption = require('../models/QuestionOptions');
 Joi.objectId = require('joi-objectid')(Joi)
 const router = express.Router();
 
 /**
- * @route GET/ api/assessmentExercise 
- * * @description Get List of assessmentExercise
+ * @route GET/ api/QuestionOptions 
+ * * @description Get List of Question Options
  * @access Private
  */
 
 router.get('/', auth, async (req, res) => {
-    let topic_id = '';
-    if (req.header('topic_id')) {
-        topic_id = req.header('topic_id');
+    let Question_id = '';
+    if (req.header('Question_id')) {
+        Question_id = req.header('Question_id');
 
     }
     else {
-        topic_id = req.body.topic_id;
+        Question_id = req.body.Question_id;
     }
-    const assessmentExercise = await AssessmentExercise.find({ topic_id: mongoose.Types.ObjectId(topic_id) });
-    if (!assessmentExercise) {
-        return (res.status(404).send('Exercise With This topic is not available'));
-    }
-    const exerciseId = assessmentExercise[0]["_id"];
-    if (exerciseId !== undefined) {
-        const Questions = await exerciseQuestions.find({ AssessmentExercise_id: mongoose.Types.ObjectId(exerciseId) });
-        if (!Questions) {
-            res.send(404).send('NO Question found')
-        }
-        else {
-            Questions.map((q) => {
-                console.log(q)
-            })
-        }
-    }
-    else {
-        res.status(404).send("Exercise With This topic is not available")
-    }
-    res.send(assessmentExercise);
 
+    // const questionOptions = await QuestionsOption.find({ Question_id: mongoose.Types.ObjectId(Question_id) })
+    //     .populate('Question_id');
+    // if (!questionOptions) {
+    //     return (res.status(404).send('No Option found with this Question Id'));
+    // }
     // else {
-    //     res.send(assessmentExercise);
+    //     res.send(questionOptions);
     // }
 
 });
@@ -78,19 +60,18 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, async (req, res) => {
 
 
-    // const { topic_id, exerciseTitle, exerciseSubTitle } = req.body;
-    const { topic_id } = req.body;
+    const { Option, Question_id } = req.body;
 
     try {
-        assessmentExercise = new AssessmentExercise({
-            topic_id,
-            // exerciseTitle,
-            // exerciseSubTitle
+        questionsOption = new QuestionsOption({
+            Option,
+            Question_id,
         });
-        await assessmentExercise.save();
-        res.status(200).send(assessmentExercise);
+        await questionsOption.save();
+        res.status(200).send(questionsOption);
     }
     catch (error) {
+        console.log(error)
         res.status(500).send('Server Error');
     }
     // }
