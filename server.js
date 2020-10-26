@@ -33,6 +33,8 @@ app.use('/api/courses', require('./routes/courses'));
 app.use('/api/coursetopics', require('./routes/coursetopics'));
 app.use('/api/registercourses', require('./routes/registeredcourses'));
 app.use('/api/unregistercourse', require('./routes/unregistercourse'));
+app.use('/api/assessmentexercise', require('./routes/assessmentexercise'));
+app.use('/api/exercisequestions', require('./routes/exercisequestions'));
 
 // app.use((req, res, next) => {
 //     const error = new Error('not found');

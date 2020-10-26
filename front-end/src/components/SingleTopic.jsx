@@ -85,7 +85,7 @@ export default function ListView(props) {
                     direction="row"
                     alignItems="center"
                 >
-                    <Grid item xs>
+                    <Grid item xs={10}>
                         <CardActionArea component={RouterLink} to={`/topic?course_id=${courseId}&topic_id=${_id}`}>
                             <div className={classes.titleInfo}>
                                 <Typography
