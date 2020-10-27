@@ -16,6 +16,7 @@ import CourseDetail from './pages/CourseDetail';
 import TopicDetail from './pages/TopicDetail';
 import Topic from './pages/Topic';
 import TopicState from './context/topic/TopicState';
+import EditorImageUpload from './pages/ArEditor/EditorImageUpload';
 
 
 if (localStorage.token) {
@@ -41,11 +42,7 @@ function App() {
                   {/* <PrivateRoute exact path="/topic" render={props => <Topic {...props} key={this.props.location.search} />} /> */}
                   <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
                   <PrivateRoute exact path="/topic" component={TopicDetail} />
-                  <PrivateRoute exact path="/editor" component={() => {
-                    return (
-                      <div>Hello from editor</div>
-                    )
-                  }} />
+                  <PrivateRoute exact path="/editor" component={EditorImageUpload} />
                   <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
 
 
