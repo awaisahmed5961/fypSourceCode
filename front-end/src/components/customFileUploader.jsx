@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -51,10 +51,14 @@ export default function CustomImageUpload(props) {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    const [files, setFiles] = React.useState([]);
 
     const onDrop = useCallback(acceptedFiles => {
-        // props.onImageUpload(acceptedFiles);
+        setFiles(acceptedFiles.map(file => Object.assign(file, {
+            preview: URL.createObjectURL(file)
+        })));
         props.onUpload(acceptedFiles);
+
     }, [])
 
     const { getRootProps,
@@ -75,13 +79,6 @@ export default function CustomImageUpload(props) {
     });
 
 
-
-    // const files = acceptedFiles.map(file => (
-    //     <p key={file.path}>
-    //         {file.path} - {file.size} bytes
-    //     </p>
-    // ));
-
     return (
         <>
             <div className={classes.container}>
@@ -96,9 +93,7 @@ export default function CustomImageUpload(props) {
                         height: '150px'
 
                     }} />
-                    {/* <Button variant="contained" color="primary" onClick={open}>
-                        Upload Image
-                    </Button> */}
+
                     {isDragReject && (
                         <p >Image should be JPEG / PNG </p>)}
                     {
@@ -117,6 +112,7 @@ export default function CustomImageUpload(props) {
                         </div>) : ''
                     }
                 </div>
+
             </div>
 
         </>

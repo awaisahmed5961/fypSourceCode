@@ -201,9 +201,10 @@ export default function EditorImageUpload() {
                                     <div
                                         style={{ ...currentRatio }}
                                         className={classes.ImageContainerWrapper}>
-                                        {/* <CustomImageUpload /> */}
-                                        <img style={{ transform: `rotate(${rotation}deg)` }} src={file[0]} />
-                                        {/* <img style={{ transform: `rotate(${rotation}deg)` }} src="https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80" /> */}
+                                        <img
+                                            style={{ transform: `rotate(${rotation}deg)` }}
+                                            src={file ? file[0].preview : ''} />
+
                                     </div>
                                 ) : (
                                         <div className={classes.uploadImageContainerWrapper}>
@@ -225,7 +226,7 @@ export default function EditorImageUpload() {
                                     </div>
                                 </div>
                                 <div>
-                                    <button className={classes.outlinedButton}>Remove</button>
+                                    <button onClick={() => SetFile(null)} className={classes.outlinedButton}>Remove</button>
                                 </div>
                                 <div>
                                     <button className={classes.outlinedButton} >Gray Scale</button>
