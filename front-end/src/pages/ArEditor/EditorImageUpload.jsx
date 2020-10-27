@@ -6,6 +6,7 @@ import BreadCrumbs from '../../components/BreadCrumbs';
 import Grid from '@material-ui/core/Grid';
 import Box from "@material-ui/core/Box";
 import CustomImageUpload from '../../components/customFileUploader';
+import Button from '@material-ui/core/Button';
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '90%',
@@ -90,6 +91,11 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none',
         padding: '10px',
         textTransform: 'uppercase'
+    }, botomCta: {
+        display: "block",
+        margin: '0 auto',
+        marginTop: '10px',
+        marginBottom: '10px'
     }
 }));
 
@@ -142,6 +148,17 @@ export default function EditorImageUpload() {
 
 
                             </div>
+
+                        </div>
+                        <div className={classes.botomCta}>
+                            <Button variant="outlined" color="primary" style={{
+                                marginRight: '20px'
+                            }}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" color="primary">
+                                Use This Marker
+                            </Button>
                         </div>
                     </Grid>
 

@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => (
         },
         HeadingPrimary: {
             textTransform: "uppercase",
-            fontSize: '30px',
+            fontSize: '20px',
             fontWeight: '100',
             letterSpacing: '-0.8',
             "&:hover": {
