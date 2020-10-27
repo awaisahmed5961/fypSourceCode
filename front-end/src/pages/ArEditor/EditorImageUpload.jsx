@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles, fade } from '@material-ui/core/styles';
 
 import NavBar from '../../components/NavBar'
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100vw',
         position: 'relative'
     },
-    ImageContainerWrapper: {
+    uploadImageContainerWrapper: {
         width: '600px',
         height: '400px',
         border: '1px solid #e1e1e1',
@@ -33,8 +33,28 @@ const useStyles = makeStyles((theme) => ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50% , -50%)',
-        padding: '10px'
+        padding: '10px',
+        "& img": {
+            width: '100%',
+            height: '100%'
+        }
 
+    },
+    ImageContainerWrapper: {
+        width: '800px',
+        height: '400px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50% , -50%)',
+        // padding: '10px',
+        "& img": {
+            width: '100%',
+            height: '100%',
+            border: '1px solid #e1e1e1',
+            borderRadius: '4px',
+            padding: '10px'
+        }
     },
     containerLeftSideControllers: {
         height: '100px',
@@ -101,8 +121,60 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function EditorImageUpload() {
+    const [rotation, setRotation] = useState(0);
+    const [currentRatio, setCurrentRatio] = useState({
+        height: 400,
+        width: 800
+    });
+    const [file, SetFile] = useState(null);
     const classes = useStyles();
 
+    const zoomPicIn = () => {
+        if (currentRatio.height > 600) {
+            return
+        }
+        const newRatio = {
+            height: currentRatio.height + 30,
+            width: currentRatio.width + 30
+        }
+
+        setCurrentRatio({
+            ...newRatio
+        });
+    }
+
+    const zoomPicOut = () => {
+        if (currentRatio.height < 200) {
+            return
+        }
+        const newRatio = {
+            height: currentRatio.height - 30,
+            width: currentRatio.width - 30
+        }
+        setCurrentRatio({
+            ...newRatio
+        });
+    }
+
+    const rotate = () => {
+        let newRotation = rotation + 90;
+        if (newRotation >= 360) {
+            newRotation = - 360;
+        }
+        setRotation(newRotation);
+    }
+
+    const rotateleft = () => {
+        let newRotation = rotation - 90;
+        if (newRotation >= 360) {
+            newRotation = -360;
+        }
+        setRotation(newRotation)
+        // this.setState({
+        //     rotation: newRotation,
+        // })
+    }
+    console.log(file);
 
     return (
         <div>
@@ -124,19 +196,32 @@ export default function EditorImageUpload() {
                         <div className={
                             classes.MainScreeen
                         }>
-                            <div className={classes.ImageContainerWrapper}>
-                                <CustomImageUpload />
-                            </div>
+                            {
+                                file ? (
+                                    <div
+                                        style={{ ...currentRatio }}
+                                        className={classes.ImageContainerWrapper}>
+                                        {/* <CustomImageUpload /> */}
+                                        <img style={{ transform: `rotate(${rotation}deg)` }} src={file[0]} />
+                                        {/* <img style={{ transform: `rotate(${rotation}deg)` }} src="https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80" /> */}
+                                    </div>
+                                ) : (
+                                        <div className={classes.uploadImageContainerWrapper}>
+                                            <CustomImageUpload onUpload={SetFile} />
+                                        </div>
+                                    )}
+
+
                             <div className={classes.containerLeftSideControllers}>
-                                <button onClick={() => alert('zoom in')}>+</button>
-                                <button onClick={() => alert('zoom out')}>-</button>
+                                <button onClick={() => zoomPicIn()}>+</button>
+                                <button onClick={() => zoomPicOut()}>-</button>
 
                             </div>
                             <div className={classes.containerRightSideControllers}>
                                 <div>
                                     <div className={classes.buttonRow}>
-                                        <button className={classes.outlinedButton} >left</button>
-                                        <button className={classes.outlinedButton}>right</button>
+                                        <button className={classes.outlinedButton} onClick={() => rotateleft()} >left</button>
+                                        <button className={classes.outlinedButton} onClick={() => rotate()}>right</button>
                                     </div>
                                 </div>
                                 <div>
@@ -166,6 +251,6 @@ export default function EditorImageUpload() {
             </Grid>
 
 
-        </div>
+        </div >
     )
 }

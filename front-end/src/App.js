@@ -17,7 +17,7 @@ import TopicDetail from './pages/TopicDetail';
 import Topic from './pages/Topic';
 import TopicState from './context/topic/TopicState';
 import EditorImageUpload from './pages/ArEditor/EditorImageUpload';
-
+import ExerciseState from './context/Exercise/ExerciseState';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -30,25 +30,27 @@ function App() {
     <AuthState>
       <CourseState>
         <TopicState>
-          <ThemeProvider theme={theme}>
-            <Router>
-              <div >
-                <Switch>
-                  <Route exact path="/login" component={SignIn} />
-                  <Route exact path="/register_user" component={SignUp} />
-                  <PrivateRoute exact path="/" label="Home" component={Dashboard} />
-                  <PrivateRoute exact path="/courseform" component={Course} />
-                  <PrivateRoute exact path="/topiceditor" component={Topic} />
-                  {/* <PrivateRoute exact path="/topic" render={props => <Topic {...props} key={this.props.location.search} />} /> */}
-                  <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
-                  <PrivateRoute exact path="/topic" component={TopicDetail} />
-                  <PrivateRoute exact path="/editor" component={EditorImageUpload} />
-                  <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
+          <ExerciseState>
+
+            <ThemeProvider theme={theme}>
+              <Router>
+                <div >
+                  <Switch>
+                    <Route exact path="/login" component={SignIn} />
+                    <Route exact path="/register_user" component={SignUp} />
+                    <PrivateRoute exact path="/" label="Home" component={Dashboard} />
+                    <PrivateRoute exact path="/courseform" component={Course} />
+                    <PrivateRoute exact path="/topiceditor" component={Topic} />
+                    {/* <PrivateRoute exact path="/topic" render={props => <Topic {...props} key={this.props.location.search} />} /> */}
+                    <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
+                    <PrivateRoute exact path="/topic" component={TopicDetail} />
+                    <PrivateRoute exact path="/editor" component={EditorImageUpload} />
+                    <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
 
 
-                  <Route path="" component={NotFound} />
+                    <Route path="" component={NotFound} />
 
-                  {/* <Route exact path="/login" component={SignIn} />
+                    {/* <Route exact path="/login" component={SignIn} />
                   <Route exact path="/register_user" component={SignUp} />
                   <PrivateRoute exact path="/" label="Home" component={Dashboard} />
                   <PrivateRoute exact path="/course/:id?" component={Course} />
@@ -63,10 +65,11 @@ function App() {
 
                   <Route path="" component={NotFound} /> */}
 
-                </Switch>
-              </div>
-            </Router>
-          </ThemeProvider>
+                  </Switch>
+                </div>
+              </Router>
+            </ThemeProvider>
+          </ExerciseState>
         </TopicState>
       </CourseState>
     </AuthState>

@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
 const ExerciseQuestions = require('../models/ExerciseQuestions');
+const QuestionsOption = require('../models/QuestionOptions');
+
 Joi.objectId = require('joi-objectid')(Joi)
 const router = express.Router();
 
@@ -96,20 +98,54 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, async (req, res) => {
 
 
-    const { topic_id, Question, CorrectOption } = req.body;
+    const { topicId, questions } = req.body;
+    if (!questions) {
+        console.log("no question")
+    }
+    else {
+        questions.map((question) => {
+            try {
+                exerciseQuestion = new ExerciseQuestions({
+                    Question: question.question,
+                    CorrectOption: question.correctOption,
+                    topic_id: topicId
+                });
+                exerciseQuestion.save().then((q) => {
+                    // console.log(q);
+                    question.options.map((option) => {
+                        try {
+                            questionsOption = new QuestionsOption({
+                                Option: option,
+                                Question_id: q._id
+                            });
+                            questionsOption.save();
+                        }
+                        catch (error) {
+                            console.log(error)
+                            res.status(500).send('Server Error');
+                        }
+                    })
+                })
 
-    try {
-        exerciseQuestion = new ExerciseQuestions({
-            Question,
-            CorrectOption,
-            topic_id,
-        });
-        await exerciseQuestion.save();
-        res.status(200).send(exerciseQuestion);
+            }
+            catch (error) {
+                res.status(500).send('Server Error');
+            }
+        })
+        res.status(200).send(questions);
     }
-    catch (error) {
-        res.status(500).send('Server Error');
-    }
+    // try {
+    //     exerciseQuestion = new ExerciseQuestions({
+    //         Question,
+    //         CorrectOption,
+    //         topic_id,
+    //     });
+    //     await exerciseQuestion.save();
+    //     res.status(200).send(exerciseQuestion);
+    // }
+    // catch (error) {
+    //     res.status(500).send('Server Error');
+    // }
     // }
     //     catch (error) {
     //     res.status(500).send('Server Error');

@@ -57,16 +57,19 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Topic(props) {
+    const queryStringParameters = queryString.parse(props.location.search);
+    const { course_id, topic_id } = queryStringParameters;
 
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState(new Set());
+    const [topicId, setTopicID] = React.useState(topic_id ? topic_id : undefined)
     const [skipped, setSkipped] = React.useState(new Set());
     const steps = getSteps();
 
 
-    const queryStringParameters = queryString.parse(props.location.search);
-    const { course_id, topic_id } = queryStringParameters;
+
+
 
     const currentTab = (newValue) => {
         setActiveStep(newValue);
@@ -90,7 +93,7 @@ export default function Topic(props) {
             case 0:
                 return (<TopicContentForm onComplete={handleComplete} courseId={course_id} topicId={topic_id} />);
             case 1:
-                return (<TopicExerciseForm />);
+                return (<TopicExerciseForm topicId={topicId} onComplete={handleComplete} />);
             case 2:
                 return (<AgumentedContentForm />);
             default:
@@ -148,10 +151,11 @@ export default function Topic(props) {
         setActiveStep(step);
     };
 
-    const handleComplete = () => {
+    const handleComplete = (topic_id) => {
         const newCompleted = new Set(completed);
         newCompleted.add(activeStep);
         setCompleted(newCompleted);
+        setTopicID(topic_id);
 
         /**
          * Sigh... it would be much nicer to replace the following if conditional with

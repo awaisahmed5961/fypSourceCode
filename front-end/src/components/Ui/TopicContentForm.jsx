@@ -113,7 +113,7 @@ export default function TopicContentForm(props) {
                         setOpenActionModal(true);
                         setTimeout(() => {
                             setOpenActionModal(false);
-                            props.onComplete();
+                            props.onComplete(topic.data._id);
                         }, 1000)
 
                     }).catch(err => {

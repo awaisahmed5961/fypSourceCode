@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => (
         }
     }));
 
-export default function CustomImageUpload() {
+export default function CustomImageUpload(props) {
 
     const classes = useStyles();
 
@@ -54,7 +54,7 @@ export default function CustomImageUpload() {
 
     const onDrop = useCallback(acceptedFiles => {
         // props.onImageUpload(acceptedFiles);
-
+        props.onUpload(acceptedFiles);
     }, [])
 
     const { getRootProps,
@@ -76,11 +76,11 @@ export default function CustomImageUpload() {
 
 
 
-    const files = acceptedFiles.map(file => (
-        <p key={file.path}>
-            {file.path} - {file.size} bytes
-        </p>
-    ));
+    // const files = acceptedFiles.map(file => (
+    //     <p key={file.path}>
+    //         {file.path} - {file.size} bytes
+    //     </p>
+    // ));
 
     return (
         <>
@@ -118,14 +118,7 @@ export default function CustomImageUpload() {
                     }
                 </div>
             </div>
-            <aside>
-                {
-                    files.length !== 0 ? (<div>
-                        <h4>Image</h4>
-                        <div>{files}</div>
-                    </div>) : null
-                }
-            </aside>
+
         </>
     );
 }

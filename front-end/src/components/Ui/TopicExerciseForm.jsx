@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import Radio from '@material-ui/core/Radio';
-import Joi from 'joi-browser'
+import Joi from 'joi-browser';
+import CustomDialog from '../layouts/LoadingDialog';
+import { LoadingSpinner } from '../LoadinSpinner';
+import exerciseContext from '../../context/Exercise/exerciseContext';
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: '10px',
@@ -44,19 +47,46 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function TopicExerciseForm() {
+export default function TopicExerciseForm(props) {
+    const { topicId } = props;
     const classes = useStyles();
+    const ExerciseContext = useContext(exerciseContext);
+    const { addexercise } = ExerciseContext;
     const [enableForm, setEnableForm] = useState(false);
     const [options, setOptions] = useState(['', '']);
-    const [Question, setQuestion] = useState({
-        Question: '',
-    });
+    const [Question, setQuestion] = useState("");
     const [questions, setQuestions] = useState([]);
     const [selectedValue, setSelectedValue] = useState(0);
+    const [questionErrors, setQuestionErrors] = useState({
+        Question: '',
+        options: []
+    });
+    const [openloadingModal, setOpenLoadingModal] = useState(false);
     const handleCorrectOption = (i) => {
         setSelectedValue(i);
     };
-
+    const publishExercise = () => {
+        if (enableForm) {
+            if (questions.length !== 0) {
+                // submit execise here
+                addexercise({ topicId, questions }).then(() => {
+                    setTimeout(() => {
+                        setOpenLoadingModal(false);
+                        props.onComplete(topicId);
+                    }, 1000)
+                }).catch((err) => {
+                    alert('failed to create exercise')
+                });
+                setOpenLoadingModal(true);
+            }
+            else {
+                alert("Please create excercise before submiting")
+            }
+        }
+        else {
+            setEnableForm(true)
+        }
+    }
     const handleChange = (event, i) => {
 
         let option = [...options];
@@ -75,33 +105,45 @@ export default function TopicExerciseForm() {
     }
     const createQuestion = () => {
 
-        // validate here
+        const error = formValidation();
+        if (error) {
+            setQuestionErrors({ Question: error });
+            return;
+        }
 
+        const optionError = optionsValidation();
+        console.log(optionError)
         let newQuestion = {
             question: Question,
             options: options,
             correctOption: selectedValue
         }
+        console.log(questionErrors)
         setQuestions([...questions, newQuestion]);
-        setQuestion({ Question: '' });
+        setQuestion("");
         setOptions(["", ""])
         setSelectedValue(0)
     }
     var ExerciseSchema = {
         Question: Joi.string().required().label('Question'),
-        // password: Joi.string().required().label('Password')
+    }
+    var OptionsSchema = {
+        options: Joi.array().items(Joi.string().required()),
     }
     const formValidation = () => {
-
-        const result = Joi.validate(Question, ExerciseSchema, { abortEarly: false });
+        const result = Joi.validate({ Question }, ExerciseSchema, { abortEarly: false });
         if (!result.error) return null;
 
-        let errors = {};
-        //     for (let item of result.error.details) {
-        //         errors[item.path[0]] = item.message;
-        //     }
-        //     return errors;
+        return result.error.details[0].message;
+
     }
+    const optionsValidation = () => {
+        const result = Joi.validate({ options }, OptionsSchema, { abortEarly: false });
+        if (!result.error) return null;
+        return result.error.details[0].message;
+    }
+
+
 
     const createUI = () => {
 
@@ -141,10 +183,10 @@ export default function TopicExerciseForm() {
                     type="submit"
                     variant="contained"
                     color="primary"
-                    onClick={() => setEnableForm(true)}
-                    {...(enableForm && { disabled: true })}
+                    onClick={() => publishExercise()}
+                    {...(topicId === undefined && { disabled: true })}
                 >
-                    Create Exercise
+                    {enableForm ? 'Publish Exercise' : 'Create Exercise'}
                 </Button>
             </div>
             <div>
@@ -152,14 +194,14 @@ export default function TopicExerciseForm() {
                     enableForm && (<form className={classes.form}>
 
                         <TextField
-                            error
                             id="standard-basic"
                             label="Question"
-                            name={Question}
+                            // name={Question}
                             fullWidth
-                            value={Question.Question}
+                            value={Question}
                             onChange={(e) => setQuestion(e.target.value)}
                             helperText="Incorrect entry."
+                            {...(questionErrors.Question && { error: true, helperText: questionErrors.Question })}
                         />
                         <div className={classes.options}>
                             {
@@ -219,6 +261,12 @@ export default function TopicExerciseForm() {
                     ) : ''
                 }
             </div>
+            <CustomDialog open={openloadingModal}
+                aria-labelledby={'Creating Exercise please wait...'}
+                disableBackdropClick={true} >
+                <LoadingSpinner style={{ width: '40px', marginRight: '20px' }} />
+                {''} {'Creating Exercise please wait...'}
+            </CustomDialog>
         </div>
     )
 }
