@@ -48,7 +48,7 @@ function App() {
                     <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
 
 
-                    {/* <Route path="" component={NotFound} /> */}
+                    <Route path="" component={NotFound} />
 
                     {/* <Route exact path="/login" component={SignIn} />
                   <Route exact path="/register_user" component={SignUp} />

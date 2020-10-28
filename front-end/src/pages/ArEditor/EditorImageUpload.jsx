@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import Box from "@material-ui/core/Box";
 import CustomImageUpload from '../../components/customFileUploader';
 import Button from '@material-ui/core/Button';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '90%',
@@ -41,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
     },
     ImageContainerWrapper: {
-        width: '800px',
-        height: '400px',
+        minWidth: '800px',
+        minHeight: '400px',
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -127,8 +129,34 @@ export default function EditorImageUpload() {
         width: 800
     });
     const [file, SetFile] = useState(null);
+    const [crop, setCrop] = useState(
+        {
+            unit: 'px', // default, can be 'px' or '%'
+            x: 0,
+            y: 0,
+            width: 200,
+            height: 200,
+            aspect: 1 / 1
+        }
+    );
     const classes = useStyles();
 
+    const handleOnChange = (crop) => {
+        console.log(crop);
+        setCrop(crop);
+
+    }
+    const handleImageLoaded = (image) => {
+        console.log(image);
+        console.log("editorImageUpload line 146")
+    }
+    const handleOnCropChange = (crop) => {
+        setCrop(crop);
+        console.log("log from editorImageupload line 150")
+    }
+    const handleOnCropComplete = (crop, pixelCrop) => {
+        console.log(crop, pixelCrop)
+    }
     const zoomPicIn = () => {
         if (currentRatio.height > 600) {
             return
@@ -174,7 +202,6 @@ export default function EditorImageUpload() {
         //     rotation: newRotation,
         // })
     }
-    console.log(file);
 
     return (
         <div>
@@ -201,9 +228,18 @@ export default function EditorImageUpload() {
                                     <div
                                         style={{ ...currentRatio }}
                                         className={classes.ImageContainerWrapper}>
-                                        <img
+                                        {/* <img
                                             style={{ transform: `rotate(${rotation}deg)` }}
-                                            src={file ? file[0].preview : ''} />
+                                            src={file ? file[0].preview : ''} /> */}
+                                        <ReactCrop
+                                            src={file ? file[0].preview : ''}
+                                            style={{ transform: `rotate(${rotation}deg)` }
+                                            }
+                                            crop={crop}
+                                            onChange={handleOnCropChange}
+                                            onImageLoaded={handleImageLoaded}
+                                            onComplete={handleOnCropComplete}
+                                        />
 
                                     </div>
                                 ) : (
@@ -213,39 +249,43 @@ export default function EditorImageUpload() {
                                     )}
 
 
-                            <div className={classes.containerLeftSideControllers}>
+                            {file && (<><div className={classes.containerLeftSideControllers}>
                                 <button onClick={() => zoomPicIn()}>+</button>
                                 <button onClick={() => zoomPicOut()}>-</button>
-
                             </div>
-                            <div className={classes.containerRightSideControllers}>
-                                <div>
-                                    <div className={classes.buttonRow}>
-                                        <button className={classes.outlinedButton} onClick={() => rotateleft()} >left</button>
-                                        <button className={classes.outlinedButton} onClick={() => rotate()}>right</button>
+
+                                <div className={classes.containerRightSideControllers}>
+                                    <div>
+                                        <div className={classes.buttonRow}>
+                                            <button className={classes.outlinedButton} onClick={() => rotateleft()} >left</button>
+                                            <button className={classes.outlinedButton} onClick={() => rotate()}>right</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button onClick={() => SetFile(null)} className={classes.outlinedButton}>Remove</button>
+                                    </div>
+                                    <div>
+                                        <button className={classes.outlinedButton} >Gray Scale</button>
                                     </div>
                                 </div>
-                                <div>
-                                    <button onClick={() => SetFile(null)} className={classes.outlinedButton}>Remove</button>
-                                </div>
-                                <div>
-                                    <button className={classes.outlinedButton} >Gray Scale</button>
-                                </div>
-
-
-                            </div>
+                            </>)
+                            }
 
                         </div>
-                        <div className={classes.botomCta}>
-                            <Button variant="outlined" color="primary" style={{
-                                marginRight: '20px'
-                            }}>
-                                Cancel
+                        {
+                            file && (<>
+                                <div className={classes.botomCta}>
+                                    <Button variant="outlined" color="primary" style={{
+                                        marginRight: '20px'
+                                    }}>
+                                        Cancel
                             </Button>
-                            <Button variant="contained" color="primary">
-                                Use This Marker
+                                    <Button variant="contained" color="primary">
+                                        Use This Marker
                             </Button>
-                        </div>
+                                </div>
+                            </>)
+                        }
                     </Grid>
 
                 </Grid>

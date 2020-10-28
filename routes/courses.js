@@ -1,5 +1,6 @@
 const express = require('express');
 const Course = require('../models/Course');
+const RegisterCourse = require('../models/RegisterCourse');
 const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
 Joi.objectId = require('joi-objectid')(Joi)
@@ -149,6 +150,9 @@ router.delete('/:id', auth, async (req, res) => {
         if (course.educator_id.toString() !== req.user.id)
             return res.status(401).json({ msg: 'Not authorized' });
 
+        // RegisterCourse.deleteMany({ course_id: req.params.id }).then((d) => {
+        //     console.log(d.deletedCount);
+        // });
         await Course.findByIdAndRemove(req.params.id);
         res.status(200).json({ msg: 'Course removed' });
 
