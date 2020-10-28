@@ -18,7 +18,7 @@ import Topic from './pages/Topic';
 import TopicState from './context/topic/TopicState';
 import EditorImageUpload from './pages/ArEditor/EditorImageUpload';
 import ExerciseState from './context/Exercise/ExerciseState';
-
+import WorkSpace from './pages/ArEditor/WorkSpace';
 if (localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -31,7 +31,6 @@ function App() {
       <CourseState>
         <TopicState>
           <ExerciseState>
-
             <ThemeProvider theme={theme}>
               <Router>
                 <div >
@@ -45,6 +44,7 @@ function App() {
                     <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
                     <PrivateRoute exact path="/topic" component={TopicDetail} />
                     <PrivateRoute exact path="/editor" component={EditorImageUpload} />
+                    <PrivateRoute exact path="/editor/workspace" component={WorkSpace} />
                     <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />
 
 

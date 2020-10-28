@@ -9,6 +9,9 @@ import CustomImageUpload from '../../components/customFileUploader';
 import Button from '@material-ui/core/Button';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
+import EditorDialog from '../../components/Ui/editorComponents/EditorDialog';
+import { LoadingSpinner } from '../../components/LoadinSpinner';
+import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '90%',
@@ -123,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function EditorImageUpload() {
+
     const [rotation, setRotation] = useState(0);
     const [currentRatio, setCurrentRatio] = useState({
         height: 400,
@@ -131,14 +135,15 @@ export default function EditorImageUpload() {
     const [file, SetFile] = useState(null);
     const [crop, setCrop] = useState(
         {
-            unit: 'px', // default, can be 'px' or '%'
+            unit: 'px',
             x: 0,
             y: 0,
-            width: 200,
-            height: 200,
+            width: 800,
+            height: 400,
             aspect: 1 / 1
         }
     );
+    const [processing, setProcessing] = React.useState(false);
     const classes = useStyles();
 
     const handleOnChange = (crop) => {
@@ -201,6 +206,12 @@ export default function EditorImageUpload() {
         // this.setState({
         //     rotation: newRotation,
         // })
+    }
+    const handleUploadingMarker = () => {
+        setProcessing(true);
+        setTimeout(() => {
+            setProcessing(false);
+        }, 2000)
     }
 
     return (
@@ -280,7 +291,7 @@ export default function EditorImageUpload() {
                                     }}>
                                         Cancel
                             </Button>
-                                    <Button variant="contained" color="primary">
+                                    <Button onClick={() => handleUploadingMarker()} variant="contained" color="primary">
                                         Use This Marker
                             </Button>
                                 </div>
@@ -290,7 +301,23 @@ export default function EditorImageUpload() {
 
                 </Grid>
             </Grid>
-
+            <EditorDialog open={processing} >
+                <LoadingSpinner style={{
+                    display: 'block',
+                    margin: '0 auto'
+                }} />
+                <div style={{
+                    textAlign: 'center',
+                    marginTop: '10px'
+                }}>
+                    <Typography variant="h6" >
+                        Processing Marker
+                </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                        Please wait, it may take a while
+                </Typography>
+                </div>
+            </EditorDialog>
 
         </div >
     )

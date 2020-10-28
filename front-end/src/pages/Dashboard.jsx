@@ -106,7 +106,9 @@ export default function Dashboard() {
                 >
                     <BreadCrumbs />
                 </Box>
-                <Grid item sm={false} xs={12}  >
+                <Grid item sm={false} xs={12} style={{
+                    marginTop: '50px'
+                }}  >
                     <Grid container direction="row"
                         justify="space-between" className={classes.container} >
                         <Grid item >

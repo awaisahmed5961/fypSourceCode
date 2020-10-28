@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ICourse from './ICourse';
 import CardSkelton from './Ui/CardSkelton';
 import ListView from './ListView';
+import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
     coursesContainer: {
         marginTop: '30px'
@@ -70,7 +71,7 @@ export default function Courses(props) {
                         There is no Course.
                                     </Typography>
 
-                    <Button variant="contained" color="primary">
+                    <Button component={Link} to="/courseform?action=new" variant="contained" color="primary">
                         Create Course
                     </Button>
                 </div>) : (
