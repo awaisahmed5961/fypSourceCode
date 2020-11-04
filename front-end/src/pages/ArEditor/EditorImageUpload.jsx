@@ -12,6 +12,9 @@ import 'react-image-crop/dist/ReactCrop.css';
 import EditorDialog from '../../components/Ui/editorComponents/EditorDialog';
 import { LoadingSpinner } from '../../components/LoadinSpinner';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
+import imagebase64 from '../../utils/imagebase64'
+
 const useStyles = makeStyles((theme) => ({
     container: {
         width: '90%',
@@ -126,13 +129,24 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function EditorImageUpload() {
-
+    let history = useHistory();
     const [rotation, setRotation] = useState(0);
     const [currentRatio, setCurrentRatio] = useState({
         height: 400,
         width: 800
     });
     const [file, SetFile] = useState(null);
+    const [filein64, SetFileIn64] = useState(null);
+    console.log('file.....139');
+    console.log(file)
+    if (file) {
+        const result = imagebase64(file[0]);
+        result.then((w) => {
+            console.log(w);
+            SetFileIn64(w);
+        })
+    }
+
     const [crop, setCrop] = useState(
         {
             unit: 'px',
@@ -160,7 +174,9 @@ export default function EditorImageUpload() {
         console.log("log from editorImageupload line 150")
     }
     const handleOnCropComplete = (crop, pixelCrop) => {
-        console.log(crop, pixelCrop)
+        console.log(crop)
+        console.log(pixelCrop)
+        console.log("Crope compelete")
     }
     const zoomPicIn = () => {
         if (currentRatio.height > 600) {
@@ -211,7 +227,10 @@ export default function EditorImageUpload() {
         setProcessing(true);
         setTimeout(() => {
             setProcessing(false);
+            history.push("/editor/workspace");
         }, 2000)
+
+        localStorage.setItem('MarkerImage', file ? file[0].preview : '');
     }
 
     return (
@@ -242,8 +261,17 @@ export default function EditorImageUpload() {
                                         {/* <img
                                             style={{ transform: `rotate(${rotation}deg)` }}
                                             src={file ? file[0].preview : ''} /> */}
-                                        <ReactCrop
+                                        {/* <ReactCrop
                                             src={file ? file[0].preview : ''}
+                                            style={{ transform: `rotate(${rotation}deg)` }
+                                            }
+                                            crop={crop}
+                                            onChange={handleOnCropChange}
+                                            onImageLoaded={handleImageLoaded}
+                                            onComplete={handleOnCropComplete}
+                                        /> */}
+                                        <ReactCrop
+                                            src={filein64 ? filein64 : ''}
                                             style={{ transform: `rotate(${rotation}deg)` }
                                             }
                                             crop={crop}

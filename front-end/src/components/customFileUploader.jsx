@@ -58,7 +58,6 @@ export default function CustomImageUpload(props) {
             preview: URL.createObjectURL(file)
         })));
         props.onUpload(acceptedFiles);
-
     }, [])
 
     const { getRootProps,
@@ -74,7 +73,7 @@ export default function CustomImageUpload(props) {
         noClick: true,
         noKeyboard: true,
         multiple: false,
-        maxSize: 1000000,
+        maxSize: 100000000000,
         accept: 'image/jpeg, image/png'
     });
 
