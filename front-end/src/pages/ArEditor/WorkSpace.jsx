@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles, fade } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../../components/NavBar'
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
 import videoIcon from '../../app assetrs/editorIcons/play-button.svg';
 import audioIcon from '../../app assetrs/editorIcons/speaker.svg';
 import imageIcon from '../../app assetrs/editorIcons/image.svg';
@@ -15,6 +14,7 @@ import VideoPlaceHolder from './placeholders/VideoPlaceHolder';
 import ImagePlaceHolder from './placeholders/ImagePlaceHolder';
 import AudioPlaceHolder from './placeholders/AudioPlaceHolder';
 import ThreeDModelPlaceHolder from './placeholders/ThreeDModelPlaceHolder';
+import EmptyAr from './ArControlls/EmptyAr';
 const useStyles = makeStyles((theme) => ({
     container: {
 
@@ -204,6 +204,21 @@ export default function WorkSpace() {
         }
     }
 
+    const renderArContent = (currentControll) => {
+        switch (currentControll) {
+            case 'video':
+                return null;
+            case 'audio':
+                return null;
+            case 'image':
+                return null;
+            case 'threed':
+                return null;
+            default:
+                return <EmptyAr />;
+        }
+    }
+
     return (
         <>
             <NavBar haveButton={false} />
@@ -331,7 +346,8 @@ export default function WorkSpace() {
                     <div className={classes.heading}>
                         <Typography variant="h6" color="primary" >
                             AR Content
-                </Typography>
+                        </Typography>
+                        {renderArContent(setCurrentArControll)}
                     </div>
                 </div>
 

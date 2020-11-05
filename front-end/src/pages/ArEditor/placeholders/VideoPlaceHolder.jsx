@@ -1,17 +1,28 @@
 import React, { useRef, useEffect } from 'react'
 import videoIcon from '../../../app assetrs/editorIcons/play-button.svg';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+
+}));
+
 export default function VideoPlaceHolder() {
-    // const videoCanvasRef = useRef(null);
-    // const videoCanvasContext = useRef(null);
+    const classes = useStyles();
+    const videoCanvasRef = useRef(null);
+    const videoCanvasContext = useRef(null);
 
     useEffect(() => {
-        // const canvas = videoCanvasRef.current;
-        // canvas.width = '400px';
-        // canvas.height = '400px';
+        const canvas = videoCanvasRef.current;
+        canvas.width = '250';
+        canvas.height = '150';
 
-        // const context = canvas.getContext('2d');
-        // videoCanvasContext.current = context;
+        const context = canvas.getContext('2d');
 
+        var img = new Image();
+        img.src = videoIcon;
+        img.onload = function () {
+            context.drawImage(img, ((canvas.width - 45) / 2), ((canvas.height - 45) / 2), 45, 45);
+        };
 
 
     }, []);
@@ -24,18 +35,16 @@ export default function VideoPlaceHolder() {
                 transform: 'translate(-50% ,-50%)'
             }}>
                 controlls
-                <canvas style={{
+                <canvas ref={videoCanvasRef} style={{
                     border: '1px solid #000000',
-                    backgroundColor: 'red',
-                    // paddingLeft: 0,
-                    // paddingRight: 0,
-                    // marginLeft: 'auto',
-                    // marginRight: 'auto',
-                    display: 'block',
+                    borderColor: 'green',
+                    borderRadius: '4px',
+                    display: 'block'
 
                 }}>
 
                 </canvas>
+
             </div>
         </>
 

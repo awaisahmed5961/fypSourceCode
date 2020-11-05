@@ -258,18 +258,7 @@ export default function EditorImageUpload() {
                                     <div
                                         style={{ ...currentRatio }}
                                         className={classes.ImageContainerWrapper}>
-                                        {/* <img
-                                            style={{ transform: `rotate(${rotation}deg)` }}
-                                            src={file ? file[0].preview : ''} /> */}
-                                        {/* <ReactCrop
-                                            src={file ? file[0].preview : ''}
-                                            style={{ transform: `rotate(${rotation}deg)` }
-                                            }
-                                            crop={crop}
-                                            onChange={handleOnCropChange}
-                                            onImageLoaded={handleImageLoaded}
-                                            onComplete={handleOnCropComplete}
-                                        /> */}
+                                       
                                         <ReactCrop
                                             src={filein64 ? filein64 : ''}
                                             style={{ transform: `rotate(${rotation}deg)` }
