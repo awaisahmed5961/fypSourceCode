@@ -15,6 +15,7 @@ import ImagePlaceHolder from './placeholders/ImagePlaceHolder';
 import AudioPlaceHolder from './placeholders/AudioPlaceHolder';
 import ThreeDModelPlaceHolder from './placeholders/ThreeDModelPlaceHolder';
 import EmptyAr from './ArControlls/EmptyAr';
+import VideoAr from './ArControlls/VideoAr';
 const useStyles = makeStyles((theme) => ({
     container: {
 
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
     ContentMetabox: {
         width: '330px',
-        backgroundColor: '#fff'
+        backgroundColor: '#f5f6f7',
     },
     pcWrapper: {
         display: 'flex',
@@ -67,7 +68,13 @@ const useStyles = makeStyles((theme) => ({
     heading: {
         display: 'block',
         backgroundColor: '#fff',
-        paddingLeft: '13px'
+        paddingLeft: '13px',
+        paddingBottom: '13px',
+        paddingTop: '13px',
+        '& h6': {
+            textTransform: 'capitalize'
+
+        }
     },
     bottomControlls: {
         display: 'flex',
@@ -144,6 +151,8 @@ export default function WorkSpace() {
     const [xAxiesvalue, setXaxiesValue] = useState(0);
     const [yAxiesvalue, setYaxiesValue] = useState(0);
     const [zAxiesvalue, setZaxiesValue] = useState(0);
+    const [filePath, setFilePath] = useState(null);
+
     const classes = useStyles();
     const [currentRatio, setCurrentRatio] = useState({
         height: 600,
@@ -192,7 +201,7 @@ export default function WorkSpace() {
     const renderPlaceholder = (currentControll) => {
         switch (currentControll) {
             case 'video':
-                return <VideoPlaceHolder />;
+                return <VideoPlaceHolder videoSrc={filePath ? filePath : null} />;
             case 'audio':
                 return <AudioPlaceHolder />;
             case 'image':
@@ -207,7 +216,7 @@ export default function WorkSpace() {
     const renderArContent = (currentControll) => {
         switch (currentControll) {
             case 'video':
-                return null;
+                return <VideoAr onUpload={setFilePath} />;
             case 'audio':
                 return null;
             case 'image':
@@ -345,10 +354,10 @@ export default function WorkSpace() {
                 <div className={classes.ContentMetabox}>
                     <div className={classes.heading}>
                         <Typography variant="h6" color="primary" >
-                            AR Content
+                            AR CONTENT
                         </Typography>
-                        {renderArContent(setCurrentArControll)}
                     </div>
+                    {renderArContent(currentArControll)}
                 </div>
 
 
