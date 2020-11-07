@@ -231,6 +231,7 @@ export default function EditorImageUpload() {
         }, 2000)
 
         localStorage.setItem('MarkerImage', file ? file[0].preview : '');
+        localStorage.setItem('MarkerImageBase64', filein64 ? filein64 : '');
     }
 
     return (
@@ -258,7 +259,7 @@ export default function EditorImageUpload() {
                                     <div
                                         style={{ ...currentRatio }}
                                         className={classes.ImageContainerWrapper}>
-                                       
+
                                         <ReactCrop
                                             src={filein64 ? filein64 : ''}
                                             style={{ transform: `rotate(${rotation}deg)` }

@@ -5,12 +5,13 @@ const app = express();
 const morgan = require('morgan');
 
 app.use('/api/uploads', express.static('uploads'))
+app.use('/api/markerImages', express.static('markerimages'))
 // Connect DataBase
 connectDB();
 
 app.use(morgan('dev'));
 // Init Middleware
-app.use(express.json({ extended: false }));
+app.use(express.json({ limit: '50mb', extended: false }));
 
 
 // app.use((req, res, next) => {
@@ -36,6 +37,9 @@ app.use('/api/unregistercourse', require('./routes/unregistercourse'));
 app.use('/api/assessmentexercise', require('./routes/assessmentexercise'));
 app.use('/api/exercisequestions', require('./routes/exercisequestions'));
 app.use('/api/questionoptions', require('./routes/questionoptions'));
+
+// ArContent Api
+app.use('/api/markerimages', require('./routes/markerimages'));
 
 
 // app.use((req, res, next) => {

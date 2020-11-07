@@ -16,6 +16,9 @@ import AudioPlaceHolder from './placeholders/AudioPlaceHolder';
 import ThreeDModelPlaceHolder from './placeholders/ThreeDModelPlaceHolder';
 import EmptyAr from './ArControlls/EmptyAr';
 import VideoAr from './ArControlls/VideoAr';
+
+import axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
     container: {
 
@@ -185,8 +188,56 @@ export default function WorkSpace() {
             ...newRatio
         });
     }
+    const uploadAR = () => {
+        if (targetImageInbase64) {
+            console.log('log from workspaceline 190');
+            console.log(targetImageInbase64);
+            console.log('video in base 64');
+            // console.log(filePath)
+            const markerImage = {
+                Image: targetImageInbase64,
+                metadata: {
+                    artype: "video",
+                    arfile: filePath,
+                    width: '200px',
+                    height: '200px',
+                    autoplay: false
+                }
+            }
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                onUploadProgress: (progressEvent) => {
+                    const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+                    console.log("onUploadProgress", totalLength);
+                    // if (totalLength !== null) {
+                    //     this.updateProgressBarValue(Math.round((progressEvent.loaded * 100) / totalLength));
+                    // }
+                }
+            }
+            try {
+                const res = axios.post('/api/markerimages', markerImage, config).then((q) => {
+                    console.log(q);
+
+                }).catch((err) => {
+                    console.log(err)
+                    console.log('workspace line 218')
+                });
+            }
+            catch (err) {
+                return err;
+            }
+
+
+        }
+        else {
+            alert('we lost your target Image please re create')
+        }
+    }
     useEffect(() => {
         setTargetImageUrl(localStorage.getItem('MarkerImage'));
+        setTargetImageInbase64(localStorage.getItem('MarkerImageBase64'));
     }, []);
     const handleYAxiesSliderChange = (event) => {
         setYaxiesValue(event.target.value);
@@ -197,6 +248,7 @@ export default function WorkSpace() {
         setXaxiesValue(event.target.value);
     };
     const [targetImageUrl, setTargetImageUrl] = useState(null);
+    const [targetImageInbase64, setTargetImageInbase64] = useState(null);
 
     const renderPlaceholder = (currentControll) => {
         switch (currentControll) {
@@ -360,8 +412,8 @@ export default function WorkSpace() {
                     {renderArContent(currentArControll)}
                 </div>
 
-
             </Grid>
+            <button onClick={() => uploadAR()}> Save</button>
         </ >
     )
 }

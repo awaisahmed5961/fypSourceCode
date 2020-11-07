@@ -8,9 +8,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function VideoPlaceHolder(props) {
     const [videosource, setVidesource] = useState(null);
+    const [aspectRation, setAspectRation] = useState({
+        width: 250,
+        height: 150
+    })
     const classes = useStyles();
     const videoCanvasRef = useRef(null);
-    const v = useRef(null);
     const videoCanvasContext = useRef(null);
 
     useEffect(() => {
@@ -27,31 +30,32 @@ export default function VideoPlaceHolder(props) {
             videoElement.setAttribute("src", props.videoSrc);
             videoElement.setAttribute("width", '100%');
             videoElement.setAttribute("height", 'auto');
+            videoElement.setAttribute("muted", true);
+
 
 
             const canvas = videoCanvasRef.current;
-            canvas.width = '250';
-            canvas.height = '150';
+            canvas.width = aspectRation.width;
+            canvas.height = aspectRation.height;
             const context = canvas.getContext('2d');
-            context.drawImage(videoElement, 0, 0);
+            context.drawImage(videoElement, 0, 0, 250, 150);
 
 
 
             videoElement.play();
-
             setInterval(drawScreen, 33);
 
 
             function drawScreen() {
 
-                context.drawImage(videoElement, 0, 0);
+                context.drawImage(videoElement, 0, 0, 250, 150);
 
             }
         }
         else {
             const canvas = videoCanvasRef.current;
-            canvas.width = '250';
-            canvas.height = '150';
+            canvas.width = aspectRation.width;
+            canvas.height = aspectRation.height;
 
             const context = canvas.getContext('2d');
 
@@ -86,15 +90,6 @@ export default function VideoPlaceHolder(props) {
                 }}>
 
                 </canvas>
-                <div style={{ display: 'none' }}>
-                    <video ref={v} controls loop style={{
-                        height: 'auto',
-                        width: '100%'
-                    }}  >
-                        <source src="" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
-                    </video>
-
-                </div>
 
             </div>
         </>
