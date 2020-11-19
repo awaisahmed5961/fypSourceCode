@@ -38,8 +38,10 @@ var World = {
 
         if (recognized) {
             document.getElementById("loadingMessage").style.display = "block";
-            if (World.type === '3d') {
 
+            World.type = 'video';
+
+            if (World.type === '3d') {
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
                     World.sirenSound.destroy();
@@ -112,7 +114,7 @@ var World = {
 
             }
             else if (World.type === 'video') {
-
+                alert(JSON.stringify(response));
                 /* Create play button which is used for starting the video. */
                 World.playButtonImg = new AR.ImageResource("assets/playButton.png", {
                     onError: World.onError
