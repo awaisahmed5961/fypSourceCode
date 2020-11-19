@@ -13,9 +13,9 @@ var World = {
     // Initating cloud recog connection
     createTracker: function createTrackerFn() {
         this.cloudRecognitionService = new AR.CloudRecognitionService(
-            "b277eeadc6183ab57a83b07682b3ceba",
-            "B1QL5CTCZ",
-            "54e4b9fe6134bb74351b2aa3", {
+            "5da7f1ee89f87ef5f8701ef04f0c76f0",
+            "Hyk0nNDYP",
+            "5fa9bcdecfa0c01c44f3410a", {
             onInitialized: World.trackerLoaded,
             onError: World.onError
         }
@@ -39,7 +39,7 @@ var World = {
         if (recognized) {
             document.getElementById("loadingMessage").style.display = "block";
             if (World.type === '3d') {
-                
+
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
                     World.sirenSound.destroy();
@@ -121,8 +121,8 @@ var World = {
                     enabled: false,
                     clicked: false,
                     zOrder: 2,
-                    onClick: function playButtonClicked() 
-                    {   World.playButton.enabled = false;
+                    onClick: function playButtonClicked() {
+                        World.playButton.enabled = false;
                         World.arContent.resume();
                         World.arContent.playing = true;
                         World.playButton.clicked = true;
@@ -193,24 +193,24 @@ var World = {
                 });
             }
 
-            else if (World.type === "audio"){
+            else if (World.type === "audio") {
 
                 if (World.arContent !== undefined) {
                     World.arContent.destroy();
                 }
 
                 if (World.sirenSound !== undefined) {
-                        World.sirenSound.stop();
-                        World.sirenSound.destroy();
+                    World.sirenSound.stop();
+                    World.sirenSound.destroy();
                 }
 
 
                 World.sirenSound = new AR.Sound("assets/rt.mp3", {
                     onError: World.onError,
-                    onFinishedPlaying: function onFinishedPlayingFn(){
+                    onFinishedPlaying: function onFinishedPlayingFn() {
                         World.playButton.playing = false;
                     },
-                    onLoaded: function onLoadedFn(){
+                    onLoaded: function onLoadedFn() {
                         World.playButtonImg = new AR.ImageResource("assets/audioplay.png", {
                             onError: World.onError
                         });
@@ -219,13 +219,12 @@ var World = {
                         World.arContent = new AR.ImageDrawable(World.playButtonImg, 0.3, {
                             playing: false,
                             zOrder: 2,
-                            onClick: function playButtonClicked() 
-                            {   
-                                if(!World.arContent.playing){
+                            onClick: function playButtonClicked() {
+                                if (!World.arContent.playing) {
                                     World.sirenSound.play();
                                     World.arContent.playing = true;
                                 }
-                                else{
+                                else {
                                     World.sirenSound.stop();
                                     World.arContent.playing = false;
                                 }
@@ -235,12 +234,12 @@ var World = {
                                 y: 0.0
                             }
                         });
-                       
+
                         if (World.renderAugmentation !== undefined) {
                             World.renderAugmentation.destroy();
                         }
                         World.loader();
-        
+
                         World.renderAugmentation = new AR.ImageTrackable(World.tracker, response.targetInfo.name, {
                             drawables: {
                                 cam: [World.arContent]
