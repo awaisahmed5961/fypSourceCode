@@ -114,7 +114,6 @@ var World = {
 
             }
             else if (World.type === 'video') {
-                alert(JSON.stringify(response));
                 /* Create play button which is used for starting the video. */
                 World.playButtonImg = new AR.ImageResource("assets/playButton.png", {
                     onError: World.onError
@@ -140,7 +139,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.VideoDrawable("assets/video.mp4", 0.50, {
+                World.arContent = new AR.VideoDrawable(`assets/ArContent/ArVideos/${response.metadata.filename}`, 0.50, {
                     translate: {
                         x: World.playButton.translate.x,
                         y: World.playButton.translate.y
