@@ -16,8 +16,13 @@ import AudioPlaceHolder from './placeholders/AudioPlaceHolder';
 import ThreeDModelPlaceHolder from './placeholders/ThreeDModelPlaceHolder';
 import EmptyAr from './ArControlls/EmptyAr';
 import VideoAr from './ArControlls/VideoAr';
-
 import axios from 'axios';
+import ImageAr from './ArControlls/ImageAr';
+import AudioAr from './ArControlls/AudioAr';
+import ThreeDAr from './ArControlls/3dAr';
+import EditorDialog from '../../components/Ui/editorComponents/EditorDialog';
+import Button from '@material-ui/core/Button';
+import ProgressBar from '../../components/Ui/editorComponents/ProgressBar'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -130,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
             '&:focus': {
                 border: 'none',
                 outline: 'none',
-                background: [theme.palette.primary.main],
+                border: `1px solid ${[theme.palette.primary.main]}`,
             },
             '& img': {
                 width: '25px',
@@ -145,16 +150,86 @@ const useStyles = makeStyles((theme) => ({
             width: '350px',
             cursor: 'pointer'
         }
+    },
+    progressHolder: {
+        position: 'relative',
+        width: '100px',
+        height: '100px',
+        borderRadius: '50%',
+        background: 'yellowgreen',
+        overflow: 'hidden',
+    },
+    semiCircle: {
+        width: '100%',
+        height: '100%',
+        background: 'inherit',
+        borderRadius: '50%',
+        position: 'absolute',
+        top: '0px',
+        left: '0px'
+    },
+    leftBlock: {
+
+        width: '50%',
+        height: '100%',
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        background: '#ccc',
+        borderTopLeftRadius: '50%',
+        borderBottomLeftRadius: '50%'
+    },
+    rightBlock: {
+        width: '50%',
+        height: '100%',
+        position: 'absolute',
+        top: '0px',
+        left: '50%',
+        background: '#ccc',
+        borderTopRightRadius: '50%',
+        borderBottomRightRadius: '50%',
+        transformOrigin: 'left center'
+    },
+    mask: {
+        width: '80%',
+        height: '80%',
+        position: 'absolute',
+        left: '10%',
+        top: '10%',
+        background: '#fff',
+        borderRadius: '50%',
+        textAlign: 'center',
+        '& > span': {
+            color: 'yellowgreen',
+            fontSize: '20px',
+            fontFamily: 'Arial',
+            position: 'absolute',
+            width: '100%',
+            textAlign: 'center',
+            top: 'calc(50 % - 16px)',
+            left: 'calc(0px)'
+        }
     }
 }));
 
 
 export default function WorkSpace() {
+    const [uploadingDialogOpen, setUpLoadingDialogeOpen] = useState(false);
+    const [uploadingPercentage, setUploadingPercentage] = useState(0);
     const [currentArControll, setCurrentArControll] = useState(null);
     const [xAxiesvalue, setXaxiesValue] = useState(0);
     const [yAxiesvalue, setYaxiesValue] = useState(0);
     const [zAxiesvalue, setZaxiesValue] = useState(0);
     const [filePath, setFilePath] = useState(null);
+    const [arContentMetadata, setArContentMetaData] = useState({
+        type: 'none',
+        fileData: '',
+        file: null,
+        width: 250,
+        height: 150,
+        rotate: null,
+        controlls: []
+    });
 
     const classes = useStyles();
     const [currentRatio, setCurrentRatio] = useState({
@@ -189,35 +264,31 @@ export default function WorkSpace() {
         });
     }
     const uploadAR = () => {
-        if (targetImageInbase64) {
-            console.log('log from workspaceline 190');
-            console.log(targetImageInbase64);
-            console.log('video in base 64');
-            // console.log(filePath)
+        if (arContentMetadata.type === 'none') {
+            return;
+        }
+        setUpLoadingDialogeOpen(true);
+        if (arContentMetadata.type === 'threed') {
             const markerImage = {
-                Image: targetImageInbase64,
-                metadata: {
-                    artype: "video",
-                    arfile: filePath,
-                    width: '200px',
-                    height: '200px',
-                    autoplay: false
-                }
+                Image: targetImageUrl,
+                metadata: arContentMetadata
             }
             const config = {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'content-type': 'multipart/form-data'
                 },
                 onUploadProgress: (progressEvent) => {
                     const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-                    console.log("onUploadProgress", totalLength);
-                    // if (totalLength !== null) {
-                    //     this.updateProgressBarValue(Math.round((progressEvent.loaded * 100) / totalLength));
-                    // }
+                    if (totalLength !== null) {
+                        setUploadingPercentage(Math.round((progressEvent.loaded * 100) / totalLength));
+                    }
                 }
             }
             try {
-                const res = axios.post('/api/markerimages', markerImage, config).then((q) => {
+                const formData = new FormData();
+                formData.append('file', arContentMetadata.file);
+                const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
+                    // setUpLoadingDialogeOpen(false);
                     console.log(q);
 
                 }).catch((err) => {
@@ -228,13 +299,41 @@ export default function WorkSpace() {
             catch (err) {
                 return err;
             }
-
-
         }
         else {
-            alert('we lost your target Image please re create')
+
+            const markerImage = {
+                Image: targetImageUrl,
+                metadata: arContentMetadata
+            }
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+
+                },
+                onUploadProgress: (progressEvent) => {
+                    const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+                    if (totalLength !== null) {
+                        setUploadingPercentage(Math.round((progressEvent.loaded * 100) / totalLength));
+                    }
+                }
+            }
+            try {
+                const res = axios.post('/api/markerimages', markerImage, config).then((q) => {
+                    // setUpLoadingDialogeOpen(false);
+                    console.log(q);
+
+                }).catch((err) => {
+                    console.log(err)
+                    console.log('workspace line 218')
+                });
+            }
+            catch (err) {
+                return err;
+            }
         }
     }
+
     useEffect(() => {
         setTargetImageUrl(localStorage.getItem('MarkerImage'));
         setTargetImageInbase64(localStorage.getItem('MarkerImageBase64'));
@@ -253,28 +352,28 @@ export default function WorkSpace() {
     const renderPlaceholder = (currentControll) => {
         switch (currentControll) {
             case 'video':
-                return <VideoPlaceHolder videoSrc={filePath ? filePath : null} />;
+                return <VideoPlaceHolder ardata={arContentMetadata} setArdata={setArContentMetaData} />;
             case 'audio':
-                return <AudioPlaceHolder />;
+                return <AudioPlaceHolder ardata={arContentMetadata} setArdata={setArContentMetaData} />;
             case 'image':
-                return <ImagePlaceHolder />;
+                return <ImagePlaceHolder ardata={arContentMetadata} setArdata={setArContentMetaData} />;
             case 'threed':
-                return <ThreeDModelPlaceHolder />;
+                return <ThreeDModelPlaceHolder ardata={arContentMetadata} setArdata={setArContentMetaData} />;
             default:
                 return null;
         }
     }
-
     const renderArContent = (currentControll) => {
         switch (currentControll) {
             case 'video':
-                return <VideoAr onUpload={setFilePath} />;
+                // return <VideoAr onUpload={setFilePath}  />;
+                return <VideoAr onUpload={setArContentMetaData} ar={arContentMetadata} />;
             case 'audio':
-                return null;
+                return <AudioAr onUpload={setArContentMetaData} ar={arContentMetadata} />;
             case 'image':
-                return null;
+                return <ImageAr onUpload={setArContentMetaData} ar={arContentMetadata} />;
             case 'threed':
-                return null;
+                return <ThreeDAr onUpload={setArContentMetaData} ar={arContentMetadata} />;
             default:
                 return <EmptyAr />;
         }
@@ -413,7 +512,64 @@ export default function WorkSpace() {
                 </div>
 
             </Grid>
-            <button onClick={() => uploadAR()}> Save</button>
+            <Grid>
+                <div style={{
+                    display: 'block',
+                    height: '60px',
+                    backgroundColor: '#eee',
+                    textAlign: 'right',
+                    paddingRight: '30px',
+                    paddingTop: '30px'
+                }}>
+                    <Button onClick={() => alert('cancle')} variant="outlined" color="primary" style={{
+                        width: '200px',
+                        height: '50px',
+                        marginRight: '20px'
+                    }}>
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={() => uploadAR()}
+                        variant="contained"
+                        color="primary" style={{
+                            width: '200px',
+                            height: '50px'
+                        }}
+                        {...(arContentMetadata.type === 'none' && { disabled: true })}
+                    >
+                        Save
+                    </Button>
+                </div>
+
+            </Grid>
+            <EditorDialog open={uploadingDialogOpen} >
+                <div style={{
+                    width: '500px',
+                    height: '400px',
+                    textAlign: 'center',
+                    marginTop: '10px'
+                }}>
+                    <div style={{
+                        marginBottom: '20px'
+                    }}>
+                        {
+                            uploadingPercentage <= 99 ? (
+                                <ProgressBar
+                                    strokeWidth="10"
+                                    sqSize="150"
+                                    percentage={uploadingPercentage} />
+                            ) : (null)
+                        }
+
+                    </div>
+                    <Typography variant="h6" >
+                        Publishing AR Content
+                </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                        Please wait, it may take a while
+                </Typography>
+                </div>
+            </EditorDialog>
         </ >
     )
 }

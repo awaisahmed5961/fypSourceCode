@@ -124,7 +124,8 @@ const useStyles = makeStyles((theme) => ({
         margin: '0 auto',
         marginTop: '10px',
         marginBottom: '10px'
-    }
+    },
+
 }));
 
 
@@ -137,12 +138,9 @@ export default function EditorImageUpload() {
     });
     const [file, SetFile] = useState(null);
     const [filein64, SetFileIn64] = useState(null);
-    console.log('file.....139');
-    console.log(file)
     if (file) {
         const result = imagebase64(file[0]);
         result.then((w) => {
-            console.log(w);
             SetFileIn64(w);
         })
     }
@@ -168,15 +166,59 @@ export default function EditorImageUpload() {
     const handleImageLoaded = (image) => {
         console.log(image);
         console.log("editorImageUpload line 146")
+
     }
     const handleOnCropChange = (crop) => {
         setCrop(crop);
         console.log("log from editorImageupload line 150")
     }
-    const handleOnCropComplete = (crop, pixelCrop) => {
-        console.log(crop)
+    const handleOnCropComplete = (cropPixel, pixelCrop) => {
+        console.log(cropPixel)
         console.log(pixelCrop)
         console.log("Crope compelete")
+        // percentages to pixel calculation
+        // var percentsWidth = parseInt(pixelCrop.width);
+        // var parentWidth = parseInt(cropPixel.width);
+        // var pixels = parentWidth * (percentsWidth / 100);
+        // console.log('width in pixel' + parseInt(pixels))
+
+        // var percentsHeight = parseInt(pixelCrop.height);
+        // var parentHeight = parseInt(cropPixel.height);
+        // var pixelsheight = parentHeight * (percentsHeight / 100);
+        // console.log('height in pixel' + parseInt(pixelsheight))
+
+        // var percentsx = parseInt(pixelCrop.x);
+        // var parentW = parseInt(cropPixel.width);
+        // var pixelsx = parentW * (percentsx / 100);
+        // console.log('x in pixel' + parseInt(pixelsx))
+
+        // var percentsY = parseInt(pixelCrop.y);
+        // var parentH = parseInt(cropPixel.height);
+        // var pixelsy = parentH * (percentsY / 100);
+        // console.log('y in pixel' + parseInt(pixelsy))
+
+
+        // var canvas = document.getElementById('myCanvas');
+        // canvas.width = pixels;
+        // canvas.height = pixelsheight;
+
+        // var context = canvas.getContext('2d');
+        // var imageObj = new Image();
+
+        // imageObj.onload = function () {
+        //     // draw cropped image
+        //     // var sourceX = cropPixel.x;
+        //     // var sourceY = cropPixel.y;
+        //     // var sourceWidth = cropPixel.width;
+        //     // var sourceHeight = cropPixel.height;
+        //     // var destWidth = sourceWidth;
+        //     // var destHeight = sourceHeight;
+        //     // var destX = canvas.width / 2 - destWidth / 2;
+        //     // var destY = canvas.height / 2 - destHeight / 2;
+
+        //     context.drawImage(imageObj, cropPixel.x, cropPixel.y, cropPixel.width, cropPixel.height, parseInt(pixelsx), parseInt(pixelsy), parseInt(pixels), parseInt(pixelsheight));
+        // };
+        // imageObj.src = filein64;
     }
     const zoomPicIn = () => {
         if (currentRatio.height > 600) {
@@ -285,10 +327,10 @@ export default function EditorImageUpload() {
 
                                 <div className={classes.containerRightSideControllers}>
                                     <div>
-                                        <div className={classes.buttonRow}>
+                                        {/* <div className={classes.buttonRow}>
                                             <button className={classes.outlinedButton} onClick={() => rotateleft()} >left</button>
                                             <button className={classes.outlinedButton} onClick={() => rotate()}>right</button>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div>
                                         <button onClick={() => SetFile(null)} className={classes.outlinedButton}>Remove</button>
@@ -304,6 +346,9 @@ export default function EditorImageUpload() {
                         {
                             file && (<>
                                 <div className={classes.botomCta}>
+
+                                    <canvas id="myCanvas" ></canvas>
+
                                     <Button variant="outlined" color="primary" style={{
                                         marginRight: '20px'
                                     }}>

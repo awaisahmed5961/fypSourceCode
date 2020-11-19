@@ -5,6 +5,10 @@ const app = express();
 const morgan = require('morgan');
 
 app.use('/api/uploads', express.static('uploads'))
+app.use('/api/cloudrecogionation', express.static('cloud/'))
+// app.get('/api/cloudrecogionation', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'))
+// })
 app.use('/api/markerImages', express.static('markerimages'))
 // Connect DataBase
 connectDB();
@@ -40,6 +44,7 @@ app.use('/api/questionoptions', require('./routes/questionoptions'));
 
 // ArContent Api
 app.use('/api/markerimages', require('./routes/markerimages'));
+app.use('/api/upload3dmodel', require('./routes/threedmodel'));
 
 
 // app.use((req, res, next) => {

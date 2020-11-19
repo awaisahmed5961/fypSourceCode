@@ -8,8 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import videoIcon from '../../../app assetrs/editorIcons/play-button.svg';
+import fileIcon from '../../../app assetrs/editorIcons/video-file.svg';
 import Button from '@material-ui/core/Button';
 import FileUpload from '../FileUpload';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,6 +40,18 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         width: '100%'
+    },
+    ExternalUrl: {
+        display: 'block',
+        width: '98%',
+        height: '30px',
+        borderRadius: '4px',
+        fontSize: '16px',
+        paddingLeft: '12px',
+        '&:focus': {
+            border: `1px solid ${[theme.palette.primary.main]}`,
+            outline: 'none'
+        }
     }
 }));
 
@@ -46,7 +60,12 @@ function VideoAr(props) {
     const [file, setFile] = useState(null);
     useEffect(() => {
         if (file) {
-            props.onUpload(file);
+            props.onUpload(
+                {
+                    ...props.ar,
+                    type: 'video',
+                    fileData: file
+                });
         }
     }, [file])
     return (
@@ -96,11 +115,11 @@ function VideoAr(props) {
                             letterSpacing: '1px'
                         }}>
                             PAST URL
-                            <input type="text" />
+                            <input type="text" className={classes.ExternalUrl} onChange={(e) => { setFile(e.target.value) }} />
                             <div style={{
                                 marginTop: '20px'
                             }}>
-                                <FileUpload onUpload={setFile} />
+                                <FileUpload onUpload={setFile} acceptedfiles="video/*" icon={fileIcon} />
                             </div>
                         </div>
 

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
-import { ReactComponent as FileUploadIcon } from '../../../src/app assetrs/editorIcons/video-file.svg';
 
 import { useTheme } from '@material-ui/core/styles';
 
@@ -67,7 +66,8 @@ export default function FileUpload(props) {
         noClick: true,
         noKeyboard: true,
         multiple: false,
-        accept: 'video/*'
+        // accept: 'video/*'
+        accept: props.acceptedfiles
     });
 
 
@@ -87,11 +87,12 @@ export default function FileUpload(props) {
 
                 })}>
                     <input {...getInputProps()} />
-                    <FileUploadIcon className={classes.icon} onClick={open} >
+                    {/* <FileUploadIcon className={classes.icon} onClick={open} >
                         {isDragReject && (<p>Video should be MPG </p>)}
 
 
-                    </FileUploadIcon>
+                    </FileUploadIcon> */}
+                    <img src={props.icon} alt="" className={classes.icon} onClick={open} />
                 </div>
             </div>
             <aside>
