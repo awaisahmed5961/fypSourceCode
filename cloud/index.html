@@ -25,15 +25,18 @@
 
 <body>
     <div id="infoBox" class="info">
-        <button onclick="World.type = '3d'">3d model</button>
-        <button onclick="World.type = 'image'">Image</button>
-        <button onclick="World.type = 'video'">Video</button>
-        <button onclick="World.type = 'audio'">Audio</button>
-        <button onclick="World.scan()">Scan</button>
+        <div class="bottom_controlls">
+            <div class="photo-button camera_button" onclick="World.scan()">
+                <div class="circle"></div>
+                <div class="ring"></div>
+            </div>
+            <!-- <button class="camera_button" onclick="World.scan()">Scan</button> -->
+        </div>
+
+
 
     </div>
     <div id="loadingMessage" class="preeloader">
-
         <img src="jquery/images/ajax-loader.gif" width="30px" height="30px">
     </div>
     <script src="js/continuousimagerecognition.js"></script>

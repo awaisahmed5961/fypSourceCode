@@ -1,3 +1,4 @@
+
 .info {
     font-size: large;
     position: absolute;
@@ -26,7 +27,7 @@
     display: table;
 }
 #infoBox {
-    display: none;
+    display: block;
 }
 
 #infoBox .text {
@@ -45,3 +46,60 @@
 #infoBox .icons img {
     margin-left: 15px;
 }
+.bottom_controlls{
+    margin-top: 90vh;
+}
+.bottom_controlls .camera_button {
+    width: 70px;
+    height: 70px;
+    background-color: transparent;
+    border-radius: 50px;
+    border: none;
+    position: relative;
+
+} 
+
+
+
+.photo-button {
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    position: absolute;
+  }
+  .circle {
+    position: absolute;
+    top: 12%;
+    left: 12%;
+    bottom: 12%;
+    right: 12%;
+    border-radius: 100%;
+    background-color: #f7f7f7;
+    opacity: 0;
+  }
+  .ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    
+    border-radius: 100%;
+    border: 6px solid #f7f7f7;
+    opacity: 0.8;
+  }
+  .photo-button .circle, .photo-button .ring {
+    transition: all 0.25s;
+  }
+  .photo-button:hover .circle {
+    opacity: 1;
+  }
+  .photo-button:active .ring {
+    opacity: 1;
+  }
+  .photo-button:active .circle {
+    opacity: 0.5;
+  }
