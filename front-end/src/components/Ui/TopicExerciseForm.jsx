@@ -61,6 +61,8 @@ export default function TopicExerciseForm(props) {
         Question: '',
         options: []
     });
+    const [optionsError, setOptionsErrors] = useState(['', '']);
+
     const [openloadingModal, setOpenLoadingModal] = useState(false);
     const handleCorrectOption = (i) => {
         setSelectedValue(i);
@@ -110,6 +112,7 @@ export default function TopicExerciseForm(props) {
             setQuestionErrors({ Question: error });
             return;
         }
+        const errorsss = options.map((option) => option === "");
 
         const optionError = optionsValidation();
         console.log(optionError)
@@ -161,8 +164,7 @@ export default function TopicExerciseForm(props) {
                     label={`Option ${i + 1}`}
                     value={el || ''}
                     onChange={(e) => handleChange(e, i)}
-                    error
-                    helperText="Incorrect entry."
+
                 />
                 <div>
                     <IconButton aria-label="Drop Option"
@@ -200,7 +202,6 @@ export default function TopicExerciseForm(props) {
                             fullWidth
                             value={Question}
                             onChange={(e) => setQuestion(e.target.value)}
-                            helperText="Incorrect entry."
                             {...(questionErrors.Question && { error: true, helperText: questionErrors.Question })}
                         />
                         <div className={classes.options}>
