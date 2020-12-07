@@ -329,6 +329,8 @@ var World = {
     onRecognition: function onRecognitionFn(recognized, response) {
 
         if (recognized) {
+
+            alert(response)
             document.getElementById("loadingMessage").style.display = "block";
             if (response.type === '3d') {
 
