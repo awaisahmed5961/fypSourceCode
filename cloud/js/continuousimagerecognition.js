@@ -330,7 +330,7 @@ var World = {
 
         if (recognized) {
             document.getElementById("loadingMessage").style.display = "block";
-            if (World.type === '3d') {
+            if (response.type === '3d') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -341,7 +341,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.Model("assets/car.wt3", {
+                World.arContent = new AR.Model(`assets/ArContent/Ar3Dmodels/${response.filename}`, {
                     onLoaded: World.loader,
                     onError: World.onError,
                     scale: {
@@ -371,14 +371,14 @@ var World = {
                 });
             }
 
-            else if (World.type === 'image') {
+            else if (response.type === 'image') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
                     World.sirenSound.destroy();
                 }
 
-                World.bannerImg = new AR.ImageResource("assets/banner.jpg", {
+                World.bannerImg = new AR.ImageResource(`assets/ArContent/ArImage/${response.filename}`, {
                     onLoaded: World.loader,
                     onError: World.onError
                 });
@@ -408,7 +408,7 @@ var World = {
                 });
 
             }
-            else if (World.type === 'video') {
+            else if (response.type === 'video') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -440,7 +440,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.VideoDrawable("assets/video.mp4", 0.50, {
+                World.arContent = new AR.VideoDrawable(`assets/ArContent/ArVideos/${response.filename}`, 0.50, {
                     translate: {
                         x: World.playButton.translate.x,
                         y: World.playButton.translate.y
@@ -495,7 +495,7 @@ var World = {
                 });
             }
 
-            else if (World.type === "audio") {
+            else if (response.type === "audio") {
 
 
                 if (World.arContent !== undefined) {
@@ -508,7 +508,7 @@ var World = {
                 }
 
 
-                World.sirenSound = new AR.Sound("assets/rt.mp3", {
+                World.sirenSound = new AR.Sound(`assets/ArContent/ArAudio/${response.filename}`, {
                     onError: World.onError,
                     onFinishedPlaying: function onFinishedPlayingFn() {
                         World.playButton.playing = false;
