@@ -330,7 +330,7 @@ var World = {
 
         if (recognized) {
 
-            alert(response)
+            alert(response.toString())
             document.getElementById("loadingMessage").style.display = "block";
             if (response.type === '3d') {
 
