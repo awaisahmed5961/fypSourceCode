@@ -330,9 +330,10 @@ var World = {
 
         if (recognized) {
 
-            alert(JSON.stringify(response));
+            // alert(JSON.stringify(response));
+            const { type, filename, filePath } = response.metadata;
             document.getElementById("loadingMessage").style.display = "block";
-            if (response.type === '3d') {
+            if (type === '3d') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -373,7 +374,7 @@ var World = {
                 });
             }
 
-            else if (response.type === 'image') {
+            else if (type === 'image') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -410,7 +411,7 @@ var World = {
                 });
 
             }
-            else if (response.type === 'video') {
+            else if (type === 'video') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -442,7 +443,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.VideoDrawable(`assets/ArContent/ArVideos/${response.filename}`, 0.50, {
+                World.arContent = new AR.VideoDrawable(`assets/ArContent/ArVideos/${filename}`, 0.50, {
                     translate: {
                         x: World.playButton.translate.x,
                         y: World.playButton.translate.y
@@ -497,7 +498,7 @@ var World = {
                 });
             }
 
-            else if (response.type === "audio") {
+            else if (type === "audio") {
 
 
                 if (World.arContent !== undefined) {
