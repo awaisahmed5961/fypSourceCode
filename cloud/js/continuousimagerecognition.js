@@ -344,7 +344,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.Model(`assets/ArContent/Ar3Dmodels/${response.filename}`, {
+                World.arContent = new AR.Model(`assets/ArContent/Ar3Dmodels/${filename}`, {
                     onLoaded: World.loader,
                     onError: World.onError,
                     scale: {
@@ -381,7 +381,7 @@ var World = {
                     World.sirenSound.destroy();
                 }
 
-                World.bannerImg = new AR.ImageResource(`assets/ArContent/ArImage/${response.filename}`, {
+                World.bannerImg = new AR.ImageResource(`assets/ArContent/ArImage/${filename}`, {
                     onLoaded: World.loader,
                     onError: World.onError
                 });
@@ -511,7 +511,7 @@ var World = {
                 }
 
 
-                World.sirenSound = new AR.Sound(`assets/ArContent/ArAudio/${response.filename}`, {
+                World.sirenSound = new AR.Sound(`assets/ArContent/ArAudio/${filename}`, {
                     onError: World.onError,
                     onFinishedPlaying: function onFinishedPlayingFn() {
                         World.playButton.playing = false;
