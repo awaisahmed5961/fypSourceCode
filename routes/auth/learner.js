@@ -62,15 +62,12 @@ router.post('/', async (req, res) => {
             }
         }
         // creating JWT
-        jwt.sign(payload, config.get('jwtSecret'), {
-            // Options
-            expiresIn: 3600
-        }, (err, token) => {
+        jwt.sign(payload, config.get('jwtSecret'), (err, token) => {
             if (err) {
                 throw err;
             }
             // Returning Token
-            res.json({ token, userName: user.name });
+            res.json({ token, userName: user.name, profileImage: user.imageAvatar });
         });
     }
     catch (err) {

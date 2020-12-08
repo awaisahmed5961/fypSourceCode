@@ -5,6 +5,7 @@ const app = express();
 const morgan = require('morgan');
 
 app.use('/api/uploads', express.static('uploads'))
+app.use('/api/learner/avatar', express.static('learneravatar'))
 app.use('/api/cloudrecogionation', express.static('cloud/'))
 // app.get('/api/cloudrecogionation', (req, res) => {
 //     res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'))

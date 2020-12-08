@@ -13,6 +13,10 @@ const LearnerSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    imageAvatar: {
+        type: String,
+        default: 'http://localhost:5000/api/learner/avatar/defaultAvatar.svg'
     }
 });
 
