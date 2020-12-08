@@ -1,104 +1,175 @@
 
 .info {
-    font-size: large;
-    position: absolute;
-    width: 100%;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    /* background-color: #BBBBBB; */
-    text-align: center;
-    top: 0;
-    left: 0;
-    opacity: 0.7;
-    display: table;
+  font-size: large;
+  position: absolute;
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  /* background-color: #BBBBBB; */
+  text-align: center;
+  top: 0;
+  left: 0;
+  opacity: 0.7;
+  display: table;
 }
 .preeloader {
-    font-size: large;
-    position: absolute;
-    width: 100%;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    /* background-color: #BBBBBB; */
-    text-align: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50% , -50%);
-    opacity: 0.7;
-    display: table;
+  font-size: large;
+  position: absolute;
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  /* background-color: #BBBBBB; */
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+  opacity: 0.7;
+  display: table;
 }
 #infoBox {
-    display: block;
+  display: block;
 }
 
 #infoBox .text {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: right;
-    width: 20%;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: right;
+  width: 20%;
 }
 
 #infoBox .icons {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: left;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
 }
 
 #infoBox .icons img {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 .bottom_controlls{
-    margin-top: 90vh;
+  margin-top: 90vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .bottom_controlls .camera_button {
-    width: 70px;
-    height: 70px;
-    background-color: transparent;
-    border-radius: 50px;
-    border: none;
-    position: relative;
+  width: 70px;
+  height: 70px;
+  background-color: transparent;
+  border-radius: 50px;
+  border: none;
+  position: relative;
 
 } 
 
-
+/* .bottom_controlls .camera_button::after {
+  content: "";
+  border: 2px solid green;
+  width: 110%;
+  height: 110%;
+  position: absolute;
+  top:-1px;
+  left: -1px;
+  border-radius: 50px;
+} */
 
 .photo-button {
-    width: 100px;
-    height: 100px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50% , -50%);
-    position: absolute;
-  }
-  .circle {
-    position: absolute;
-    top: 12%;
-    left: 12%;
-    bottom: 12%;
-    right: 12%;
-    border-radius: 100%;
-    background-color: #f7f7f7;
-    opacity: 0;
-  }
-  .ring {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    
-    border-radius: 100%;
-    border: 6px solid #f7f7f7;
-    opacity: 0.8;
-  }
-  .photo-button .circle, .photo-button .ring {
-    transition: all 0.25s;
-  }
-  .photo-button:hover .circle {
-    opacity: 1;
-  }
-  .photo-button:active .ring {
-    opacity: 1;
-  }
-  .photo-button:active .circle {
-    opacity: 0.5;
-  }
+  width: 100px;
+  height: 100px;
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%); */
+  /* margin-top: -50px;
+  margin-left: -50px; */
+  /* position: absolute; */
+}
+.circle {
+  position: absolute;
+  top: 12%;
+  left: 12%;
+  bottom: 12%;
+  right: 12%;
+  border-radius: 100%;
+  background-color: #f7f7f7;
+  opacity: 0;
+}
+.ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  
+  border-radius: 100%;
+  border: 6px solid #f7f7f7;
+  opacity: 0.8;
+}
+.photo-button .circle, .photo-button .ring {
+  transition: all 0.25s;
+}
+.photo-button:hover .circle {
+  opacity: 1;
+}
+.photo-button:active .ring {
+  opacity: 1;
+}
+.photo-button:active .circle {
+  opacity: 0.5;
+}
+.bottom_icon {
+  width: 40px;
+  height: 40px;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #f7f7f7, 0px 0px 1px #f7f7f7;
+  background: #f7f7f7;
+  border-radius: 10px;
+  border: 0.2px solid none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #f7f7f7;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid t;
+  height: 200px;
+  width: 200px;
+  border-radius: 3px;
+  background: yellow;
+  cursor: pointer;
+  margin-top: -14px;
+}
+
+.rightMiddle_controlls {
+  position: absolute;
+  right: 0%;
+  top: 50%;
+  transform: translate(-0%, -50%);
+}
+
+.range-slider .input-range {
+ -webkit-appearance: none;
+ height: 200px;
+ border-radius: 5px;
+ background-color: yellow;
+ outline: none;
+ writing-mode: bt-lr;
+/* IE */
+ -webkit-appearance: slider-vertical;
+/* WebKit */
+}
+.range-slider .input-range:focus {
+outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+.range-slider .input-range::-moz-range-track {
+
+ background: #ccc;
+ border: 0;
+}
+input::-moz-focus-inner {
+ border: 0;
+}
+

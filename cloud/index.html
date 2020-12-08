@@ -25,12 +25,32 @@
 
 <body>
     <div id="infoBox" class="info">
-        <div class="bottom_controlls">
+        <!-- <div class="bottom_controlls">
             <div class="photo-button camera_button" onclick="World.scan()">
                 <div class="circle"></div>
                 <div class="ring"></div>
             </div>
-            <!-- <button class="camera_button" onclick="World.scan()">Scan</button> -->
+             <button class="camera_button" onclick="World.scan()">Scan</button> -->
+        <!-- </div> -->
+
+        <div class="rightMiddle_controlls">
+            <div class="range-slider">
+                <input class="input-range" orient="vertical" type="range" step="0.5" value="5" min="1" max="10">
+                <span class="range-value"></span>
+            </div>
+        </div>
+        <div class="bottom_controlls">
+            <img src="/icons/flashsolid-s.svg" class="bottom_icon" alt="flash light">
+            <div>
+                <div class="photo-button camera_button" onclick="World.scan()">
+                    <div class=" circle"></div>
+                    <div class="ring"></div>
+                </div>
+            </div>
+
+
+            <img src="/icons/camerarotate-s.svg" class="bottom_icon" alt="camera rotate">
+
         </div>
 
 
