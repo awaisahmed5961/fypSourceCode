@@ -221,6 +221,7 @@ export default function WorkSpace() {
     const [yAxiesvalue, setYaxiesValue] = useState(0);
     const [zAxiesvalue, setZaxiesValue] = useState(0);
     const [filePath, setFilePath] = useState(null);
+
     const [arContentMetadata, setArContentMetaData] = useState({
         type: 'none',
         fileData: '',
@@ -230,6 +231,7 @@ export default function WorkSpace() {
         rotate: null,
         controlls: []
     });
+
 
     const classes = useStyles();
     const [currentRatio, setCurrentRatio] = useState({
@@ -264,74 +266,80 @@ export default function WorkSpace() {
         });
     }
     const uploadAR = () => {
-        if (arContentMetadata.type === 'none') {
-            return;
-        }
         setUpLoadingDialogeOpen(true);
-        if (arContentMetadata.type === 'threed') {
-            const markerImage = {
-                Image: targetImageUrl,
-                metadata: arContentMetadata
+        setTimeout(() => {
+            if (arContentMetadata.type === 'none') {
+                return;
             }
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                },
-                onUploadProgress: (progressEvent) => {
-                    const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-                    if (totalLength !== null) {
-                        setUploadingPercentage(Math.round((progressEvent.loaded * 100) / totalLength));
+            setUpLoadingDialogeOpen(true);
+            if (arContentMetadata.type === 'threed') {
+                const markerImage = {
+                    Image: targetImageInbase64,
+                    metadata: arContentMetadata
+                }
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+                        if (totalLength !== null) {
+                            setUploadingPercentage(Math.round((progressEvent.loaded * 100) / totalLength));
+                        }
                     }
                 }
-            }
-            try {
-                const formData = new FormData();
-                formData.append('file', arContentMetadata.file);
-                const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
-                    // setUpLoadingDialogeOpen(false);
-                    console.log(q);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', arContentMetadata.file);
+                    formData.append("targetImage", markerImage.Image);
+                    formData.append("metadata", markerImage.metadata)
+                    const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
+                        // setUpLoadingDialogeOpen(false);
+                        console.log(q);
 
-                }).catch((err) => {
-                    console.log(err)
-                    console.log('workspace line 218')
-                });
-            }
-            catch (err) {
-                return err;
-            }
-        }
-        else {
-
-            const markerImage = {
-                Image: targetImageUrl,
-                metadata: arContentMetadata
-            }
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-
-                },
-                onUploadProgress: (progressEvent) => {
-                    const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-                    if (totalLength !== null) {
-                        setUploadingPercentage(Math.round((progressEvent.loaded * 100) / totalLength));
-                    }
+                    }).catch((err) => {
+                        console.log(err)
+                        console.log('workspace line 218')
+                    });
+                }
+                catch (err) {
+                    return err;
                 }
             }
-            try {
-                const res = axios.post('/api/markerimages', markerImage, config).then((q) => {
-                    // setUpLoadingDialogeOpen(false);
-                    console.log(q);
+            else {
 
-                }).catch((err) => {
-                    console.log(err)
-                    console.log('workspace line 218')
-                });
+                const markerImage = {
+                    Image: targetImageInbase64,
+                    metadata: arContentMetadata
+                }
+
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json'
+
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+                        if (totalLength !== null) {
+                            setUploadingPercentage(Math.round((progressEvent.loaded * 100) / totalLength));
+                        }
+                    }
+                }
+                try {
+                    const res = axios.post('/api/markerimages', markerImage, config).then((q) => {
+                        // setUpLoadingDialogeOpen(false);
+                        console.log(q);
+
+                    }).catch((err) => {
+                        console.log(err)
+                        console.log('workspace line 218')
+                    });
+                }
+                catch (err) {
+                    return err;
+                }
             }
-            catch (err) {
-                return err;
-            }
-        }
+        }, 3000);
     }
 
     useEffect(() => {

@@ -70,7 +70,7 @@ router.post('/', async (req, res) => {
                 throw err;
             }
             // Returning Token
-            res.json({ token });
+            res.json({ token, userName: user.name });
         });
     }
     catch (err) {
