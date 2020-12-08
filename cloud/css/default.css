@@ -147,6 +147,7 @@ input[type=range]::-webkit-slider-thumb {
   right: 0%;
   top: 40%;
   transform: translate(-0%, -40%);
+  margin-right: -30px;
 }
 
 .range-slider .input-range {
