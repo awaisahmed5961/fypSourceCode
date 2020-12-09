@@ -16,7 +16,7 @@ const CourseSchema = mongoose.Schema({
     },
     ImagePlaceholder: {
         type: String,
-        default: 'https://guarded-shelf-88919.herokuapp.com/api/uploads/g placeholder.jpg'
+        default: 'https://guarded-shelf-88919.herokuapp.com/api/uploads/list placeholder.jpg'
     },
     date: {
         type: Date,
