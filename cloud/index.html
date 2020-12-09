@@ -6,7 +6,11 @@
     <meta content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes" name="viewport">
 
     <title></title>
-
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
     <script src="https://www.wikitude.com/libs/architect.js"></script>
     <script type="text/javascript" src="../ade.js"></script>
 
@@ -26,16 +30,16 @@
 <body>
     <div id="infoBox" class="info">
 
+        <div class="customlogo">Zinda<span>Kittab</span></div>
         <div class="rightMiddle_controlls">
             <div class="range-slider">
                 <input class="input-range" orient="vertical" type="range" step="0.5" value="5" min="1" max="10">
-                <span class="range-value"></span>
             </div>
         </div>
         <div class="bottom_controlls">
             <div v-on:click="enableFlush">
-                <div v-if="flashEnabled === true">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="30" height="30">
+                <div v-if="flashEnabled === true" class="touch_animation">
+                    <svg v-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="30" height="30">
                         <g id="Layer">
                             <g id="Layer">
                                 <path id="Layer" fill="#f7f7f7"
@@ -45,8 +49,8 @@
 
                     </svg>
                 </div>
-                <div v-else>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="30" height="30">
+                <div v-else class="touch_animation">
+                    <svg v-cloak xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="30" height="30">
 
                         <g id="Layer">
                             <g id="Layer">
@@ -59,13 +63,13 @@
                 </div>
             </div>
             <div>
-                <div class="photo-button camera_button" onclick="World.scan()">
+                <div class="photo-button camera_button" onclick="alert('hello word')">
                     <div class="circle"></div>
                     <div class="ring"></div>
                 </div>
             </div>
 
-            <div v-on:click="changeCamera">
+            <div v-on:click="changeCamera" class="touch_animation" :class="{ rotate_animation: RotateCamera}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="30" height="30">
                     <g id="Layer">
                         <g id="Layer">
@@ -95,7 +99,8 @@
                 el: '#infoBox',
                 // define data - initial display text
                 data: {
-                    flashEnabled: false
+                    flashEnabled: false,
+                    RotateCamera: false,
                 },
                 methods: {
                     enableFlush: function () {
@@ -104,7 +109,13 @@
                     },
 
                     changeCamera: function () {
+                        this.RotateCamera = true;
                         alert('change camera')
+
+                        setTimeout(() => {
+                            this.RotateCamera = false;
+                        }, 2000)
+
                     }
                 }
 
