@@ -101,6 +101,7 @@
                 data: {
                     flashEnabled: false,
                     RotateCamera: false,
+                    isfrontCam: false,
                 },
                 methods: {
                     enableFlush: function () {
@@ -110,7 +111,10 @@
 
                     changeCamera: function () {
                         this.RotateCamera = true;
-                        World.switchCam();
+                        World.switchCam(isfrontCam);
+                        if (isfrontCam) {
+                            flashEnabled = false;
+                        }
                         setTimeout(() => {
                             this.RotateCamera = false;
                         }, 2000)

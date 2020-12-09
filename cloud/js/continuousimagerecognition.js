@@ -326,11 +326,12 @@ var World = {
         });
 
     },
-    switchCam: function switchCamFn() {
+    switchCam: function switchCamFn(isfrontCam) {
         if (AR.hardware.camera.position === AR.CONST.CAMERA_POSITION.FRONT) {
             AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.BACK
         } else {
-            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT
+            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT;
+            isfrontCam = true;
         }
     },
     updateFlashlight: function updateFlashlightFn(flashEnabled) {
