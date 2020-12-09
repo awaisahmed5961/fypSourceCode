@@ -16,7 +16,7 @@ const LearnerSchema = mongoose.Schema({
     },
     imageAvatar: {
         type: String,
-        default: 'http://localhost:5000/api/learner/avatar/defaultAvatar.svg'
+        default: 'https://guarded-shelf-88919.herokuapp.com/api/learner/avatar/defaultAvatar.svg'
     }
 });
 
