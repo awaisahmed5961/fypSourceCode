@@ -326,17 +326,19 @@ var World = {
         });
 
     },
-    switchCam: function switchCamFn(isfrontCam) {
+    switchCam: function switchCamFn() {
         if (AR.hardware.camera.position === AR.CONST.CAMERA_POSITION.FRONT) {
             AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.BACK
         } else {
-            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT;
-            isfrontCam = true;
+            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT
         }
     },
     updateFlashlight: function updateFlashlightFn(flashEnabled) {
         /* Get current checkbox status. */
         AR.hardware.camera.flashlight = flashEnabled;
+    },
+    updateRangeValues: function updateRangeValuesFn(currentValue) {
+        AR.hardware.camera.zoom = parseFloat(currentValue);
     },
     onRecognition: function onRecognitionFn(recognized, response) {
 

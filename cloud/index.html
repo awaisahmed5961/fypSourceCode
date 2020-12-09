@@ -31,11 +31,11 @@
     <div id="infoBox" class="info">
 
         <div class="customlogo">Zinda<span>Kitab</span></div>
-        <div class="rightMiddle_controlls">
-            <div class="range-slider">
-                <input class="input-range" orient="vertical" type="range" step="0.5" value="5" min="1" max="10">
-            </div>
-        </div>
+
+        <input type="range" min="-10" max="10" step="1" v-model="value" @input="updateSlider"
+            :style="{backgroundSize: backgroundSize}">
+        <div class="data">Slider value: {{ value }}/100</div>
+
         <div class="bottom_controlls">
             <div v-on:click="enableFlush">
                 <div v-if="flashEnabled === true" class="touch_animation">
@@ -101,9 +101,19 @@
                 data: {
                     flashEnabled: false,
                     RotateCamera: false,
-                    isfrontCam: false,
+
+                    value: 1,
+                    backgroundSize: '55% 100%'
                 },
                 methods: {
+                    updateSlider(e) {
+                        let clickedElement = e.target,
+                            min = clickedElement.min,
+                            max = clickedElement.max,
+                            val = clickedElement.value;
+
+                        this.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
+                    },
                     enableFlush: function () {
                         this.flashEnabled = !this.flashEnabled;
                         World.updateFlashlight(this.flashEnabled);
@@ -111,10 +121,7 @@
 
                     changeCamera: function () {
                         this.RotateCamera = true;
-                        World.switchCam(isfrontCam);
-                        if (isfrontCam) {
-                            flashEnabled = false;
-                        }
+                        World.switchCam();
                         setTimeout(() => {
                             this.RotateCamera = false;
                         }, 2000)
