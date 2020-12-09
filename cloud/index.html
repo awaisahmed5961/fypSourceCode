@@ -32,9 +32,12 @@
 
         <div class="customlogo">Zinda<span>Kitab</span></div>
 
-        <input type="range" min="-10" max="10" step="1" v-model="value" @input="updateSlider"
-            :style="{backgroundSize: backgroundSize}">
-        <div class="data">Slider value: {{ value }}/100</div>
+        <div class="zoom_controlls">
+            <div class="slider_inner">
+                <input type="range" min="-10" max="10" step="1" v-model="value" @input="updateSlider"
+                    :style="{backgroundSize: backgroundSize}">
+            </div>
+        </div>
 
         <div class="bottom_controlls">
             <div v-on:click="enableFlush">

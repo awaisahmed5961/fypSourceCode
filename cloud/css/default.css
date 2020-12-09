@@ -210,13 +210,18 @@ transform: rotateZ(21deg);
 display: block;
 }
 
-.rightMiddle_controlls {
-  position: absolute;
-  right: 0%;
-  top: 40%;
-  transform: translate(0%, -40%);
+.zoom_controlls {
+width: 100%;
+position: absolute;
+top: 75vh;
+left: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
-
+.slider_inner {
+width: 90%;
+}
 
 /* Slider CSS */
 
