@@ -333,6 +333,12 @@ var World = {
             AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT
         }
     },
+    updateFlashlight: function updateFlashlightFn() {
+
+        // get current checkbox status
+        var check_value = $("#panel-flashlight").is(":checked");
+        AR.hardware.camera.flashlight = check_value;
+    },
     onRecognition: function onRecognitionFn(recognized, response) {
 
         if (recognized) {
