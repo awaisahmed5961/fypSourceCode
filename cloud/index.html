@@ -34,7 +34,7 @@
 
         <div class="zoom_controlls">
             <div class="slider_inner">
-                <input type="range" min="-10" max="10" step="1" v-model="value" @input="updateSlider"
+                <input type="range" min="0" max="10" step="1" v-model="value" @input="updateSlider"
                     :style="{backgroundSize: backgroundSize}">
             </div>
         </div>
@@ -105,8 +105,8 @@
                     flashEnabled: false,
                     RotateCamera: false,
 
-                    value: 1,
-                    backgroundSize: '55% 100%'
+                    value: 0,
+                    backgroundSize: '0% 100%'
                 },
                 methods: {
                     updateSlider(e) {
