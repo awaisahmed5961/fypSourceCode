@@ -110,8 +110,7 @@
 
                     changeCamera: function () {
                         this.RotateCamera = true;
-                        alert('change camera')
-
+                        World.switchCam();
                         setTimeout(() => {
                             this.RotateCamera = false;
                         }, 2000)

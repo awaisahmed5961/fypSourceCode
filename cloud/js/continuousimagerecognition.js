@@ -300,6 +300,7 @@ var World = {
     type: 'video',
     cloudRecognitionService: null,
 
+
     init: function initFn() {
         this.createTracker();
 
@@ -325,7 +326,13 @@ var World = {
         });
 
     },
-
+    switchCam: function switchCamFn() {
+        if (AR.hardware.camera.position === AR.CONST.CAMERA_POSITION.FRONT) {
+            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.BACK
+        } else {
+            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT
+        }
+    },
     onRecognition: function onRecognitionFn(recognized, response) {
 
         if (recognized) {
