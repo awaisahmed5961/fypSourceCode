@@ -335,9 +335,8 @@ var World = {
     },
     updateFlashlight: function updateFlashlightFn() {
 
-        // get current checkbox status
-        var check_value = $("#panel-flashlight").is(":checked");
-        AR.hardware.camera.flashlight = check_value;
+        /* Get current checkbox status. */
+        AR.hardware.camera.flashlight = $("#panel-flashlight").is(":checked");
     },
     onRecognition: function onRecognitionFn(recognized, response) {
 
