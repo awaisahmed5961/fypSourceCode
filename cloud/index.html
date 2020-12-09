@@ -116,6 +116,8 @@
                             val = clickedElement.value;
 
                         this.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
+
+                        World.updateRangeValues(val);
                     },
                     enableFlush: function () {
                         this.flashEnabled = !this.flashEnabled;
