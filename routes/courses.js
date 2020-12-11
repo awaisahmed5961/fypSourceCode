@@ -99,11 +99,6 @@ router.post('/', auth, upload.single('ImagePlaceholder'), async (req, res) => {
  */
 router.put('/:id', auth, async (req, res) => {
 
-    // let { error } = courseValidationSchema.validate(req.body);
-    // console.log('looking for')
-    // if (error) { return res.status(400).send(error.details[0].message) }
-    // Pulling required Information from the Request
-
     const { title, subTitle, description } = req.body;
 
     // Build contact object
@@ -143,9 +138,7 @@ router.put('/:id', auth, async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
     try {
         const course = await Course.findById(req.params.id);
-
         if (!course) return res.status(404).json({ msg: 'Course with this id does not exists' });
-
         // Make sure user owns course
         if (course.educator_id.toString() !== req.user.id)
             return res.status(401).json({ msg: 'Not authorized' });

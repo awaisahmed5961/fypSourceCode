@@ -49,12 +49,6 @@ router.get('/:id', auth, async (req, res) => {
         res.status(400).send('Please Provide Valid Id... ');
     }
 
-    const course = await Course.findById(req.params.id);
-    if (!course) {
-        res.status(404).send('Ooops required Course is not existing in the server');
-        return;
-
-    }
     const topic = await Topic.findById(req.params.id);
     if (!topic) {
         res.status(404).send('topic id is invalid');
@@ -99,40 +93,6 @@ router.post('/', auth, async (req, res) => {
  */
 router.put('/:id', async (req, res) => {
 
-    // let { error } = courseValidationSchema.validate(req.body);
-    // console.log('looking for')
-    // if (error) { return res.status(400).send(error.details[0].message) }
-    // Pulling required Information from the Request
-
-    //     const { title, subTitle, description } = req.body;
-
-    //     // Build contact object
-    //     const updatedCourse = {};
-    //     if (title) updatedCourse.title = title;
-    //     if (subTitle) updatedCourse.subTitle = subTitle;
-    //     if (description) updatedCourse.description = description;
-
-    //     try {
-
-    //         let course = await Course.findById(req.params.id);
-    //         if (!course) return res.status(404).json({ msg: 'Course not found' });
-
-    //         // Make sure user owns contact
-    //         if (course.educator_id.toString() !== req.user.id)
-    //             return res.status(401).json({ msg: 'Not authorized' });
-
-    //         course = await Course.findByIdAndUpdate(
-    //             req.params.id,
-    //             { $set: updatedCourse },
-    //             { new: true }
-    //         );
-
-    //         res.json(course);
-    //     } catch (err) {
-    //         console.error(err.message);
-    //         res.status(500).send('Server error');
-    //     }
-
     const { TopicTitle, TopicDescription } = req.body;
     const updateTopic = {};
     if (TopicTitle) {
@@ -144,17 +104,16 @@ router.put('/:id', async (req, res) => {
     try {
         const topic = await Topic.findById(req.params.id);
         if (!topic) {
-            res.status(404).send('Topic id is invalid');
+            return res.status(404).send('Topic id is invalid');
         }
 
         const coursetopic = await Topic.findByIdAndUpdate(req.params.id,
             { $set: updateTopic },
             { new: true });
 
-
         res.status(200).send('Course topic updated');
-        console.log('successful');
-    } catch (err) {
+    }
+    catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }

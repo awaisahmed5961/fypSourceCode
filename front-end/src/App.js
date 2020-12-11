@@ -19,6 +19,7 @@ import TopicState from './context/topic/TopicState';
 import EditorImageUpload from './pages/ArEditor/EditorImageUpload';
 import ExerciseState from './context/Exercise/ExerciseState';
 import WorkSpace from './pages/ArEditor/WorkSpace';
+import EducatorProfile from './pages/EducatorProfile';
 if (localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -37,6 +38,8 @@ function App() {
                   <Switch>
                     <Route exact path="/login" component={SignIn} />
                     <Route exact path="/register_user" component={SignUp} />
+                    <Route exact path="/profile/:id?" component={EducatorProfile} />
+
                     <PrivateRoute exact path="/" label="Home" component={Dashboard} />
                     <PrivateRoute exact path="/courseform" component={Course} />
                     <PrivateRoute exact path="/topiceditor" component={Topic} />

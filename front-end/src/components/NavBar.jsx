@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -90,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar(props) {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-
+    let history = useHistory();
     const { haveButton } = props;
 
     const classes = useStyles();
@@ -218,7 +219,15 @@ export default function ButtonAppBar(props) {
                                         <MenuList classes={{
                                             root: classes.customMenuList
                                         }} id="simple-menu" onKeyDown={handleListKeyDown}  >
-                                            <MenuItem onClick={handleClose}>   <PermIdentityIcon fontSize="small" className={classes.iconMarginLeft} /> {'  '} Profile</MenuItem>
+                                            <MenuItem onClick={() => {
+                                                handleClose();
+
+                                                history.push(`/profile?holder=${user._id}`);
+
+                                            }}>
+                                                <PermIdentityIcon fontSize="small"
+                                                    className={classes.iconMarginLeft} /> {'  '}
+                                               Profile</MenuItem>
                                             <Divider variant="middle" />
                                             <MenuItem onClick={() => {
                                                 handleClose();
