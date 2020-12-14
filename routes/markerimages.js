@@ -16,11 +16,22 @@ router.post('/', async (req, res) => {
     var opts = {
         'createImageTargetsBody': [
             {
+                // "name": TargetImagefile.filename,
+                // "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${TargetImagefile.filename}`,
+                // "physicalHeight": 42,
+                // "metadata": {
+                //     "value": "value"
+                // }
                 "name": TargetImagefile.filename,
                 "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${TargetImagefile.filename}`,
                 "physicalHeight": 42,
                 "metadata": {
-                    "value": "value"
+                    "type": `${req.body.metadata.type}`,
+                    "filename": `${TargetImagefile.filename}`,
+                    "filePath": "null",
+                    "width": `${req.body.metadata.width}`,
+                    "height": `${req.body.metadata.height}`,
+                    "rotate": `${req.body.metadata.height}`,
                 }
             }
         ]
@@ -28,6 +39,21 @@ router.post('/', async (req, res) => {
     apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
         console.log('API called successfully. Returned data: ' + data);
         console.log(data)
+        if (req.body.metadata.type === "video") {
+            const videoAr = saveArVideo(req.body.metadata.fileData);
+            // return res.status(200).send("uploaded");
+            return res.send(data).status(200);
+        }
+        else if (req.body.metadata.type === "audio") {
+            const araudio = saveArAudio(req.body.metadata.fileData);
+            // return res.status(200).send("uploaded");
+            return res.send(data).status(200);
+        }
+        else if (req.body.metadata.type === 'image') {
+            const arImage = saveArImage(req.body.metadata.fileData);
+            // return res.status(200).send("uploaded");
+            return res.send(data).status(200);
+        }
         return res.send(data).status(200);
     }, function (error) {
         console.log("error")
@@ -35,18 +61,7 @@ router.post('/', async (req, res) => {
         return res.send("some thing went wrong").status(400);
     });
 
-    // if (req.body.metadata.type === "video") {
-    //     const videoAr = saveArVideo(req.body.metadata.fileData);
-    //     return res.status(200).send("uploaded");
-    // }
-    // else if (req.body.metadata.type === "audio") {
-    //     const araudio = saveArAudio(req.body.metadata.fileData);
-    //     return res.status(200).send("uploaded");
-    // }
-    // else if (req.body.metadata.type === 'image') {
-    //     const arImage = saveArImage(req.body.metadata.fileData);
-    //     return res.status(200).send("uploaded");
-    // }
+
 });
 
 /*Download the base64 image in the server and returns the filename and path of image.*/

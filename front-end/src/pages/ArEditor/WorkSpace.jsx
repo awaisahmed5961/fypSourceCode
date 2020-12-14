@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../../components/NavBar'
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +24,7 @@ import ThreeDAr from './ArControlls/3dAr';
 import EditorDialog from '../../components/Ui/editorComponents/EditorDialog';
 import Button from '@material-ui/core/Button';
 import ProgressBar from '../../components/Ui/editorComponents/ProgressBar'
+import SuccessSpinner from '../../components/Ui/editorComponents/successSpinner/successSpinner';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -214,9 +216,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function WorkSpace() {
-    const [uploadingDialogOpen, setUpLoadingDialogeOpen] = useState(true);
+    let history = useHistory();
+    const [uploadingDialogOpen, setUpLoadingDialogeOpen] = useState(false);
     const [uploadingPercentage, setUploadingPercentage] = useState(0);
-    const [uploadedState, setUploadedState] = useState(true);
+    const [uploaded, setUploaded] = useState(false);
+    const [uploadedState, setUploadedState] = useState(null);
     const [currentArControll, setCurrentArControll] = useState(null);
     const [xAxiesvalue, setXaxiesValue] = useState(0);
     const [yAxiesvalue, setYaxiesValue] = useState(0);
@@ -296,7 +300,15 @@ export default function WorkSpace() {
                     formData.append("metadata", markerImage.metadata)
                     const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
                         // setUpLoadingDialogeOpen(false);
-                        console.log(q);
+                        if (q.data === "some thing went wrong") {
+
+                            setUploaded(true)
+                            setUploadedState('error')
+                        }
+                        else {
+                            setUploaded(true)
+                            setUploadedState('success')
+                        }
 
                     }).catch((err) => {
                         console.log(err)
@@ -329,7 +341,16 @@ export default function WorkSpace() {
                 try {
                     const res = axios.post('/api/markerimages', markerImage, config).then((q) => {
                         // setUpLoadingDialogeOpen(false);
+                        setUploadedState(true)
                         console.log(q);
+                        if (q.data === "some thing went wrong") {
+                            setUploaded(true)
+                            setUploadedState('error')
+                        }
+                        else {
+                            setUploaded(true)
+                            setUploadedState('success')
+                        }
 
                     }).catch((err) => {
                         console.log(err)
@@ -556,25 +577,82 @@ export default function WorkSpace() {
                     width: '500px',
                     height: '400px',
                     textAlign: 'center',
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    paddingLeft: '30px',
+                    paddingRight: '30px'
                 }}>
                     {
-                        uploadedState ? (<div>
-                            uploaded
+                        uploaded ? (<div style={{
+                            marginBottom: '20px'
+                        }}>
+                            {
+                                uploadedState === 'success' ? (<div>
+                                    <SuccessSpinner style={{
+                                        marginBottom: '20px',
+                                    }} />
+                                    <div style={{
+                                        marginTop: '30px'
+                                    }}>
+                                        <Typography variant="h6" >
+                                            AR Uploaded
+                </Typography>
+                                        <Typography variant="subtitle1" gutterBottom>
+                                            Please wait, it may take 8-15 minutes to plublish AR Content. Once its published you will get notified
+                </Typography>
+
+                                        <Button
+                                            onClick={() => history.push('/')}
+                                            variant="contained"
+                                            color="primary" style={{
+                                                width: '200px',
+                                                height: '50px',
+                                                marginTop: '20px'
+                                            }}
+
+                                        >
+                                            Back to Dashboard
+                    </Button>
+                                    </div>
+                                </div>) : (<div>
+
+                                    <div style={{
+                                        marginTop: '30px'
+                                    }}>
+                                        <Typography variant="h6" style={{
+                                            color: 'red'
+                                        }} >
+                                            Failed to Uploaded AR
+                </Typography>
+                                        <Typography variant="subtitle1" gutterBottom>
+                                            Please retry, Please try with Correct formate or color scheme for Marker Image.
+                </Typography>
+
+                                        <Button
+                                            onClick={() => history.push('/editor')}
+                                            variant="contained"
+                                            color="primary" style={{
+                                                width: '200px',
+                                                height: '50px',
+                                                marginTop: '20px'
+                                            }}
+
+                                        >
+                                            Back to Editor
+                    </Button>
+                                    </div>
+                                </div>)
+                            }
+
+
                         </div>) : (<div>
 
                             <div style={{
                                 marginBottom: '20px'
                             }}>
-                                {
-                                    uploadingPercentage <= 99 ? (
-                                        <ProgressBar
-                                            strokeWidth="10"
-                                            sqSize="150"
-                                            percentage={uploadingPercentage} />
-                                    ) : (null)
-                                }
-
+                                <ProgressBar
+                                    strokeWidth="10"
+                                    sqSize="150"
+                                    percentage={uploadingPercentage} />
                             </div>
                             <Typography variant="h6" >
                                 Publishing AR Content

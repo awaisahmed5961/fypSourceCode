@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+var WikitudeStudioApiClient = require('wikitude_client');
 
 const multer = require('multer');
 
@@ -52,15 +53,56 @@ function saveImage(baseImage) {
 router.post('/', upload.single('file'), async (req, res) => {
 
     const targetimage = saveImage(req.body.targetImage);
-    console.log(targetimage)
+    // type: 'none',
+    // fileData: '',
+    // file: null,
+    // width: 250,
+    // height: 150,
+    // rotate: null,
+    // controlls: []
 
-    const file = req.file
-    if (!file) {
-        const error = new Error('Please upload a file')
-        error.httpStatusCode = 400
-        return next(error)
-    }
-    res.send(file)
+
+
+    var apiInstance = new WikitudeStudioApiClient.ImageTargetApi();
+    var xVersion = "3";
+    var xToken = "ea704952b26e61d4e839afc34e95ff74";
+    var contentType = "application/json";
+    var tcId = "5fb6061995d79d506359920f";
+    var opts = {
+        'createImageTargetsBody': [
+            {
+                "name": targetimage.filename,
+                "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${targetimage.filename}`,
+                "physicalHeight": 42,
+                "metadata": {
+                    "type": `${req.body.metadata.type}`,
+                    "filename": `${targetimage.filename}`,
+                    "filePath": "null",
+                    "width": `${req.body.metadata.width}`,
+                    "height": `${req.body.metadata.height}`,
+                    "rotate": `${req.body.metadata.height}`,
+                }
+            }
+        ]
+    };
+    apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
+        console.log('API called successfully. Returned data: ' + data);
+        console.log(data)
+        const file = req.file
+        if (!file) {
+            const error = new Error('Please upload a file')
+            error.httpStatusCode = 400
+            return res.send("some thing went wrong").status(400)
+        }
+        return res.send(data).status(200);
+    }, function (error) {
+        console.log("error")
+        console.error(error);
+        return res.send("some thing went wrong").status(400);
+    });
+
+
+    // res.send(file)
 });
 
 module.exports = router;
