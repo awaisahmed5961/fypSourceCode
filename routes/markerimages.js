@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         'createImageTargetsBody': [
             {
                 "name": TargetImagefile.filename,
-                "imageUrl": `../markerimages/${TargetImagefile.filename}`,
+                "imageUrl": ` https://guarded-shelf-88919.herokuapp.com/markerimages/${TargetImagefile.filename}`,
                 "physicalHeight": 42,
                 "metadata": req.body.metadata
             }
