@@ -310,18 +310,16 @@ export default function WorkSpace() {
                     // formData.append("metadata", testObj)
 
                     const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
-                        // setUpLoadingDialogeOpen(false);
-                        // alert('working...')
-                        console.log(q)
-                        // if (q.data === "some thing went wrong") {
 
-                        //     setUploaded(true)
-                        //     setUploadedState('error')
-                        // }
-                        // else {
-                        //     setUploaded(true)
-                        //     setUploadedState('success')
-                        // }
+                        if (q.data === "some thing went wrong") {
+
+                            setUploaded(true)
+                            setUploadedState('error')
+                        }
+                        else {
+                            setUploaded(true)
+                            setUploadedState('success')
+                        }
 
                     }).catch((err) => {
                         console.log(err)

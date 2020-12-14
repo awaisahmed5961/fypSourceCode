@@ -52,7 +52,6 @@ function saveImage(baseImage) {
 
 router.post('/', upload.single('file'), async (req, res) => {
 
-
     const targetimage = saveImage(req.body.targetImage);
     const { type, width, height, rotate } = req.body;
     console.log(targetimage);
@@ -77,7 +76,7 @@ router.post('/', upload.single('file'), async (req, res) => {
                 "physicalHeight": 42,
                 "metadata": {
                     "type": `${three3Object.type}`,
-                    "filename": `${targetimage.filename}`,
+                    "filename": `${req.file.filename}`,
                     "filePath": "null",
                     "width": `${three3Object.width}`,
                     "height": `${three3Object.height}`,
