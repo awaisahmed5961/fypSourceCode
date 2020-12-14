@@ -8,7 +8,7 @@ previousScaleValue2d = 1;
 
 var oneFingerGestureAllowed = false;
 
-AR.context.on2FingerGestureStarted = function() {
+AR.context.on2FingerGestureStarted = function () {
     oneFingerGestureAllowed = false;
 };
 
@@ -32,9 +32,9 @@ var World = {
             // "b277eeadc6183ab57a83b07682b3ceba",
             // "B1QL5CTCZ",
             // "54e4b9fe6134bb74351b2aa3", {
-            "5da7f1ee89f87ef5f8701ef04f0c76f0",
-            "Hyk0nNDYP",
-            "5fa9bcdecfa0c01c44f3410a", {
+            "e639b0d3e41972100e879618c13be722",
+            "rk-F4ECFFw",
+            "5fb6061995d79d506359920f", {
             onInitialized: World.showInfoBar,
             onError: World.onError
         }
@@ -91,56 +91,56 @@ var World = {
                         z: defaultScaleValue
                     },
                     rotate: {
-                        z:defaultRotaionValue
+                        z: defaultRotaionValue
                     },
-                    onDragBegan: function( /*x, y*/ ) {
+                    onDragBegan: function ( /*x, y*/) {
                         oneFingerGestureAllowed = true;
-        
+
                         return true;
                     },
-                    onDragChanged: function(x, y, intersectionX, intersectionY) {
+                    onDragChanged: function (x, y, intersectionX, intersectionY) {
                         if (oneFingerGestureAllowed) {
                             this.translate = {
                                 x: intersectionX,
                                 y: intersectionY
                             };
                         }
-        
+
                         return true;
                     },
-                    onDragEnded: function( /*x, y*/ ) {
+                    onDragEnded: function ( /*x, y*/) {
                         return true;
                     },
-                    onRotationBegan: function( /*angleInDegrees*/ ) {
+                    onRotationBegan: function ( /*angleInDegrees*/) {
                         return true;
                     },
-                    onRotationChanged: function(angleInDegrees) {
+                    onRotationChanged: function (angleInDegrees) {
                         this.rotate.z = previousRotationValue - angleInDegrees;
                         this.rotate.x = previousRotationValue - angleInDegrees;
                         this.rotate.y = previousRotationValue - angleInDegrees
-        
+
                         return true;
                     },
-                    onRotationEnded: function( /*angleInDegrees*/ ) {
+                    onRotationEnded: function ( /*angleInDegrees*/) {
                         previousRotationValue = this.rotate.z;
-        
+
                         return true;
                     },
-                    onScaleBegan: function( /*scale*/ ) {
+                    onScaleBegan: function ( /*scale*/) {
                         return true;
                     },
-                    onScaleChanged: function(scale) {
+                    onScaleChanged: function (scale) {
                         var scaleValue = previousScaleValue * scale;
                         this.scale = {
                             x: scaleValue,
                             y: scaleValue
                         };
-        
+
                         return true;
                     },
-                    onScaleEnded: function( /*scale*/ ) {
+                    onScaleEnded: function ( /*scale*/) {
                         previousScaleValue = this.scale.x;
-        
+
                         return true;
                     },
                 });
@@ -178,51 +178,51 @@ var World = {
                         x: 0.0,
                         y: 0.0
                     },
-                    onDragBegan: function( /*x, y*/ ) {
+                    onDragBegan: function ( /*x, y*/) {
                         oneFingerGestureAllowed = true;
-        
+
                         return true;
                     },
-                    onDragChanged: function(x, y, intersectionX, intersectionY) {
+                    onDragChanged: function (x, y, intersectionX, intersectionY) {
                         if (oneFingerGestureAllowed) {
                             this.translate = {
                                 x: intersectionX,
                                 y: intersectionY
                             };
                         }
-        
+
                         return true;
                     },
-                    onDragEnded: function( /*x, y*/ ) {
+                    onDragEnded: function ( /*x, y*/) {
                         return true;
                     },
-                    onRotationBegan: function( /*angleInDegrees*/ ) {
+                    onRotationBegan: function ( /*angleInDegrees*/) {
                         return true;
                     },
-                    onRotationChanged: function(angleInDegrees) {
+                    onRotationChanged: function (angleInDegrees) {
                         this.rotate.z = previousRotationValue + angleInDegrees;
                         return true;
                     },
-                    onRotationEnded: function( /*angleInDegrees*/ ) {
+                    onRotationEnded: function ( /*angleInDegrees*/) {
                         previousRotationValue = this.rotate.z;
-        
+
                         return true;
                     },
-                    onScaleBegan: function( /*scale*/ ) {
+                    onScaleBegan: function ( /*scale*/) {
                         return true;
                     },
-                    onScaleChanged: function(scale) {
+                    onScaleChanged: function (scale) {
                         var scaleValue = previousScaleValue2d * scale;
                         this.scale = {
                             x: scaleValue,
                             y: scaleValue
                         };
-        
+
                         return true;
                     },
-                    onScaleEnded: function( /*scale*/ ) {
+                    onScaleEnded: function ( /*scale*/) {
                         previousScaleValue2d = this.scale.x;
-        
+
                         return true;
                     },
                     zOrder: 1
@@ -369,51 +369,51 @@ var World = {
                                 x: 0.0,
                                 y: 0.0
                             },
-                            onDragBegan: function( /*x, y*/ ) {
+                            onDragBegan: function ( /*x, y*/) {
                                 oneFingerGestureAllowed = true;
-                
+
                                 return true;
                             },
-                            onDragChanged: function(x, y, intersectionX, intersectionY) {
+                            onDragChanged: function (x, y, intersectionX, intersectionY) {
                                 if (oneFingerGestureAllowed) {
                                     this.translate = {
                                         x: intersectionX,
                                         y: intersectionY
                                     };
                                 }
-                
+
                                 return true;
                             },
-                            onDragEnded: function( /*x, y*/ ) {
+                            onDragEnded: function ( /*x, y*/) {
                                 return true;
                             },
-                            onRotationBegan: function( /*angleInDegrees*/ ) {
+                            onRotationBegan: function ( /*angleInDegrees*/) {
                                 return true;
                             },
-                            onRotationChanged: function(angleInDegrees) {
+                            onRotationChanged: function (angleInDegrees) {
                                 this.rotate.z = previousRotationValue + angleInDegrees;
                                 return true;
                             },
-                            onRotationEnded: function( /*angleInDegrees*/ ) {
+                            onRotationEnded: function ( /*angleInDegrees*/) {
                                 previousRotationValue = this.rotate.z;
-                
+
                                 return true;
                             },
-                            onScaleBegan: function( /*scale*/ ) {
+                            onScaleBegan: function ( /*scale*/) {
                                 return true;
                             },
-                            onScaleChanged: function(scale) {
+                            onScaleChanged: function (scale) {
                                 var scaleValue = previousScaleValue2d * scale;
                                 this.scale = {
                                     x: scaleValue,
                                     y: scaleValue
                                 };
-                
+
                                 return true;
                             },
-                            onScaleEnded: function( /*scale*/ ) {
+                            onScaleEnded: function ( /*scale*/) {
                                 previousScaleValue2d = this.scale.x;
-                
+
                                 return true;
                             },
                         });
@@ -455,7 +455,7 @@ var World = {
         this.resetOverlayvalues();
     },
 
-    resetOverlayvalues: function() {
+    resetOverlayvalues: function () {
         previousRotationValue = defaultRotaionValue;
         previousScaleValue = defaultScaleValue;
         previousScaleValue2d = 1;
