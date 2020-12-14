@@ -63,7 +63,7 @@ var World = {
 
         if (recognized) {
 
-            // alert(JSON.stringify(response));
+            alert(JSON.stringify(response));
             const { type, filename, filePath } = response.metadata;
             document.getElementById("loadingMessage").style.display = "block";
             if (type === '3d') {

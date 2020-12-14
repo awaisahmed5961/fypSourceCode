@@ -214,8 +214,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function WorkSpace() {
-    const [uploadingDialogOpen, setUpLoadingDialogeOpen] = useState(false);
+    const [uploadingDialogOpen, setUpLoadingDialogeOpen] = useState(true);
     const [uploadingPercentage, setUploadingPercentage] = useState(0);
+    const [uploadedState, setUploadedState] = useState(true);
     const [currentArControll, setCurrentArControll] = useState(null);
     const [xAxiesvalue, setXaxiesValue] = useState(0);
     const [yAxiesvalue, setYaxiesValue] = useState(0);
@@ -557,25 +558,33 @@ export default function WorkSpace() {
                     textAlign: 'center',
                     marginTop: '10px'
                 }}>
-                    <div style={{
-                        marginBottom: '20px'
-                    }}>
-                        {
-                            uploadingPercentage <= 99 ? (
-                                <ProgressBar
-                                    strokeWidth="10"
-                                    sqSize="150"
-                                    percentage={uploadingPercentage} />
-                            ) : (null)
-                        }
+                    {
+                        uploadedState ? (<div>
+                            uploaded
+                        </div>) : (<div>
 
-                    </div>
-                    <Typography variant="h6" >
-                        Publishing AR Content
+                            <div style={{
+                                marginBottom: '20px'
+                            }}>
+                                {
+                                    uploadingPercentage <= 99 ? (
+                                        <ProgressBar
+                                            strokeWidth="10"
+                                            sqSize="150"
+                                            percentage={uploadingPercentage} />
+                                    ) : (null)
+                                }
+
+                            </div>
+                            <Typography variant="h6" >
+                                Publishing AR Content
                 </Typography>
-                    <Typography variant="subtitle1" gutterBottom>
-                        Please wait, it may take a while
+                            <Typography variant="subtitle1" gutterBottom>
+                                Please wait, it may take a while
                 </Typography>
+                        </div>)
+                    }
+
                 </div>
             </EditorDialog>
         </ >
