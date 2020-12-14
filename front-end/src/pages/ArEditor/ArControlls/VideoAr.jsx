@@ -101,11 +101,7 @@ function VideoAr(props) {
                         <div className={classes.contentMainHeading}>
                             Video Source
                         <div>
-                                <Button variant="contained" color="primary" style={{
-                                    marginTop: '10px',
-                                }}>
-                                    From Youtube
-                    </Button>
+
                             </div>
                         </div>
                         <div style={{
@@ -114,8 +110,7 @@ function VideoAr(props) {
                             opacity: '.9',
                             letterSpacing: '1px'
                         }}>
-                            PAST URL
-                            <input type="text" className={classes.ExternalUrl} onChange={(e) => { setFile(e.target.value) }} />
+
                             <div style={{
                                 marginTop: '20px'
                             }}>

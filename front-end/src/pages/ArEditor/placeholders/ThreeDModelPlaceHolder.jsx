@@ -47,17 +47,17 @@ function ThreeDModelPlaceHolder() {
     const [openScaleOption, setOpenScaleOption] = useState(false);
 
     useEffect(() => {
-        // const canvas = videoCanvasRef.current;
-        // canvas.width = aspectRation.width;
-        // canvas.height = aspectRation.height;
+        const canvas = videoCanvasRef.current;
+        canvas.width = aspectRation.width;
+        canvas.height = aspectRation.height;
 
-        // const context = canvas.getContext('2d');
+        const context = canvas.getContext('2d');
 
-        // var img = new Image();
-        // img.src = threedIcon;
-        // img.onload = function () {
-        //     context.drawImage(img, ((canvas.width - 45) / 2), ((canvas.height - 45) / 2), 45, 45);
-        // };
+        var img = new Image();
+        img.src = threedIcon;
+        img.onload = function () {
+            context.drawImage(img, ((canvas.width - 45) / 2), ((canvas.height - 45) / 2), 45, 45);
+        };
 
 
     }, [aspectRation]);
@@ -109,30 +109,15 @@ function ThreeDModelPlaceHolder() {
                     </div>
                     </div>) : ''
                 }
-                {/* <canvas ref={videoCanvasRef} style={{
+                <canvas ref={videoCanvasRef} style={{
                     border: '1px solid #3f51b5',
 
                     borderRadius: '4px',
                     display: 'block'
 
-                }}> */}
-                <div className="sketchfab-embed-wrapper">
-                    <iframe title="A 3D model" width="640"
-                        height="480"
-                        src="https://sketchfab.com/models/bf99374334a64291ae2876c83269adb6/embed?autostart=0&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1"
-                        allow="autoplay;
-                       fullscreen; vr"
-                        mozallowfullscreen="true"
-                        webkitallowfullscreen="true"></iframe>
-                    {/* <p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;">
-                        <a href="https://sketchfab.com/3d-models/zelda-breath-of-the-wild-bf99374334a64291ae2876c83269adb6?utm_medium=embed&utm_source=website&utm_campaign=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Zelda - Breath Of The Wild</a>
-        by <a href="https://sketchfab.com/theStoff?utm_medium=embed&utm_source=website&utm_campaign=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">theStoff</a>
-        on <a href="https://sketchfab.com?utm_medium=embed&utm_source=website&utm_campaign=share-popup" target="_blank" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a>
-                    </p> */}
-                </div>
+                }}>
 
-
-                {/* </canvas> */}
+                </canvas>
 
             </div>
         </>
