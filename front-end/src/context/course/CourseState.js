@@ -47,9 +47,10 @@ const CourseState = props => {
     const addCourse = async (course) => {
         const config = {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'content-type': 'multipart/form-data'
             }
         }
+        console.log(course)
         try {
             const res = await axios.post('/api/courses', course, config);
             dispatch({ type: ADD_COURSE, payload: res.data });

@@ -40,18 +40,14 @@ const useStyles = makeStyles((theme) => (
     }));
 
 export default function ImageUpload(props) {
-    console.log(props);
     const classes = useStyles();
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     const onDrop = useCallback(acceptedFiles => {
-        // props.onImageUpload(acceptedFiles);
-        props.onImageUpload({
-            ...props.state,
-            image: acceptedFiles
-        })
+        props.onImageUpload(acceptedFiles
+        )
 
     }, [])
 

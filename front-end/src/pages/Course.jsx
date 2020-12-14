@@ -70,7 +70,7 @@ export default function Course(props) {
         clearCourseError,
         updateCourse
     } = courseContext;
-    // const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null);
     const [actionSucessResponse, setActionSucessResponse] = useState(null);
     const { id } = props.match.params;
     const queryStringParameters = queryString.parse(props.location.search);
@@ -153,7 +153,7 @@ export default function Course(props) {
                 courseFormData.append('title', course.title);
                 courseFormData.append('subTitle', course.subTitle);
                 courseFormData.append('description', course.description);
-                // fd.append('ImagePlaceholder', image);
+                courseFormData.append('file', image[0]);
 
                 setTimeout(() => {
                     addCourse(courseFormData).then(course => {
@@ -384,7 +384,7 @@ export default function Course(props) {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sm={12} md={6}>
-                                <ImageUpload state={course} onImageUpload={setCourse} />
+                                <ImageUpload onImageUpload={setImage} />
                             </Grid>
                             <Button
                                 {

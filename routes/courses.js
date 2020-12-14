@@ -5,28 +5,23 @@ const Joi = require('@hapi/joi');
 const auth = require('../middlewares/auth');
 Joi.objectId = require('joi-objectid')(Joi)
 const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './uploads');
+        const uploadPath = path.resolve();
+        //path of folder where you want to save the image.
+        const localPath = `${uploadPath}/uploads/`;
+        cb(null, localPath);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
     }
 });
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-        cb(null, true)
-    }
-    else {
-        cb(null, false);
-    }
-}
+
 const upload = multer({
     storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 4
-    },
-    fileFilter: fileFilter
 });
 
 const router = express.Router();
@@ -62,7 +57,7 @@ router.get('/:id', auth, async (req, res) => {
  * @description Add course
  * @access Private
  */
-router.post('/', auth, upload.single('ImagePlaceholder'), async (req, res) => {
+router.post('/', auth, upload.single('file'), async (req, res) => {
     let { error } = courseValidationSchema.validate(req.body);
     if (error) { return res.status(400).send(error.details[0].message) }
     // Pulling required Information from the Request 
@@ -162,7 +157,7 @@ const courseValidationSchema = Joi.object({
         .min(1).max(50).required(),
     subTitle: Joi.string().min(1).max(50).required(),
     description: Joi.string().required().max(300),
-    ImagePlaceholder: Joi.string(),
+    file: Joi.string(),
     date: Joi.date(),
     educator_id: Joi.objectId()
 });
