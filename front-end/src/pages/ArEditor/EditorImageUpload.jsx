@@ -159,23 +159,19 @@ export default function EditorImageUpload() {
     const classes = useStyles();
 
     const handleOnChange = (crop) => {
-        console.log(crop);
         setCrop(crop);
 
     }
     const handleImageLoaded = (image) => {
-        console.log(image);
-        console.log("editorImageUpload line 146")
+
 
     }
     const handleOnCropChange = (crop) => {
         setCrop(crop);
-        console.log("log from editorImageupload line 150")
+
     }
     const handleOnCropComplete = (cropPixel, pixelCrop) => {
-        console.log(cropPixel)
-        console.log(pixelCrop)
-        console.log("Crope compelete")
+
         // percentages to pixel calculation
         // var percentsWidth = parseInt(pixelCrop.width);
         // var parentWidth = parseInt(cropPixel.width);

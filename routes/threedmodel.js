@@ -52,16 +52,17 @@ function saveImage(baseImage) {
 
 router.post('/', upload.single('file'), async (req, res) => {
 
+
     const targetimage = saveImage(req.body.targetImage);
-    // type: 'none',
-    // fileData: '',
-    // file: null,
-    // width: 250,
-    // height: 150,
-    // rotate: null,
-    // controlls: []
+    const { type, width, height, rotate } = req.body;
+    console.log(targetimage);
 
-
+    const three3Object = {
+        type: '3d',
+        width: width,
+        height: height,
+        rotate: rotate
+    }
 
     var apiInstance = new WikitudeStudioApiClient.ImageTargetApi();
     var xVersion = "3";
@@ -75,12 +76,12 @@ router.post('/', upload.single('file'), async (req, res) => {
                 "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${targetimage.filename}`,
                 "physicalHeight": 42,
                 "metadata": {
-                    "type": `${req.body.metadata.type}`,
+                    "type": `${three3Object.type}`,
                     "filename": `${targetimage.filename}`,
                     "filePath": "null",
-                    "width": `${req.body.metadata.width}`,
-                    "height": `${req.body.metadata.height}`,
-                    "rotate": `${req.body.metadata.height}`,
+                    "width": `${three3Object.width}`,
+                    "height": `${three3Object.height}`,
+                    "rotate": `${three3Object.rotate}`,
                 }
             }
         ]
@@ -100,9 +101,6 @@ router.post('/', upload.single('file'), async (req, res) => {
         console.error(error);
         return res.send("some thing went wrong").status(400);
     });
-
-
-    // res.send(file)
 });
 
 module.exports = router;

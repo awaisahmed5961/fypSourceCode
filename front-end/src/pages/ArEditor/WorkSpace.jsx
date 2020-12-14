@@ -280,7 +280,12 @@ export default function WorkSpace() {
             if (arContentMetadata.type === 'threed') {
                 const markerImage = {
                     Image: targetImageInbase64,
-                    metadata: arContentMetadata
+                    type: arContentMetadata.type,
+                    fileData: arContentMetadata.fileData,
+                    file: arContentMetadata.file,
+                    width: arContentMetadata.width,
+                    height: arContentMetadata.height,
+                    rotate: arContentMetadata.rotate,
                 }
                 const config = {
                     headers: {
@@ -294,21 +299,29 @@ export default function WorkSpace() {
                     }
                 }
                 try {
+
                     const formData = new FormData();
                     formData.append('file', arContentMetadata.file);
                     formData.append("targetImage", markerImage.Image);
-                    formData.append("metadata", markerImage.metadata)
+                    formData.append("type", markerImage.type);
+                    formData.append("width", markerImage.width);
+                    formData.append("height", markerImage.height);
+                    formData.append("rotate", markerImage.rotate);
+                    // formData.append("metadata", testObj)
+
                     const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
                         // setUpLoadingDialogeOpen(false);
-                        if (q.data === "some thing went wrong") {
+                        // alert('working...')
+                        console.log(q)
+                        // if (q.data === "some thing went wrong") {
 
-                            setUploaded(true)
-                            setUploadedState('error')
-                        }
-                        else {
-                            setUploaded(true)
-                            setUploadedState('success')
-                        }
+                        //     setUploaded(true)
+                        //     setUploadedState('error')
+                        // }
+                        // else {
+                        //     setUploaded(true)
+                        //     setUploadedState('success')
+                        // }
 
                     }).catch((err) => {
                         console.log(err)
