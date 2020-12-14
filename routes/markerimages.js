@@ -19,16 +19,18 @@ router.post('/', async (req, res) => {
         'createImageTargetsBody': [
             {
                 "name": TargetImagefile.filename,
-                "imageUrl": ` https://guarded-shelf-88919.herokuapp.com/api/markerimages/${TargetImagefile.filename}`,
+                "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${TargetImagefile.filename}`,
                 "physicalHeight": 42,
-                "metadata": req.body.metadata
+                "metadata": {
+                    "value": "value"
+                }
             }
         ]
     };
     apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
         console.log('API called successfully. Returned data: ' + data);
         console.log(data)
-        return res.send(opts).status(200);
+        return res.send(data).status(200);
     }, function (error) {
         console.log("error")
         console.error(error);
