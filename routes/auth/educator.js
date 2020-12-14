@@ -18,8 +18,6 @@ router.get('/',
     auth,
     async (req, res) => {
         try {
-            // Getting all user data except User Password
-            // prehaps - Sign is used conjection of attribute, that have t0 be ommoted
             const user = await Educator.findById(req.user.id)
                 .select('-password');
             res.send(user)
@@ -45,13 +43,13 @@ router.post('/', async (req, res) => {
         let user = await Educator.findOne({ email });
 
         if (!user) {
-            res.status(400).json({ msg: "Invalid Credentials" })
+            return res.status(400).json({ msg: "Invalid Credentials" })
         }
         // Matching  provided Password with hashed password stored in the database 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            res.status(400).json({ msg: "Invalid Credentials" });
+            return res.status(400).json({ msg: "Invalid Credentials" });
         }
         // Create Payload for JWT
         const payload = {
@@ -72,7 +70,7 @@ router.post('/', async (req, res) => {
         });
     }
     catch (err) {
-        console.error(err.message);
+
         res.status(500).send('Server Error');
     }
 

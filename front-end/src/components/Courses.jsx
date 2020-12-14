@@ -75,10 +75,10 @@ export default function Courses(props) {
                         Create Course
                     </Button>
                 </div>) : (
-                        <Grid container spacing={6} direction="row" justify='center' className={classes.coursesContainer} >
+                        <Grid container spacing={6} direction="row" className={classes.coursesContainer} >
                             {
                                 courseList.length === 0 && !loading ? (
-                                    <h5>There is no Course</h5>
+                                    <h5 style={{ textAlign: 'center' }}>There is no Course</h5>
                                 ) : (
                                         courseView === 'grid_view' ? (
                                             courseList.map((course) => {

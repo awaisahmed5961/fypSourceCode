@@ -4,6 +4,7 @@ node_modules/
 /front-end/build
 /ArContent
 /markerimages
+/coverage
 
 .DS_Store
 /front-end/.env.local

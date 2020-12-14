@@ -335,9 +335,9 @@ export default function EditorImageUpload() {
                                     <div>
                                         <button onClick={() => SetFile(null)} className={classes.outlinedButton}>Remove</button>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <button className={classes.outlinedButton} >Gray Scale</button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </>)
                             }

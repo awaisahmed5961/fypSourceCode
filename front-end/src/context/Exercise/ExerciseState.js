@@ -39,100 +39,14 @@ const ExerciseState = props => {
 
     }
 
-    // getCourses
-    // const getCourses = async () => {
 
-    //     try {
-    //         const res = await axios.get('/api/courses');
-    //         dispatch({ type: GET_COURSES, payload: res.data })
-    //         return res;
-    //     }
-    //     catch (err) {
-    //         console.log('errro in couse add course state js');
-    //         return err;
-    //     }
-
-    // }
-    // // clearContacts
-    // const clearCourses = () => {
-    //     dispatch({ type: CLEAR_COURSES })
-    // }
-
-    // // delete Course
-    // const deleteCourse = async (id) => {
-    //     try {
-    //         const res = await axios.delete(`/api/courses/${id}`);
-
-    //         dispatch({ type: DELETE_COURSE, payload: id })
-    //         return res;
-
-    //     } catch (err) {
-    //         dispatch({
-    //             type: COURSE_ERROR,
-    //             payload: err.response.msg
-    //         });
-    //         return err;
-    //     }
-    // }
-
-    // // update Course
-    // const updateCourse = async (course) => {
-    //     const config = {
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     };
-
-    //     try {
-    //         const res = await axios.put(
-    //             `/api/courses/${course.id}`,
-    //             course,
-    //             config
-    //         );
-
-    //         dispatch({
-    //             type: UPDATE_COURSE,
-    //             payload: res.data
-    //         });
-    //         return res;
-    //     } catch (err) {
-    //         dispatch({
-    //             type: COURSE_ERROR,
-    //             payload: err.response.msg
-    //         });
-    //         return err;
-    //     }
-    // }
-    // // Filter Course
-    // // setCurrentMethod
-    // const setCurrent = (course) => {
-    //     dispatch({ type: SET_CURRENT, payload: course })
-    // }
-    // // CLEARCurrentMethod
-    // const clearCurrent = () => {
-    //     dispatch({ type: CLEAR_CURRENT })
-    // }
-    // const clearCourseError = () => {
-    //     dispatch({ type: CLEAR_COURSE_ERRORS })
-    // }
 
     return (
         <ExerciseContext.Provider
             value={{
                 exercise: state.exercise,
                 addexercise,
-                // current: state.current,
-                // loading: state.loading,
-                // error: state.error,
-                // courseadded: state.courseadded,
-                // serverResponseWating: state.serverResponseWating,
-                // getCourses,
-                // updateCourse,
-                // deleteCourse,
-                // setCurrent,
-                // clearCurrent,
-                // clearCourses,
-                // clearCourseError
+
             }}
         >
             {props.children}

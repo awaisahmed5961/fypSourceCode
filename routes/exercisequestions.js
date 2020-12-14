@@ -22,13 +22,7 @@ router.get('/', auth, async (req, res) => {
     else {
         topic_id = req.body.topic_id;
     }
-    // let AssessmentExercise_id = '';
-    // if (req.header('AssessmentExercise_id')) {
-    //     AssessmentExercise_id = req.header('AssessmentExercise_id');
-    // }
-    // else {
-    //     AssessmentExercise_id = req.body.AssessmentExercise_id;
-    // }
+
 
     ExerciseQuestions.aggregate([
         { $match: { topic_id: mongoose.Types.ObjectId(topic_id) } },
@@ -40,35 +34,11 @@ router.get('/', auth, async (req, res) => {
                 as: "Options"
             }
         },
-        // { $unwind: "$Options" },
-        // {
-        //     $project: {
-        //         Question: 1,
-        //         CorrectOption: 1,
-        //         Options: '$Options'
-        //         // Options: {
-        //         // "$map": {
-        //         //     '$input': '$Options',
-        //         //     '$as': 'o',
-        //         //     '$in': {
-        //         //         option: '$Options.option'
-        //         //     }
-        //         // }
-        //         // }
-        //     }
-        // }
+
     ]).exec(function (err, options) {
         // students contain WorksnapsTimeEntries
         res.send(options)
     });
-    // const exerciseQuestions = await ExerciseQuestions.find({ AssessmentExercise_id: mongoose.Types.ObjectId(AssessmentExercise_id) })
-    // if (!exerciseQuestions) {
-    //     return (res.status(404).send('No Question with this exercise Id'));
-    // }
-    // else {
-    //     res.send(exerciseQuestions);
-    // }
-
 });
 
 /**
@@ -96,7 +66,6 @@ router.get('/:id', async (req, res) => {
  * @access Private
  */
 router.post('/', auth, async (req, res) => {
-
 
     const { topicId, questions } = req.body;
     if (!questions) {
@@ -134,22 +103,7 @@ router.post('/', auth, async (req, res) => {
         })
         res.status(200).send(questions);
     }
-    // try {
-    //     exerciseQuestion = new ExerciseQuestions({
-    //         Question,
-    //         CorrectOption,
-    //         topic_id,
-    //     });
-    //     await exerciseQuestion.save();
-    //     res.status(200).send(exerciseQuestion);
-    // }
-    // catch (error) {
-    //     res.status(500).send('Server Error');
-    // }
-    // }
-    //     catch (error) {
-    //     res.status(500).send('Server Error');
-    // }
+
 });
 
 /**

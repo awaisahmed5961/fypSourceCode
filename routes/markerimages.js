@@ -2,33 +2,78 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
-var vuforia = require('vuforia-api');
-
-
-
+var WikitudeStudioApiClient = require('wikitude_client');
+// var WikitudeStudioApiClient = require('wikitude_studio_api_client');
 
 router.post('/', async (req, res) => {
 
     const TargetImagefile = saveImage(req.body.Image);
-    console.log(TargetImagefile)
+    console.log(TargetImagefile.localPath + TargetImagefile.filename)
 
-    if (req.body.metadata.type === "video") {
-        const videoAr = saveArVideo(req.body.metadata.fileData);
-        res.send("uploaded");
-    }
-    else if (req.body.metadata.type === "audio") {
-        const araudio = saveArAudio(req.body.metadata.fileData);
-        res.send("uploaded");
-    }
-    else if (req.body.metadata.type === 'image') {
-        const arImage = saveArImage(req.body.metadata.fileData);
-        res.send("uploaded");
-    }
-    // console.log(arImage);
-    // console.log(req.body.metadata);
+    var apiInstance = new WikitudeStudioApiClient.ImageTargetApi();
+    var xVersion = "3"; // String | The version of the API to be used. Must be set to 3.
+    var xToken = "ea704952b26e61d4e839afc34e95ff74"; // String | Your Manager Token.
+    var contentType = "application/json"; // String | The Content Type of the body. Must be set to application/json.
+    var tcId = "5fb6061995d79d506359920f"; // String | Unique identifier of the Image Target Collection.
+    var opts = {
+        'createImageTargetsBody': [
+            {
+                "name": TargetImagefile.filename,
+                "imageUrl": `${TargetImagefile.localPath + TargetImagefile.filename}`,
+                "physicalHeight": 42,
+                "metadata": req.body.metadata
+            }
+        ]
+    };
+    apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
+        console.log('API called successfully. Returned data: ' + data);
+        console.log(data)
+    }, function (error) {
+        console.log("error")
+        console.error(error);
+    });
 
 
+    // var api = new WikitudeStudioApiClient.AccountApi()
+    // var xVersion = "3.0.0";
+    // var xToken = "ea704952b26e61d4e839afc34e95ff74";
 
+    // api.getAccount(xVersion, xToken).then(function (data) {
+    //     console.log('API called successfully. Returned data: ' + data);
+    //     console.log(data)
+    // }, function (error) {
+    //     console.error(error);
+    // });
+
+
+    // var apiInstance = new WikitudeStudioApiClient.ImageTargetApi();
+    // var xVersion = "3.0.0"; // {String} The version of the API to be used. Must be set to 3.
+    // var xToken = "ea704952b26e61d4e839afc34e95ff74"; // {String} Your Manager Token.
+    // var contentType = "application/json"; // String | The Content Type of the body. Must be set to application/json.
+    // var tcId = "5fb6061995d79d506359920f"; // String | Unique identifier of the Image Target Collection.
+    // var opts = {
+    //     'createImageTargetsBody': [new WikitudeStudioApiClient.CreateImageTargetsBody()] // [CreateImageTargetsBody] | 
+    // };
+    // apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
+    //     console.log('API called successfully. Returned data: ' + data);
+    //     console.log("called....")
+    // }, function (error) {
+    //     console.log("error");
+    //     console.error(error);
+    // });
+
+    // if (req.body.metadata.type === "video") {
+    //     const videoAr = saveArVideo(req.body.metadata.fileData);
+    //     return res.status(200).send("uploaded");
+    // }
+    // else if (req.body.metadata.type === "audio") {
+    //     const araudio = saveArAudio(req.body.metadata.fileData);
+    //     return res.status(200).send("uploaded");
+    // }
+    // else if (req.body.metadata.type === 'image') {
+    //     const arImage = saveArImage(req.body.metadata.fileData);
+    //     return res.status(200).send("uploaded");
+    // }
 });
 
 /*Download the base64 image in the server and returns the filename and path of image.*/

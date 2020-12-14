@@ -13,10 +13,7 @@ const Educator = require('../models/Educator');
  */
 router.post('/',
     async (req, res) => {
-        // Validating the Request body 
-        // let { error } = educatorValidationSchema.validate(req.body);
-        // if (error) { return res.status(400).send(error.details[0].message) }
-        // Pulling required Information from the Request 
+
         const { name, email, password } = req.body;
 
         try {

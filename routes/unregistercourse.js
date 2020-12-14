@@ -22,7 +22,6 @@ router.delete('/:id', auth, async (req, res) => {
         if (learner_id !== req.user.id)
             return res.status(401).send("un authorized user");
 
-
         await RegisterCourse.deleteOne({ course_id: courseID, learner_id: req.user.id });
         res.status(200).send("un registered");
 

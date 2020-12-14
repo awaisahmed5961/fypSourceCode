@@ -34,10 +34,10 @@ router.get('/', auth, async (req, res) => {
 router.get('/:id', auth, async (req, res) => {
     const course = await RegisterCourse.find({ course_id: req.params.id });
     if (!course) {
-        res.status(404).send('Ooops no register course found with this id');
-        return;
+        return res.status(404).send('Ooops no register course found with this id');
+
     }
-    res.send(course);
+    return res.send(course);
 });
 
 /**
@@ -90,47 +90,6 @@ router.post('/', auth, async (req, res) => {
 
 });
 
-/**
- * @route Put / api/courses/:id
- * @description update course
- * @access Private
- */
-router.put('/:id', auth, async (req, res) => {
-
-    // let { error } = courseValidationSchema.validate(req.body);
-    // if (error) { return res.status(400).send(error.details[0].message) }
-    // // Pulling required Information from the Request 
-    // const { title, subTitle, description } = req.body;
-
-    // // Build contact object
-    // const updatedCourse = {};
-    // if (title) updatedCourse.title = title;
-    // if (subTitle) updatedCourse.subTitle = subTitle;
-    // if (description) updatedCourse.description = description;
-
-    // try {
-    //     let course = await Course.findById(req.params.id);
-
-    //     if (!course) return res.status(404).json({ msg: 'Course not found' });
-
-    //     // Make sure user owns contact
-    //     if (course.educator_id.toString() !== req.user.id)
-    //         return res.status(401).json({ msg: 'Not authorized' });
-
-    //     course = await Course.findByIdAndUpdate(
-    //         req.params.id,
-    //         { $set: updatedCourse },
-    //         { new: true }
-    //     );
-
-    //     res.json(course);
-    // } catch (err) {
-    //     console.error(err.message);
-    //     res.status(500).send('Server error');
-    // }
-    res.send('updated coruse');
-
-});
 
 /**
  * @route DELETE / api/course
