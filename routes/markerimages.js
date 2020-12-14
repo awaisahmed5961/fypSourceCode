@@ -8,7 +8,7 @@ var WikitudeStudioApiClient = require('wikitude_client');
 router.post('/', async (req, res) => {
 
     const TargetImagefile = saveImage(req.body.Image);
-    console.log(TargetImagefile.localPath + TargetImagefile.filename)
+    // console.log(TargetImagefile.localPath + TargetImagefile.filename)
 
     var apiInstance = new WikitudeStudioApiClient.ImageTargetApi();
     var xVersion = "3"; // String | The version of the API to be used. Must be set to 3.
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         'createImageTargetsBody': [
             {
                 "name": TargetImagefile.filename,
-                "imageUrl": `${TargetImagefile.localPath + TargetImagefile.filename}`,
+                "imageUrl": TargetImagefile.localPath + TargetImagefile.filename,
                 "physicalHeight": 42,
                 "metadata": req.body.metadata
             }
@@ -28,9 +28,11 @@ router.post('/', async (req, res) => {
     apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
         console.log('API called successfully. Returned data: ' + data);
         console.log(data)
+        return res.send(data).status(200);
     }, function (error) {
         console.log("error")
         console.error(error);
+        return res.send("some thing went wrong").status(400);
     });
 
 
