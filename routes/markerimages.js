@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
         console.log('API called successfully. Returned data: ' + data);
         console.log(data)
-        return res.send(data).status(200);
+        return res.send(opts).status(200);
     }, function (error) {
         console.log("error")
         console.error(error);
