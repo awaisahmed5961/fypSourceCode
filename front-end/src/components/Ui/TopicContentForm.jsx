@@ -53,7 +53,7 @@ export default function TopicContentForm(props) {
 
 
     const topicContext = useContext(TopicContext);
-    const { addTopic, topic, getTopics } = topicContext;
+    const { addTopic, topic, getTopics, updateTopic } = topicContext;
     const [openloadingModal, setOpenLoadingModal] = useState(false);
     const [openActionModal, setOpenActionModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
@@ -67,7 +67,6 @@ export default function TopicContentForm(props) {
         TopicTitle: '',
         TopicDescription: '',
     });
-
 
     const handleInputOnChange = e => {
         const { name, value } = e.target;
@@ -136,7 +135,25 @@ export default function TopicContentForm(props) {
                 setTopicContentErrors({ ...eerrors });
             }
             else {
-                alert('no error, update the ocures')
+                // alert('no error, update the ocures')
+                var topic = {
+                    id: topicId,
+                    TopicTitle: topicContent.TopicTitle,
+                    TopicDescription: topicContent.TopicDescription
+                }
+                updateTopic(topic).then((q) => {
+                    setOpenLoadingModal(false)
+                    setOpenActionModal(true)
+                    setTimeout(() => {
+                        setOpenActionModal(false);
+                        props.onComplete(q.data._id);
+                    }, 1000)
+                    console.log(q);
+
+                }).catch((e) => {
+                    console.log(e)
+                })
+                setOpenLoadingModal(true)
             }
         }
     }

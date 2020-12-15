@@ -45,6 +45,7 @@ var World = {
     onRecognition: function onRecognitionFn(recognized, response) {
 
         if (recognized) {
+            const { type, filename, filePath } = response.metadata;
             document.getElementById("loadingMessage").style.display = "block";
             if (World.type === '3d') {
 
@@ -57,7 +58,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.Model("assets/HubbleTelescope.wt3", {
+                World.arContent = new AR.Model(`assets/ArContent/Ar3Dmodels/${filename}`, {
                     onLoaded: World.loader,
                     onError: World.onError,
                     translate: {
@@ -144,7 +145,7 @@ var World = {
                     World.sirenSound.destroy();
                 }
 
-                World.bannerImg = new AR.ImageResource("assets/banner.jpg", {
+                World.bannerImg = new AR.ImageResource(`assets/ArContent/ArImage/${filename}`, {
                     onLoaded: World.loader,
                     onError: World.onError
                 });
@@ -254,7 +255,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.VideoDrawable("assets/video.mp4", 0.50, {
+                World.arContent = new AR.VideoDrawable(`assets/ArContent/ArVideos/${filename}`, 0.50, {
                     translate: {
                         x: World.playButton.translate.x,
                         y: World.playButton.translate.y
@@ -369,7 +370,7 @@ var World = {
                 }
 
 
-                World.sirenSound = new AR.Sound("assets/rt.mp3", {
+                World.sirenSound = new AR.Sound(`assets/ArContent/ArAudio/${filename}`, {
                     onError: World.onError,
                     onFinishedPlaying: function onFinishedPlayingFn() {
                         World.playButton.playing = false;

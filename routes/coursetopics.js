@@ -111,7 +111,7 @@ router.put('/:id', async (req, res) => {
             { $set: updateTopic },
             { new: true });
 
-        res.status(200).send('Course topic updated');
+        res.status(200).send(coursetopic);
     }
     catch (err) {
         console.error(err.message);

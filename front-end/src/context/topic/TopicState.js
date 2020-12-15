@@ -8,7 +8,8 @@ import {
     GET_TOPICS,
     ADD_TOPIC,
     TOPIC_ERROR,
-    DELETE_TOPIC
+    DELETE_TOPIC,
+    UPDATE_TOPIC
     // UPDATE_COURSE,
     // DELETE_COURSE,
     // FILTER_COURSE,
@@ -96,34 +97,34 @@ const TopicState = props => {
 
 
 
-    // // update Course
-    // const updateCourse = async (course) => {
-    //     const config = {
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     };
+    // update Course
+    const updateTopic = async (topic) => {
+        console.log(topic)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
 
-    //     try {
-    //         const res = await axios.put(
-    //             `/api/courses/${course.id}`,
-    //             course,
-    //             config
-    //         );
+        try {
+            const res = await axios.put(
+                `/api/coursetopics/${topic.id}`,
+                topic,
+                config
+            );
 
-    //         dispatch({
-    //             type: UPDATE_COURSE,
-    //             payload: res.data
-    //         });
-    //         return res;
-    //     } catch (err) {
-    //         dispatch({
-    //             type: COURSE_ERROR,
-    //             payload: err.response.msg
-    //         });
-    //         return err;
-    //     }
-    // }
+            dispatch({
+                type: UPDATE_TOPIC,
+                payload: res.data
+            });
+            return res;
+        } catch (err) {
+            dispatch({
+                // payload: err.response.msg
+            });
+            return err;
+        }
+    }
     // // Filter Course
     // // setCurrentMethod
     // const setCurrent = (course) => {
@@ -145,7 +146,7 @@ const TopicState = props => {
             error: state.error,
             getTopics,
             addTopic,
-            deleteTopic
+            deleteTopic, updateTopic
         }}>
             {props.children}
         </TopicContext.Provider>
