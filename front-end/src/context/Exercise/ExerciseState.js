@@ -39,14 +39,34 @@ const ExerciseState = props => {
 
     }
 
+    const getExercise = async (topicId) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'topic_id': topicId
+            }
+        }
+        try {
+            const res = await axios.get('/api/exercisequestions', config);
+            dispatch({ type: GET_EXERCISES, payload: res.data });
+            return res;
+        }
+        catch (err) {
+            console.log(err);
+            // dispatch({
+            //     type: COURSE_ERROR
+            // });
+            return err;
+        }
 
+    }
 
     return (
         <ExerciseContext.Provider
             value={{
                 exercise: state.exercise,
                 addexercise,
-
+                getExercise
             }}
         >
             {props.children}

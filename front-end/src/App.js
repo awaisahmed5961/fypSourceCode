@@ -20,6 +20,7 @@ import EditorImageUpload from './pages/ArEditor/EditorImageUpload';
 import ExerciseState from './context/Exercise/ExerciseState';
 import WorkSpace from './pages/ArEditor/WorkSpace';
 import EducatorProfile from './pages/EducatorProfile';
+import ExerciseDetail from './pages/ExerciseDetail';
 if (localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -46,6 +47,7 @@ function App() {
                     {/* <PrivateRoute exact path="/topic" render={props => <Topic {...props} key={this.props.location.search} />} /> */}
                     <PrivateRoute exact path="/course/:id?" component={CourseDetail} />
                     <PrivateRoute exact path="/topic" component={TopicDetail} />
+                    <PrivateRoute exact path="/exercise" component={ExerciseDetail} />
                     <PrivateRoute exact path="/editor" component={EditorImageUpload} />
                     <PrivateRoute exact path="/editor/workspace" component={WorkSpace} />
                     <PrivateRoute exact path={`/:title/:topictitle`} component={TopicDetail} />

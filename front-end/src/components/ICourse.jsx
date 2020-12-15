@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ICourse(props) {
-    const { id, title, description, subTitle, date, publicationStatus, pageRoute, onDelete } = props;
+    const { id, title, description, subTitle, image, date, publicationStatus, pageRoute, onDelete } = props;
     const courseContext = useContext(CourseContext);
     const { setCurrent, deleteCourse } = courseContext;
     const [deleteConformationModalOpen, setdeleteConformationModalOpen] = useState(false);
@@ -144,7 +144,7 @@ export default function ICourse(props) {
                         className={classes.cardImage}
                         image={
                             // 'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80'
-                            defaultImage
+                            image
                         }
                     >
                         <div  >

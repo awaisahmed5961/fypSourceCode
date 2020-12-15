@@ -15,6 +15,11 @@ import { Link } from 'react-router-dom';
 import CourseContext from '../context/course/courseContext';
 import getPublicationStatus from '../utils/getPublicationStatus';
 import SortIcon from '@material-ui/icons/Sort';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -98,15 +103,34 @@ export default function CourseDetail(props) {
     const [searchFilter, setSearchFilter] = useState('');
     const topicContext = useContext(TopicContext);
     const courseContext = useContext(CourseContext);
+    const [pubStatus, setPubStatus] = useState(1);
 
     const { getTopics, topic } = topicContext;
 
-    const { courses, getCourses } = courseContext;
+    const { courses, getCourses, updateCourse } = courseContext;
     const currentCourse = courses.filter((course) => course._id === id)
 
     const defaultProps = {
         color: 'secondary',
 
+    };
+
+    const handleChange = (event) => {
+        alert(event.target.value);
+        setPubStatus(event.target.value)
+        // console.log(currentCourse)
+        var courseObj = {
+            id: currentCourse[0]._id,
+            title: currentCourse[0].title,
+            subTitle: currentCourse[0].subTitle,
+            description: currentCourse[0].description,
+            publication_Status: event.target.value
+        }
+        updateCourse(courseObj).then((res) => {
+            console.log(res)
+        }).catch((error) => {
+            alert("error")
+        })
     };
 
     let topicList = topic.filter((t) => t.TopicTitle.includes(searchFilter.toLowerCase()));
@@ -135,7 +159,25 @@ export default function CourseDetail(props) {
                         </Grid>
                         <Grid item >
                             <Typography variant="subtitle1" >
-                                <b>Course Status:</b> {getPublicationStatus(currentCourse[0] === undefined ? '' : currentCourse[0].publication_Status)}
+                                <b>Course Status:</b>
+                                <FormControl >
+
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={pubStatus}
+                                        onChange={handleChange}
+                                    >
+                                        <MenuItem value={1}>
+                                            Published
+                                        </MenuItem>
+                                        <MenuItem value={2}>Draft</MenuItem>
+                                        <MenuItem value={3}>Archived</MenuItem>
+                                    </Select>
+                                </FormControl>
+
+
+
                             </Typography>
                         </Grid>
                         <Grid item >

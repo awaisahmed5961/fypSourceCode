@@ -84,6 +84,8 @@ const CourseState = props => {
 
     // update Course
     const updateCourse = async (course) => {
+        console.log(course)
+        console.log("log from state")
         const config = {
             headers: {
                 'Content-Type': 'application/json'

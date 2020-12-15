@@ -94,6 +94,7 @@ export default function Courses(props) {
                                                                 subTitle={course.subTitle}
                                                                 description={course.description}
                                                                 date={course.date}
+                                                                image={course.ImagePlaceholder}
                                                                 publicationStatus={course.publication_Status}
                                                                 // pageRoute={`/${course.title.split(' ').join('-')}`}
                                                                 pageRoute={`/course/${course._id}`}

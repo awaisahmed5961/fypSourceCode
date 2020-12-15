@@ -310,9 +310,8 @@ export default function WorkSpace() {
                     // formData.append("metadata", testObj)
 
                     const res = axios.post('/api/upload3dmodel', formData, config).then((q) => {
-
+                        console.log(q)
                         if (q.data === "some thing went wrong") {
-
                             setUploaded(true)
                             setUploadedState('error')
                         }

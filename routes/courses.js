@@ -59,7 +59,7 @@ router.get('/:id', auth, async (req, res) => {
  */
 router.post('/', auth, upload.single('file'), async (req, res) => {
     let { error } = courseValidationSchema.validate(req.body);
-    if (error) { return res.status(400).send(error.details[0].message) }
+    if (error) { console.log(error); return res.status(400).send(error.details[0].message) }
     // Pulling required Information from the Request 
     const { title, subTitle, description, } = req.body;
 
@@ -72,7 +72,7 @@ router.post('/', auth, upload.single('file'), async (req, res) => {
             educator_id: req.user.id,
             ImagePlaceholder: (req.file && req.file.path
                 ?
-                req.file.path
+                `https://guarded-shelf-88919.herokuapp.com/api/uploads/${req.file.filename}`
                 :
                 // 'https://images.unsplash.com/photo-1517147177326-b37599372b73?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2229&q=80')
                 'https://guarded-shelf-88919.herokuapp.com/api/uploads/list placeholder.jpg')
@@ -94,14 +94,16 @@ router.post('/', auth, upload.single('file'), async (req, res) => {
  */
 router.put('/:id', auth, async (req, res) => {
 
-    const { title, subTitle, description } = req.body;
+    const { title, subTitle, description, publication_Status } = req.body;
 
     // Build contact object
     const updatedCourse = {};
     if (title) updatedCourse.title = title;
     if (subTitle) updatedCourse.subTitle = subTitle;
     if (description) updatedCourse.description = description;
+    if (publication_Status) updatedCourse.publication_Status = publication_Status;
 
+    console.log(req.param.id)
     try {
 
         let course = await Course.findById(req.params.id);

@@ -5,12 +5,12 @@ import {
 
 export default (state, action) => {
     switch (action.type) {
-        //     case GET_COURSES:
-        //         return {
-        //             ...state,
-        //             courses: action.payload,
-        //             loading: false
-        //         };
+        case GET_EXERCISES:
+            return {
+                ...state,
+                exercise: action.payload,
+                loading: false
+            };
         case ADD_EXERCISE:
             return {
                 ...state,

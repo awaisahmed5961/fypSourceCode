@@ -153,7 +153,7 @@ export default function Course(props) {
                 courseFormData.append('title', course.title);
                 courseFormData.append('subTitle', course.subTitle);
                 courseFormData.append('description', course.description);
-                courseFormData.append('file', image[0]);
+                courseFormData.append('file', image ? image[0] : null);
 
                 setTimeout(() => {
                     addCourse(courseFormData).then(course => {

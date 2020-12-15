@@ -16,9 +16,8 @@ AR.context.on2FingerGestureStarted = function () {
 var World = {
     loaded: false,
     tracker: null,
-    type: 'video',
+    type: '3d',
     cloudRecognitionService: null,
-
 
     init: function initFn() {
         this.createTracker();
@@ -29,9 +28,6 @@ var World = {
     // Initating cloud recog connection
     createTracker: function createTrackerFn() {
         this.cloudRecognitionService = new AR.CloudRecognitionService(
-            // "b277eeadc6183ab57a83b07682b3ceba",
-            // "B1QL5CTCZ",
-            // "54e4b9fe6134bb74351b2aa3", {
             "e639b0d3e41972100e879618c13be722",
             "rk-F4ECFFw",
             "5fb6061995d79d506359920f", {
@@ -45,28 +41,12 @@ var World = {
         });
 
     },
-    switchCam: function switchCamFn() {
-        if (AR.hardware.camera.position === AR.CONST.CAMERA_POSITION.FRONT) {
-            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.BACK
-        } else {
-            AR.hardware.camera.position = AR.CONST.CAMERA_POSITION.FRONT
-        }
-    },
-    updateFlashlight: function updateFlashlightFn(flashEnabled) {
-        /* Get current checkbox status. */
-        AR.hardware.camera.flashlight = flashEnabled;
-    },
-    updateRangeValues: function updateRangeValuesFn(currentValue) {
-        AR.hardware.camera.zoom = parseFloat(currentValue);
-    },
+
     onRecognition: function onRecognitionFn(recognized, response) {
 
         if (recognized) {
-
-            alert(JSON.stringify(response));
-            const { type, filename, filePath } = response.metadata;
             document.getElementById("loadingMessage").style.display = "block";
-            if (type === '3d') {
+            if (World.type === '3d') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -77,7 +57,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.Model(`assets/ArContent/Ar3Dmodels/${filename}`, {
+                World.arContent = new AR.Model("assets/HubbleTelescope.wt3", {
                     onLoaded: World.loader,
                     onError: World.onError,
                     translate: {
@@ -157,14 +137,14 @@ var World = {
                 });
             }
 
-            else if (type === 'image') {
+            else if (World.type === 'image') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
                     World.sirenSound.destroy();
                 }
 
-                World.bannerImg = new AR.ImageResource(`assets/ArContent/ArImage/${filename}`, {
+                World.bannerImg = new AR.ImageResource("assets/banner.jpg", {
                     onLoaded: World.loader,
                     onError: World.onError
                 });
@@ -241,7 +221,7 @@ var World = {
                 });
 
             }
-            else if (type === 'video') {
+            else if (World.type === 'video') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -265,7 +245,8 @@ var World = {
                     translate: {
                         x: 0.0,
                         y: 0.0
-                    }
+                    },
+
                 });
 
 
@@ -273,7 +254,7 @@ var World = {
                     World.arContent.destroy();
                 }
 
-                World.arContent = new AR.VideoDrawable(`assets/ArContent/ArVideos/${filename}`, 0.50, {
+                World.arContent = new AR.VideoDrawable("assets/video.mp4", 0.50, {
                     translate: {
                         x: World.playButton.translate.x,
                         y: World.playButton.translate.y
@@ -300,6 +281,53 @@ var World = {
                             World.arContent.playing = false;
                             World.playButton.enabled = true;
                         }
+                    },
+                    onDragBegan: function ( /*x, y*/) {
+                        oneFingerGestureAllowed = true;
+
+                        return true;
+                    },
+                    onDragChanged: function (x, y, intersectionX, intersectionY) {
+                        if (oneFingerGestureAllowed) {
+                            this.translate = {
+                                x: intersectionX,
+                                y: intersectionY
+                            };
+                        }
+
+                        return true;
+                    },
+                    onDragEnded: function ( /*x, y*/) {
+                        return true;
+                    },
+                    onRotationBegan: function ( /*angleInDegrees*/) {
+                        return true;
+                    },
+                    onRotationChanged: function (angleInDegrees) {
+                        this.rotate.z = previousRotationValue + angleInDegrees;
+                        return true;
+                    },
+                    onRotationEnded: function ( /*angleInDegrees*/) {
+                        previousRotationValue = this.rotate.z;
+
+                        return true;
+                    },
+                    onScaleBegan: function ( /*scale*/) {
+                        return true;
+                    },
+                    onScaleChanged: function (scale) {
+                        var scaleValue = previousScaleValue2d * scale;
+                        this.scale = {
+                            x: scaleValue,
+                            y: scaleValue
+                        };
+
+                        return true;
+                    },
+                    onScaleEnded: function ( /*scale*/) {
+                        previousScaleValue2d = this.scale.x;
+
+                        return true;
                     },
                     onError: World.onError
                 });
@@ -328,7 +356,7 @@ var World = {
                 });
             }
 
-            else if (type === "audio") {
+            else if (World.type === "audio") {
 
 
                 if (World.arContent !== undefined) {
@@ -341,7 +369,7 @@ var World = {
                 }
 
 
-                World.sirenSound = new AR.Sound(`assets/ArContent/ArAudio/${filename}`, {
+                World.sirenSound = new AR.Sound("assets/rt.mp3", {
                     onError: World.onError,
                     onFinishedPlaying: function onFinishedPlayingFn() {
                         World.playButton.playing = false;
@@ -455,6 +483,7 @@ var World = {
         this.resetOverlayvalues();
     },
 
+    /* Resets the parameters of an overlay to its initial values. */
     resetOverlayvalues: function () {
         previousRotationValue = defaultRotaionValue;
         previousScaleValue = defaultScaleValue;
