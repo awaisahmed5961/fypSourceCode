@@ -61,12 +61,33 @@ const ExerciseState = props => {
 
     }
 
+    const deleteExercise = async (topicId) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        try {
+            const res = await axios.delete(`/api/exercisequestions/${topicId}`, config);
+            // dispatch({ type: GET_EXERCISES, payload: res.data });
+            // return res;
+        }
+        catch (err) {
+            console.log(err);
+            // dispatch({
+            //     type: COURSE_ERROR
+            // });
+            return err;
+        }
+
+    }
+
     return (
         <ExerciseContext.Provider
             value={{
                 exercise: state.exercise,
                 addexercise,
-                getExercise
+                getExercise, deleteExercise
             }}
         >
             {props.children}

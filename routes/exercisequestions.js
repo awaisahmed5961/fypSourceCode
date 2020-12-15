@@ -147,16 +147,68 @@ router.put('/:id', async (req, res) => {
  * @access Private
  */
 router.delete('/:id', async (req, res) => {
-    try {
-        const assessmentExercise = await AssessmentExercise.findById(req.params.id);
 
-        if (!assessmentExercise) return res.status(404).send('Assessment Exercise with this id does not exists');
-        await AssessmentExercise.findByIdAndRemove(req.params.id);
-        res.status(200).json('Assessment Exercise deleted');
-
-    } catch (err) {
-        res.status(500).send('Server error');
+    const questions = await ExerciseQuestions.find({ topic_id: req.params.id });
+    if (!questions) {
+        return res.send("no Question found with this id");
     }
+    let questionCounter = 0;
+
+    questions.map(async (question) => {
+        await QuestionsOption.deleteMany({ Question_id: question._id }).then((answer) => {
+        }).catch((err) => {
+            console.log(err);
+        })
+    })
+    questions.map(async (question) => {
+        await ExerciseQuestions.deleteOne({ _id: question._id }).then((answer) => {
+            ++questionCounter;
+            if (questionCounter >= questions.length) {
+                return res.send("deleted").status(200)
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    })
+
+
+    // try {
+    //     exerciseQuestion = new ExerciseQuestions({
+    //         Question: question.question,
+    //         CorrectOption: question.correctOption,
+    //         topic_id: topicId
+    //     });
+    //     exerciseQuestion.save().then((q) => {
+    //         // console.log(q);
+    //         question.options.map((option) => {
+    //             try {
+    //                 questionsOption = new QuestionsOption({
+    //                     Option: option,
+    //                     Question_id: q._id
+    //                 });
+    //                 questionsOption.save();
+    //             }
+    //             catch (error) {
+    //                 console.log(error)
+    //                 res.status(500).send('Server Error');
+    //             }
+    //         })
+    //     })
+
+    // }
+    // catch (error) {
+    //     res.status(500).send('Server Error');
+    // }
+    // try {
+    //     const assessmentExercise = await AssessmentExercise.findById(req.params.id);
+
+    //     if (!assessmentExercise) return res.status(404).send('Assessment Exercise with this id does not exists');
+    //     await AssessmentExercise.findByIdAndRemove(req.params.id);
+    //     res.status(200).json('Assessment Exercise deleted');
+
+    // } catch (err) {
+    //     res.status(500).send('Server error');
+    // }
 
 });
 

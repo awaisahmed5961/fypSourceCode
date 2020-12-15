@@ -97,6 +97,7 @@ router.put('/:id', async (req, res) => {
     const updateTopic = {};
     if (TopicTitle) {
         updateTopic.TopicTitle = TopicTitle;
+
     }
     if (TopicDescription) {
         updateTopic.TopicDescription = TopicDescription;

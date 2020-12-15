@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
                 throw err;
             }
             // Returning Token
-            return res.json({ token, userName: user.name, profileImage: user.imageAvatar });
+            return res.json({ token, userName: user.name, profileImage: user.imageAvatar, joinDate: user.joinDate });
         });
     }
     catch (err) {

@@ -28,14 +28,22 @@ export default function ExerciseDetail(props) {
     let history = useHistory();
     const classes = useStyles();
     const exerciseContext = useContext(ExerciseContext);
-    const { exercise, getExercise } = exerciseContext;
+    const { exercise, getExercise, deleteExercise } = exerciseContext;
     const queryStringParameters = queryString.parse(props.location.search);
     const { course_id, topic_id } = queryStringParameters;
     useEffect(() => {
         getExercise(topic_id)
 
     }, []);
+    const handleDeleteExercise = () => {
 
+        deleteExercise(topic_id).then((data) => {
+
+        }).catch((err) => {
+            console.log("error");
+            console.log(err)
+        })
+    }
     return (
         <div>
             <NavBar haveButton={false} />
@@ -61,51 +69,31 @@ export default function ExerciseDetail(props) {
                             variant="contained"
                             size="large"
                             type="submit"
-                            onClick={() => history.push(`/topiceditor?course_id=${course_id}`)}
+                            onClick={() => history.push(`/topiceditor?course_id=${course_id}&`)}
                             color="primary">
                             Create Exercise
                         </Button>
                     </div>) : (<div>
+                        <div style={{
+                            marginBottom: '20px',
+                            display: 'flex',
+                            justifyContent: 'flex-end'
+                        }}>
+                            <Button
+                                variant="contained"
+                                size="large"
+                                onClick={handleDeleteExercise}
+                                color="primary">
+                                Delete Exercise
+                        </Button>
+                        </div>
                         {
                             exercise.map((question) => <SingleQuestion Question={question} key={question._id} />)
                         }
                     </div>)
                 }
-                {/* {
-                    courseTopic.length !== 0 ? (
-                        <div className={classes.container}>
-                            <div className={classes.detailMetaData}>
-                                <div style={{
-                                    marginRight: '30px',
-                                }}>
-                                    <img src={exerciseIcon} onClick={() => alert('quiz')} style={{
-                                        width: '60px',
-                                        height: '60px'
-                                    }} />
-                                </div>
-                                <div>
-                                    <img src={arIcon} onClick={() => alert('ar')} style={{
-                                        width: '60px',
-                                        height: '60px'
-                                    }} />
-                                </div>
-
-
-                            </div>
-                            <div>
-                                <Typography variant="h6" gutterBottom>
-                                    {courseTopic[0].TopicTitle}
-                                </Typography>
-                                <div dangerouslySetInnerHTML={{ __html: courseTopic[0].TopicDescription }} key={courseTopic[0]._id}>
-                                </div>
-                            </div>
-                        </div>
-
-                    ) : ''
-                } */}
-
             </Grid>
 
-        </div>
+        </div >
     )
 }

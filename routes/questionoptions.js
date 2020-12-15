@@ -74,10 +74,7 @@ router.post('/', auth, async (req, res) => {
         console.log(error)
         res.status(500).send('Server Error');
     }
-    // }
-    //     catch (error) {
-    //     res.status(500).send('Server Error');
-    // }
+
 });
 
 /**
@@ -121,6 +118,7 @@ router.put('/:id', async (req, res) => {
  * @access Private
  */
 router.delete('/:id', async (req, res) => {
+
     try {
         const assessmentExercise = await AssessmentExercise.findById(req.params.id);
 

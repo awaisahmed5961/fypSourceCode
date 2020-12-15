@@ -1,1 +1,1 @@
-export const APP_NAME = 'ARCP';
+export const APP_NAME = 'Zinda Kitab';
