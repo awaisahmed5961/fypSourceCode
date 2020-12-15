@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
                 throw err;
             }
             // returning token
-            res.json({ token });
+            res.json({ token, joinDate: user.joinDate });
         });
 
 
