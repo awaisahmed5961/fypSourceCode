@@ -47,7 +47,7 @@ var World = {
         if (recognized) {
             const { type, filename, filePath } = response.metadata;
             document.getElementById("loadingMessage").style.display = "block";
-            if (World.type === '3d') {
+            if (type === '3d') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -138,7 +138,7 @@ var World = {
                 });
             }
 
-            else if (World.type === 'image') {
+            else if (type === 'image') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -222,7 +222,7 @@ var World = {
                 });
 
             }
-            else if (World.type === 'video') {
+            else if (type === 'video') {
 
                 if (World.sirenSound !== undefined) {
                     World.sirenSound.stop();
@@ -357,7 +357,7 @@ var World = {
                 });
             }
 
-            else if (World.type === "audio") {
+            else if (type === "audio") {
 
 
                 if (World.arContent !== undefined) {
