@@ -5,6 +5,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const Learner = require('../models/Learner');
+const auth = require('../middlewares/auth');
+const fs = require('fs');
+const path = require('path');
 
 
 router.post('/', async (req, res) => {
@@ -62,12 +65,74 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    // Validating the Request body 
+    let { error } = updatelearnerValidationSchema.validate(req.body);
+    if (error) { return res.status(400).send(error.details[0].message) }
+
+    const { name, email, imageAvatar } = req.body
+    // Build contact object
+    const updateLearner = {};
+    if (name) updateLearner.name = name;
+
+    if (imageAvatar) {
+        var profileImage = saveImage(imageAvatar);
+        updateLearner.imageAvatar = profileImage.localPath + profileImage.filename;
+    };
+
+    try {
+
+        var learner = await Learner.findByIdAndUpdate(
+            req.params.id,
+            { $set: updateLearner },
+            { new: true }
+        );
+        res.json(learner);
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Server Error')
+    }
+});
+
+function saveImage(baseImage) {
+    /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
+    const uploadPath = path.resolve();
+    //path of folder where you want to save the image.
+    const localPath = `${uploadPath}/uploads/learnerprofiles/`;
+    //Find extension of file
+    const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
+    const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
+    //Forming regex to extract base64 data of file.
+    const regex = new RegExp(`^data:${fileType}\/${ext};base64,`, 'gi');
+    //Extract base64 data.
+    const base64Data = baseImage.replace(regex, "");
+    const rand = Math.ceil(Math.random() * 1000);
+    //Random photo name with timeStamp so it will not overide previous images.
+    const filename = `learner_${Date.now()}_${rand}.${ext}`;
+
+    //Check that if directory is present or not.
+    if (!fs.existsSync(`${uploadPath}/uploads/learnerprofiles/`)) {
+        fs.mkdirSync(`${uploadPath}/uploads/learnerprofiles/`);
+    }
+    if (!fs.existsSync(localPath)) {
+        fs.mkdirSync(localPath);
+    }
+    fs.writeFileSync(localPath + filename, base64Data, 'base64');
+    return { filename, localPath };
+}
 
 // Schema Validation 
 const learnerValidationSchema = Joi.object({
     name: Joi.string().min(1).max(15).required(),
     email: Joi.string().email().required(),
     password: Joi.string().required().max(20),
+});
+
+const updatelearnerValidationSchema = Joi.object({
+    name: Joi.string().min(1).max(15).required(),
+    email: Joi.string().email().required(),
+    imageAvatar: Joi.string()
 });
 
 module.exports = router;

@@ -5,6 +5,8 @@ const app = express();
 const morgan = require('morgan');
 
 app.use('/api/uploads', express.static('uploads'))
+app.use('/api/uploads/educatorAvatar', express.static('uploads/educatorprofiles'))
+app.use('/api/uploads/learnerprofiles', express.static('uploads/learnerprofiles'))
 app.use('/api/learner/avatar', express.static('learneravatar'))
 app.use('/api/cloudrecogionation', express.static('cloud/'))
 // app.get('/api/cloudrecogionation', (req, res) => {
@@ -19,17 +21,7 @@ app.use(morgan('dev'));
 app.use(express.json({ limit: '50mb', extended: false }));
 
 
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header("Access-Control-Allow-Headers", "*");
-//     if (req.method === 'OPTIONS') {
-//         res.header("Access-Control-Allow-Methods", 'PUT , PATCH , POST , DELETE , GET');
-//         res.status(200).json({
 
-//         })
-//     }
-//     next();
-// });
 
 app.use('/api/educators', require('./routes/educator'));
 app.use('/api/learners', require('./routes/learner'));

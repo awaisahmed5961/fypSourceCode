@@ -144,8 +144,7 @@ describe('/api/courses', () => {
                 subTitle: "test course subtitle",
                 description: "test course description",
                 educator_id: user_id,
-                ImagePlaceholder:
-                    'https://guarded-shelf-88919.herokuapp.com/api/uploads/list placeholder.jpg',
+
             }
 
             let dummyUser = {
@@ -192,8 +191,6 @@ describe('/api/courses', () => {
                 subTitle: "",
                 description: "",
                 educator_id: "",
-                ImagePlaceholder:
-                    '',
             }
             const res = await exec();
             expect(res.status).toBe(400)
@@ -201,8 +198,15 @@ describe('/api/courses', () => {
         });
 
         it("should return 200 if Course is valid && Educator is Authenticated", async () => {
+            courseObj = {
+                title: "test course 1",
+                subTitle: "test course 1",
+                description: "test course 1",
+            }
+            const course = await Course.find({
+                title: "test course 1",
 
-            const course = await Course.find({ title: "test course 1" });
+            });
             const res = await exec();
             expect(res.status).toBe(200)
             expect(course).not.toBeNull();

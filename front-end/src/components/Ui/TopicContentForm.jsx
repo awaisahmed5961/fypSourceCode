@@ -35,7 +35,6 @@ export default function TopicContentForm(props) {
     useEffect(() => {
         if (topicId !== undefined) {
             getTopics({ course_id: courseId }).then((t) => {
-
                 let abc = t.data.filter((topic) => topic._id === topicId);
                 const { TopicTitle, TopicDescription } = abc[0];
                 let currentTopic = {

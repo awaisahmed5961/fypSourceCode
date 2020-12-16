@@ -164,7 +164,7 @@ router.delete('/:id', async (req, res) => {
         await ExerciseQuestions.deleteOne({ _id: question._id }).then((answer) => {
             ++questionCounter;
             if (questionCounter >= questions.length) {
-                return res.send("deleted").status(200)
+                return res.send("success").status(200)
             }
         }).catch((err) => {
             console.log(err);
