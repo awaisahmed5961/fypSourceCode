@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     // Validating the Request body 
     let { error } = updatelearnerValidationSchema.validate(req.body);
     if (error) { return res.status(400).send(error.details[0].message) }
@@ -83,7 +83,7 @@ router.put('/:id', async (req, res) => {
     try {
 
         var learner = await Learner.findByIdAndUpdate(
-            req.params.id,
+            req.user.id,
             { $set: updateLearner },
             { new: true }
         );
