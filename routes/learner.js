@@ -115,8 +115,8 @@ function saveImage(baseImage) {
     const filename = `learner_${Date.now()}_${rand}.${ext}`;
 
     //Check that if directory is present or not.
-    if (!fs.existsSync(`${uploadPath}/uploads/learnerprofiles/`)) {
-        fs.mkdirSync(`${uploadPath}/uploads/learnerprofiles/`);
+    if (!fs.existsSync(`https://guarded-shelf-88919.herokuapp.com/uploads/learnerprofiles/`)) {
+        fs.mkdirSync(`https://guarded-shelf-88919.herokuapp.com/uploads/learnerprofiles/`);
     }
     if (!fs.existsSync(localPath)) {
         fs.mkdirSync(localPath);
