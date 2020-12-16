@@ -79,7 +79,7 @@ router.put('/:id', auth, async (req, res) => {
         var profileImage = saveImage(imageAvatar);
         console.log(profileImage.filename);
         console.log(profileImage.localPath)
-        updateLearner.imageAvatar = profileImage.localPath + profileImage.filename;
+        updateLearner.imageAvatar = `https://guarded-shelf-88919.herokuapp.com/api/uploads/learnerprofiles/${profileImage.filename}`;
     };
 
     try {
@@ -102,7 +102,7 @@ function saveImage(baseImage) {
     /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
     const uploadPath = path.resolve();
     //path of folder where you want to save the image.
-    const localPath = `https://guarded-shelf-88919.herokuapp.com/uploads/learnerprofiles/`;
+    const localPath = `${uploadPath}/uploads/learnerprofiles/`;
     //Find extension of file
     const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
     const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
@@ -115,8 +115,8 @@ function saveImage(baseImage) {
     const filename = `learner_${Date.now()}_${rand}.${ext}`;
 
     //Check that if directory is present or not.
-    if (!fs.existsSync(`https://guarded-shelf-88919.herokuapp.com/uploads/learnerprofiles/`)) {
-        fs.mkdirSync(`https://guarded-shelf-88919.herokuapp.com/uploads/learnerprofiles/`);
+    if (!fs.existsSync(`${uploadPath}/uploads/learnerprofiles/`)) {
+        fs.mkdirSync(`${uploadPath}/uploads/learnerprofiles/`);
     }
     if (!fs.existsSync(localPath)) {
         fs.mkdirSync(localPath);
