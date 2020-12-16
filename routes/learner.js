@@ -77,11 +77,14 @@ router.put('/:id', auth, async (req, res) => {
 
     if (imageAvatar) {
         var profileImage = saveImage(imageAvatar);
+        console.log(profileImage.filename);
+        console.log(profileImage.localPath)
         updateLearner.imageAvatar = profileImage.localPath + profileImage.filename;
     };
 
     try {
-
+        console.log(req.user.id);
+        console.log("rest")
         var learner = await Learner.findByIdAndUpdate(
             req.user.id,
             { $set: updateLearner },
@@ -99,7 +102,7 @@ function saveImage(baseImage) {
     /*path of the folder where your project is saved. (In my case i got it from config file, root path of project).*/
     const uploadPath = path.resolve();
     //path of folder where you want to save the image.
-    const localPath = `${uploadPath}/uploads/learnerprofiles/`;
+    const localPath = `https://guarded-shelf-88919.herokuapp.com/uploads/learnerprofiles/`;
     //Find extension of file
     const ext = baseImage.substring(baseImage.indexOf("/") + 1, baseImage.indexOf(";base64"));
     const fileType = baseImage.substring("data:".length, baseImage.indexOf("/"));
