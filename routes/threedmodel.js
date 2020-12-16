@@ -5,7 +5,7 @@ const path = require('path');
 var WikitudeStudioApiClient = require('wikitude_client');
 
 const multer = require('multer');
-
+let arName = ''
 // SET STORAGE
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -15,7 +15,7 @@ var storage = multer.diskStorage({
         cb(null, localPath)
     },
     filename: function (req, file, cb) {
-
+        arName = file.originalname;
         cb(null, file.originalname)
     }
 
@@ -54,7 +54,6 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     const targetimage = saveImage(req.body.targetImage);
     const { type, width, height, rotate } = req.body;
-    console.log(targetimage);
 
     const three3Object = {
         type: '3d',
@@ -76,7 +75,7 @@ router.post('/', upload.single('file'), async (req, res) => {
                 "physicalHeight": 42,
                 "metadata": {
                     "type": `${three3Object.type}`,
-                    "filename": `${req.file.filename}`,
+                    "filename": `${arName}`,
                     "filePath": "null",
                     "width": `${three3Object.width}`,
                     "height": `${three3Object.height}`,

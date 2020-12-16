@@ -7,6 +7,17 @@ var WikitudeStudioApiClient = require('wikitude_client');
 router.post('/', async (req, res) => {
 
     const TargetImagefile = saveImage(req.body.Image);
+    let arName = ''
+    if (req.body.metadata.type === "video") {
+        arName = saveArVideo(req.body.metadata.fileData);
+    }
+    else if (req.body.metadata.type === "audio") {
+        arName = saveArAudio(req.body.metadata.fileData);
+    }
+    else if (req.body.metadata.type === 'image') {
+        arName = saveArImage(req.body.metadata.fileData);
+        // return res.status(200).send("uploaded");
+    }
 
     var apiInstance = new WikitudeStudioApiClient.ImageTargetApi();
     var xVersion = "3";
@@ -16,18 +27,13 @@ router.post('/', async (req, res) => {
     var opts = {
         'createImageTargetsBody': [
             {
-                // "name": TargetImagefile.filename,
-                // "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${TargetImagefile.filename}`,
-                // "physicalHeight": 42,
-                // "metadata": {
-                //     "value": "value"
-                // }
+
                 "name": TargetImagefile.filename,
                 "imageUrl": `https://guarded-shelf-88919.herokuapp.com/api/markerimages/${TargetImagefile.filename}`,
                 "physicalHeight": 42,
                 "metadata": {
                     "type": `${req.body.metadata.type}`,
-                    "filename": `${TargetImagefile.filename}`,
+                    "filename": `${arName.filename}`,
                     "filePath": "null",
                     "width": `${req.body.metadata.width}`,
                     "height": `${req.body.metadata.height}`,
@@ -37,30 +43,12 @@ router.post('/', async (req, res) => {
         ]
     };
     apiInstance.createImageTargets(xVersion, xToken, contentType, tcId, opts).then(function (data) {
-        console.log('API called successfully. Returned data: ' + data);
-        console.log(data)
-        if (req.body.metadata.type === "video") {
-            const videoAr = saveArVideo(req.body.metadata.fileData);
-            // return res.status(200).send("uploaded");
-            return res.send(data).status(200);
-        }
-        else if (req.body.metadata.type === "audio") {
-            const araudio = saveArAudio(req.body.metadata.fileData);
-            // return res.status(200).send("uploaded");
-            return res.send(data).status(200);
-        }
-        else if (req.body.metadata.type === 'image') {
-            const arImage = saveArImage(req.body.metadata.fileData);
-            // return res.status(200).send("uploaded");
-            return res.send(data).status(200);
-        }
         return res.send(data).status(200);
     }, function (error) {
         console.log("error")
         console.error(error);
         return res.send("some thing went wrong").status(400);
     });
-
 
 });
 
