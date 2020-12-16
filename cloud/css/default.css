@@ -49,7 +49,7 @@
 .bottom_controlls{
   margin-top: 80vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .bottom_controlls .camera_button {
