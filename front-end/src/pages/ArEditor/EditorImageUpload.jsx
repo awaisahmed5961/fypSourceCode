@@ -298,7 +298,11 @@ export default function EditorImageUpload() {
                                         style={{ ...currentRatio }}
                                         className={classes.ImageContainerWrapper}>
 
-                                        <ReactCrop
+                                        <img
+                                            src={filein64 ? filein64 : ''}
+                                            style={{ transform: `rotate(${rotation}deg)` }}
+                                            alt="" />
+                                        {/* <ReactCrop
                                             src={filein64 ? filein64 : ''}
                                             style={{ transform: `rotate(${rotation}deg)` }
                                             }
@@ -306,7 +310,7 @@ export default function EditorImageUpload() {
                                             onChange={handleOnCropChange}
                                             onImageLoaded={handleImageLoaded}
                                             onComplete={handleOnCropComplete}
-                                        />
+                                        /> */}
 
                                     </div>
                                 ) : (
